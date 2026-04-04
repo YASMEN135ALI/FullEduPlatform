@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EduPlatform - تسجيل شركة</title>
+
+  <!-- Bootstrap -->
+  <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="assets/css/forms.css">
+  <link rel="stylesheet" href="assets/css/theme.css">
+
+
+</head>
+
+<body>
+
+  <!-- Navbar -->
+  <div id="navbar"></div>
+<div class="mt-5"></div>
+  <div class="container mt-5 ">
+    <div class="card shadow p-4 register-card">
+      
+       <h3 class="text-center fw-bold mb-3">تسجيل شركة</h3>
+      <p class="text-center text-muted mb-4">
+        سجّل شركتك لنشر الوظائف والبحث عن المواهب
+      </p>
+
+<form id="companyForm">
+
+  <!-- Company Information -->
+  <div class="section-title">معلومات الشركة</div>
+
+  <div class="mb-3">
+    <label class="form-label">اسم الشركة</label>
+    <input id="company_name" type="text" class="form-control" placeholder="أدخل اسم الشركة" required>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">البريد الرسمي</label>
+    <input id="email" type="email" class="form-control" placeholder="company@mail.com" required>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">كلمة المرور</label>
+    <input id="password" type="password" class="form-control" required>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">مجال العمل</label>
+    <input id="industry" type="text" class="form-control" placeholder="مثال: برمجة، تسويق، تصميم" required>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">حجم الشركة</label>
+    <select id="size" class="form-select" required>
+      <option value="">اختر الحجم</option>
+      <option>شركة ناشئة</option>
+      <option>صغيرة</option>
+      <option>متوسطة</option>
+      <option>كبيرة</option>
+    </select>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">رقم الهاتف</label>
+    <input id="phone" type="text" class="form-control" required>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">الموقع الجغرافي</label>
+    <input id="location" type="text" class="form-control" placeholder="المدينة، الدولة" required>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">الموقع الإلكتروني (اختياري)</label>
+    <input id="website" type="url" class="form-control" placeholder="https://example.com">
+  </div>
+
+  <!-- Documents Section -->
+  <div class="section-title">الوثائق المطلوبة للتحقق</div>
+
+  <p class="text-muted" style="font-size: 14px;">
+    يجب رفع الوثائق التالية للتحقق من هوية الشركة.  
+    سيبقى الحساب قيد المراجعة حتى يتم التحقق منه.
+  </p>
+
+  <div class="mb-3">
+    <label class="form-label">السجل التجاري (PDF أو صورة)</label>
+    <input id="license" type="file" class="form-control" accept=".pdf, .jpg, .jpeg, .png" required>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">شهادة التأسيس</label>
+    <input id="certificate" type="file" class="form-control" accept=".pdf, .jpg, .jpeg, .png" required>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">شعار الشركة (اختياري)</label>
+    <input id="logo" type="file" class="form-control" accept=".jpg, .jpeg, .png">
+  </div>
+
+  <!-- Submit -->
+  <button class="btn btn-success w-100 mt-3">تسجيل الشركة</button>
+
+</form>
+
+
+      <p class="text-center mt-3">
+        لديك حساب بالفعل؟
+        <a href="login.html" class="text-decoration-none">تسجيل الدخول</a>
+      </p>
+
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div id="footer"></div>
+
+  <!-- Bootstrap JS -->
+  <script src="assets/js/bootstrap.bundle.min.js"></script>
+  <!-- Custom JS -->
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/register_company.js"></script>
+
+
+</body>
+</html>

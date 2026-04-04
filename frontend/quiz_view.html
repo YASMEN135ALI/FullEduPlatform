@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الاختبار - EduPlatform</title>
+
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+
+    <style>
+        body {
+            background: #f8f9fa;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        .quiz-box {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-top: 30px;
+        }
+
+        .question-box {
+            padding: 15px;
+            border-radius: 10px;
+            background: #eef2ff;
+            margin-bottom: 20px;
+        }
+
+        .choice-item {
+            background: #fff;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+
+        .choice-item:hover {
+            background: #f0f4ff;
+        }
+
+        .choice-selected {
+            border-color: #4a6cf7;
+            background: #e8edff;
+        }
+
+        #submitBtn {
+            width: 100%;
+            padding: 14px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="quiz-box">
+        <h2 id="quizTitle" class="fw-bold mb-4"></h2>
+
+        <div id="questionsContainer"></div>
+
+        <button id="submitBtn" class="btn btn-success mt-3">إرسال الإجابات</button>
+    </div>
+
+</div>
+
+<script src="assets/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/quiz_view.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>إدارة الدرس</title>
+
+  <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+<link rel="stylesheet" href="assets/css/forms.css">
+
+</head>
+
+<body>
+
+<div class="page-wrapper">
+  <div class="card-main">
+
+    <button class="btn btn-outline-secondary back-btn mb-3" onclick="goBackToCourse()">◀ العودة للكورس</button>
+
+    <h2 class="mb-3">إدارة الدرس</h2>
+    <p id="lessonHeader" class="text-muted"></p>
+
+    <!-- عنوان الدرس -->
+    <div class="mb-3">
+      <label class="form-label">عنوان الدرس</label>
+      <input type="text" id="lessonTitle" class="form-control">
+    </div>
+
+    <!-- نوع المحتوى -->
+    <div class="mb-3">
+      <label class="form-label">نوع المحتوى</label>
+      <select id="lessonContentType" class="form-select" onchange="toggleContentInputs(); renderPreview();">
+        <option value="text">نص</option>
+        <option value="video">فيديو</option>
+        <option value="file">ملف</option>
+        <option value="link">رابط خارجي</option>
+        <option value="quiz">اختبار</option>
+      </select>
+    </div>
+
+    <!-- محتوى النص -->
+    <div id="contentTextBox" class="content-box d-none">
+      <label class="form-label">المحتوى النصي</label>
+      <textarea id="lessonContent" class="form-control" oninput="renderPreview()"></textarea>
+    </div>
+
+    <!-- فيديو -->
+    <div id="contentVideoBox" class="content-box d-none">
+      <label class="form-label">رابط الفيديو</label>
+      <input type="text" id="lessonVideo" class="form-control"
+             placeholder="ضع رابط فيديو MP4 أو YouTube" oninput="renderPreview()">
+    </div>
+
+    <!-- ملف -->
+    <div id="contentFileBox" class="content-box d-none">
+      <label class="form-label">رفع ملف</label>
+      <input type="file" id="lessonFile" class="form-control" onchange="renderPreview()">
+      <div id="currentFileContainer" class="mt-2"></div>
+    </div>
+
+    <!-- رابط خارجي -->
+    <div id="contentLinkBox" class="content-box d-none">
+      <label class="form-label">الرابط الخارجي</label>
+      <input type="text" id="lessonExternalUrl" class="form-control"
+             placeholder="https://example.com" oninput="renderPreview()">
+    </div>
+
+    <!-- ترتيب الدرس -->
+    <div class="mb-3 mt-3">
+      <label class="form-label">ترتيب الدرس</label>
+      <input type="number" id="lessonOrder" class="form-control" value="1">
+    </div>
+
+    <!-- المعاينة -->
+    <div class="preview-box">
+      <h6 class="mb-2">معاينة المحتوى</h6>
+      <div id="lessonPreview" class="text-muted">لا يوجد محتوى بعد.</div>
+    </div>
+
+    <!-- أزرار -->
+    <div class="mt-4 d-flex justify-content-between">
+      <button class="btn btn-danger" onclick="deleteLesson()">حذف الدرس</button>
+      <button class="btn btn-primary" onclick="saveLesson()">حفظ التعديلات</button>
+    </div>
+
+  </div>
+</div>
+
+<script src="assets/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/lesson-manage.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EduPlatform - تسجيل طالب</title>
+
+  <!-- Bootstrap -->
+  <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="assets/css/forms.css">
+  <link rel="stylesheet" href="assets/css/theme.css">
+
+
+</head>
+
+<body>
+
+  <!-- Navbar -->
+  <div id="navbar"></div>
+  <div class="mt-5">
+
+    <div class="container mt-5">
+      <div class="card shadow p-4 register-card">
+
+        <h3 class="text-center header-title mb-2">تسجيل طالب</h3>
+        <p class="text-center sub-text mb-4">
+          أنشئ حسابك كطالب للوصول إلى الدورات والتقدم للوظائف
+        </p>
+
+<form id="studentForm">
+
+  <!-- Full Name -->
+  <div class="mb-3">
+    <label class="form-label">الاسم الكامل</label>
+    <input id="full_name" type="text" class="form-control" placeholder="أدخل اسمك الكامل" required>
+  </div>
+
+  <!-- Email -->
+  <div class="mb-3">
+    <label class="form-label">البريد الإلكتروني</label>
+    <input id="email" type="email" class="form-control" placeholder="example@mail.com" required>
+  </div>
+
+  <!-- Password -->
+  <div class="mb-3">
+    <label class="form-label">كلمة المرور</label>
+    <input id="password" type="password" class="form-control" placeholder="أدخل كلمة مرور قوية" required>
+  </div>
+
+  <!-- Age -->
+  <div class="mb-3">
+    <label class="form-label">العمر</label>
+    <input id="age" type="number" class="form-control" min="10" max="100" required>
+  </div>
+
+  <!-- Education Level -->
+  <div class="mb-3">
+    <label class="form-label">المستوى الدراسي</label>
+    <select id="education_level" class="form-select" required>
+      <option value="">اختر المستوى</option>
+      <option>ثانوي</option>
+      <option>طالب جامعي</option>
+      <option>خريج</option>
+    </select>
+  </div>
+
+  <!-- Country -->
+  <div class="mb-3">
+    <label class="form-label">الدولة</label>
+    <input id="country" type="text" class="form-control" placeholder="أدخل دولتك" required>
+  </div>
+
+  <!-- Phone (Optional) -->
+  <div class="mb-3">
+    <label class="form-label">رقم الهاتف (اختياري)</label>
+    <input id="phone" type="text" class="form-control" placeholder="اختياري">
+  </div>
+
+  <!-- Submit -->
+  <button class="btn btn-primary w-100 mt-2">إنشاء حساب طالب</button>
+
+</form>
+
+
+        <p class="text-center mt-3">
+          لديك حساب بالفعل؟
+          <a href="login.html" class="text-decoration-none">تسجيل الدخول</a>
+        </p>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div id="footer"></div>
+
+  <!-- Bootstrap JS -->
+  <script src="assets/js/bootstrap.bundle.min.js"></script>
+  <!-- Custom JS -->
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/register_student.js"></script>
+
+
+</body>
+
+</html>

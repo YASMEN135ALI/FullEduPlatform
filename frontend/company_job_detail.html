@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تفاصيل الوظيفة</title>
+
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+</head>
+
+<body>
+
+<div class="container py-5">
+
+    <h2 class="fw-bold mb-4 text-center" id="jobTitle">عنوان الوظيفة</h2>
+
+    <div class="card shadow-sm p-4">
+
+        <p><strong>الوصف:</strong></p>
+        <p id="jobDescription"></p>
+
+        <p><strong>نوع الوظيفة:</strong> <span id="jobType"></span></p>
+        <p><strong>الراتب:</strong> <span id="jobSalary"></span></p>
+        <p><strong>المهارات المطلوبة:</strong> <span id="jobSkills"></span></p>
+        <p><strong>الموقع:</strong> <span id="jobLocation"></span></p>
+        <p><strong>تاريخ النشر:</strong> <span id="jobDate"></span></p>
+
+        <div class="d-flex gap-2 mt-4">
+
+            <a id="editBtn" class="btn btn-warning w-100">تعديل</a>
+
+            <button class="btn btn-danger w-100" id="deleteBtn">
+                حذف
+            </button>
+
+            <a id="applicantsBtn" class="btn btn-primary w-100">
+                عرض المتقدمين
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="assets/js/company-job-detail.js"></script>
+
+</body>
+</html>

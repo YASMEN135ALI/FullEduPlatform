@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>عرض الكورس - EduPlatform</title>
+
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+
+    <style>
+        body {
+            background: #f8f9fa;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        /* ============================
+           HEADER SECTION
+        ============================ */
+        .course-header {
+            position: relative;
+            height: 260px;
+            background-size: cover;
+            background-position: center;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .course-header-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.75));
+        }
+
+        .course-header-content {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            color: white;
+        }
+
+        .course-header-content h2 {
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        /* ============================
+           LESSON CARDS
+        ============================ */
+        .lesson-card {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: 0.2s;
+        }
+
+        .lesson-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+        }
+
+        .lesson-status {
+            font-size: 13px;
+            color: #6c757d;
+        }
+
+        /* ============================
+           QUIZ CARD
+        ============================ */
+        .quiz-card {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .progress-container {
+            width: 180px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container py-4">
+
+    <!-- ============================
+         HEADER
+    ============================ -->
+    <div id="courseHeader" class="course-header mb-4">
+        <div class="course-header-overlay"></div>
+        <div class="course-header-content">
+            <h2 id="courseTitle"></h2>
+            <p id="courseDescription" class="mb-1"></p>
+
+            <div class="d-flex align-items-center mt-2">
+                <div class="progress-container me-3">
+                    <div class="progress">
+                        <div id="progressBar" class="progress-bar bg-success" style="width: 0%"></div>
+                    </div>
+                </div>
+                <span id="progressText"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================
+         LESSONS SECTION
+    ============================ -->
+    <h4 class="fw-bold mb-3">الدروس</h4>
+    <div id="lessonsContainer"></div>
+
+    <!-- ============================
+         QUIZ SECTION
+    ============================ -->
+    <div id="quizSection" class="mt-4" style="display:none;">
+        <h4 class="fw-bold mb-3">الاختبار النهائي</h4>
+        <div class="quiz-card">
+            <p class="mb-2">يوجد اختبار نهائي لهذا الكورس.</p>
+            <button class="btn btn-warning" id="startQuizBtn">ابدأ الاختبار</button>
+        </div>
+    </div>
+
+</div>
+
+<script src="assets/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/student_course_view.js"></script>
+
+</body>
+</html>

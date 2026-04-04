@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الوظائف - EduPlatform</title>
+
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/theme.css">
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <div id="navbar"></div>
+    <section class="mt-5">
+        <div class="container py-5">
+
+            <h2 class="fw-bold mb-4 text-center">الوظائف المتاحة</h2>
+
+            <!-- Search + Filter -->
+            <div class="row mb-4">
+                <div class="col-md-6 mb-2">
+                    <input type="text" id="jobSearch" class="form-control" placeholder="ابحث عن وظيفة...">
+                </div>
+
+                <div class="col-md-6 mb-2">
+                    <select id="jobTypeFilter" class="form-select">
+                        <option value="">جميع الأنواع</option>
+                        <option value="full-time">دوام كامل</option>
+                        <option value="part-time">دوام جزئي</option>
+                        <option value="remote">عن بُعد</option>
+                        <option value="internship">تدريب</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Jobs Container -->
+            <div class="row" id="jobsContainer"></div>
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <div id="footer"></div>
+
+
+    <script src="assets/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/jobs.js"></script>
+
+</body>
+
+</html>

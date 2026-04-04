@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EduPlatform - اختيار نوع الحساب</title>
+
+  <!-- Bootstrap -->
+  <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/theme.css">
+
+  <style>
+    body { background: #f5f7fa; }
+    .account-card { transition: .3s; border-radius: 12px; cursor: pointer; }
+    .account-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
+    .icon-box { width: 70px; height: 70px; border-radius: 50%; background: #0d6efd;
+      display: flex; align-items: center; justify-content: center; margin: auto; margin-bottom: 15px; }
+    .icon-box i { font-size: 32px; color: white; }
+  </style>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body>
+
+  <!-- Navbar -->
+  <div id="navbar"></div>
+
+  <div class="container mt-5">
+    <h2 class="text-center fw-bold mb-4">إنشاء حساب جديد</h2>
+    <p class="text-center text-muted mb-5">اختر نوع الحساب الذي يناسبك</p>
+
+    <div class="row g-4">
+
+      <!-- Student -->
+      <div class="col-md-4">
+        <a href="register_student.html" class="text-decoration-none text-dark">
+          <div class="card p-4 text-center shadow-sm account-card">
+            <div class="icon-box"><i class="fa-solid fa-user-graduate"></i></div>
+            <h4 class="fw-bold">طالب</h4>
+            <p class="text-muted">التسجيل في الدورات والتقدم للوظائف</p>
+            <button class="btn btn-primary w-100 mt-3">متابعة</button>
+          </div>
+        </a>
+      </div>
+
+      <!-- Company -->
+      <div class="col-md-4">
+        <a href="register_company.html" class="text-decoration-none text-dark">
+          <div class="card p-4 text-center shadow-sm account-card">
+            <div class="icon-box" style="background:#198754;"><i class="fa-solid fa-building"></i></div>
+            <h4 class="fw-bold">شركة</h4>
+            <p class="text-muted">نشر الوظائف والبحث عن المواهب</p>
+            <button class="btn btn-success w-100 mt-3">متابعة</button>
+          </div>
+        </a>
+      </div>
+
+      <!-- Instructor -->
+      <div class="col-md-4">
+        <a href="register_teacher.html" class="text-decoration-none text-dark">
+          <div class="card p-4 text-center shadow-sm account-card">
+            <div class="icon-box" style="background:#fd7e14;"><i class="fa-solid fa-chalkboard-user"></i></div>
+            <h4 class="fw-bold">مدرّس</h4>
+            <p class="text-muted">إنشاء الدورات ومتابعة الطلاب</p>
+            <button class="btn btn-warning w-100 mt-3 text-white">متابعة</button>
+          </div>
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div id="footer"></div>
+
+  <!-- Bootstrap JS -->
+  <script src="assets/js/bootstrap.bundle.min.js"></script>
+  <!-- Custom JS -->
+  <script src="assets/js/main.js"></script>
+
+</body>
+</html>

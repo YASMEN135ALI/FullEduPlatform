@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>الكورسات</title>
+  <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+  <link rel="stylesheet" href="assets/css/theme.css">
+</head>
+<body>
+<div class="container py-5">
+
+  <h2 class="fw-bold mb-4 text-center">الكورسات المتاحة</h2>
+
+  <!-- شريط البحث والتصفية -->
+  <form id="searchForm" class="row g-3 mb-4">
+    <div class="col-md-4">
+      <input type="text" id="keyword" class="form-control" placeholder="ابحث عن كورس...">
+    </div>
+    <div class="col-md-3">
+      <select id="priceFilter" class="form-select">
+        <option value="">السعر</option>
+        <option value="free">مجاني</option>
+        <option value="paid">مدفوع</option>
+      </select>
+    </div>
+    <div class="col-md-3">
+      <select id="levelFilter" class="form-select">
+        <option value="">المستوى</option>
+        <option value="beginner">مبتدئ</option>
+        <option value="intermediate">متوسط</option>
+        <option value="advanced">متقدم</option>
+      </select>
+    </div>
+    <div class="col-md-2">
+      <button class="btn btn-primary w-100">بحث</button>
+    </div>
+  </form>
+
+  <!-- قائمة الكورسات -->
+  <div id="coursesList" class="row"></div>
+
+  <p id="noCoursesMsg" class="text-center text-muted d-none mt-3">
+    لا توجد كورسات حالياً.
+  </p>
+
+</div>
+
+<script src="assets/js/student-courses.js"></script>
+</body>
+</html>
+
+

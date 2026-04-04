@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>تفاصيل الكورس</title>
+  <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+</head>
+
+<body>
+
+<div class="container py-5">
+
+  <h2 id="courseTitle" class="fw-bold mb-3"></h2>
+
+  <img id="courseImage" src="assets/img/course-placeholder.jpg" 
+       class="img-fluid rounded mb-4" style="max-height: 300px; object-fit: cover;">
+
+  <p id="courseDescription" class="mb-4"></p>
+
+  <div class="row mb-4">
+    <div class="col-md-4"><strong>السعر:</strong> <span id="coursePrice"></span></div>
+    <div class="col-md-4"><strong>المستوى:</strong> <span id="courseLevel"></span></div>
+    <div class="col-md-4"><strong>المدة:</strong> <span id="courseDuration"></span></div>
+  </div>
+
+  <p><strong>المدرّس:</strong> <span id="courseTeacher"></span></p>
+
+  <div id="enrollBtnContainer" class="my-4"></div>
+
+  <hr>
+
+  <h4 class="mt-4">الدروس</h4>
+  <ul id="lessonsList" class="list-group mb-4"></ul>
+
+  <h4>الاختبارات</h4>
+  <ul id="quizzesList" class="list-group"></ul>
+
+</div>
+<button id="certificateBtn" class="btn btn-success w-100 mt-3" style="display:none;">
+    عرض الشهادة
+</button>
+
+<script src="assets/js/student-course-detail.js"></script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>تعديل الدرس</title>
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/forms.css">
+</head>
+<body>
+
+<div class="container mt-5">
+    <h1 class="mb-4 text-center">تعديل الدرس</h1>
+
+    <form id="editLessonForm" class="p-4 shadow rounded bg-white">
+
+        <div class="mb-3">
+            <label class="form-label">عنوان الدرس</label>
+            <input type="text" id="title" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">ترتيب الدرس</label>
+            <input type="number" id="order_index" class="form-control" min="1" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">الفيديو الحالي</label><br>
+            <video id="currentVideo" width="300" controls></video>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">تغيير الفيديو</label>
+            <input type="file" id="video" class="form-control" accept="video/*">
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">حفظ التعديلات</button>
+    </form>
+</div>
+
+<script src="assets/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/edit-lesson.js"></script>
+
+</body>
+</html>

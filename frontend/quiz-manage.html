@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>إدارة الاختبار</title>
+
+  <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+
+  <style>
+    body {
+      background: #eef1f5;
+      font-family: "Tajawal", sans-serif;
+    }
+
+    .page-wrapper {
+      max-width: 900px;
+      margin: 30px auto;
+    }
+
+    .card-main {
+      background: #fff;
+      padding: 25px;
+      border-radius: 14px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+    }
+
+    h2 {
+      font-weight: 800;
+      color: #222;
+    }
+
+    .form-label {
+      font-weight: 600;
+      color: #444;
+    }
+
+    .form-control {
+      border-radius: 10px;
+      height: 45px;
+    }
+
+    textarea.form-control {
+      height: auto;
+      min-height: 120px;
+    }
+
+    .btn-primary {
+      background: #0d6efd;
+      border: none;
+      border-radius: 999px;
+      padding: 10px 22px;
+      font-weight: 600;
+    }
+
+    .btn-danger {
+      border-radius: 999px;
+      padding: 10px 22px;
+      font-weight: 600;
+    }
+
+    .question-box {
+      background: #f8f9fc;
+      padding: 15px;
+      border-radius: 12px;
+      border: 1px solid #e3e6ee;
+      margin-top: 10px;
+    }
+
+    .back-btn {
+      border-radius: 999px;
+      padding: 6px 14px;
+      font-size: 13px;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="page-wrapper">
+  <div class="card-main">
+
+    <button class="btn btn-outline-secondary back-btn mb-3" onclick="goBackToCourse()">◀ العودة للكورس</button>
+
+    <h2 class="mb-3">إدارة الاختبار</h2>
+    <p id="quizHeader" class="text-muted"></p>
+
+    <!-- عنوان الاختبار -->
+    <div class="mb-3">
+      <label class="form-label">عنوان الاختبار</label>
+      <input type="text" id="quizTitle" class="form-control">
+    </div>
+
+    <!-- وصف الاختبار -->
+    <div class="mb-3">
+      <label class="form-label">الوصف</label>
+      <textarea id="quizDescription" class="form-control"></textarea>
+    </div>
+
+    <!-- درجة النجاح -->
+    <div class="mb-3">
+      <label class="form-label">درجة النجاح (%)</label>
+      <input type="number" id="quizPassScore" class="form-control" min="1" max="100">
+    </div>
+
+    <!-- عدد المحاولات -->
+    <div class="mb-3">
+      <label class="form-label">عدد المحاولات المسموحة</label>
+      <input type="number" id="quizAttempts" class="form-control" min="1">
+    </div>
+
+    <!-- الأسئلة -->
+    <h4 class="mt-4">الأسئلة</h4>
+    <div id="questionsList"></div>
+
+    <button class="btn btn-primary mt-3" onclick="createQuestion()">➕ إضافة سؤال</button>
+
+    <!-- أزرار -->
+    <div class="mt-4 d-flex justify-content-between">
+      <button class="btn btn-danger" onclick="deleteQuiz()">حذف الاختبار</button>
+      <button class="btn btn-primary" onclick="saveQuiz()">حفظ التعديلات</button>
+    </div>
+
+  </div>
+</div>
+
+<script src="assets/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/quiz-manage.js"></script>
+
+</body>
+</html>

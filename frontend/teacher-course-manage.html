@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>إدارة الكورس</title>
+
+  <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+
+<link rel="stylesheet" href="assets/css/forms.css">
+</head>
+
+<body>
+
+<div class="page-wrapper">
+  <div class="card-main">
+
+    <div class="page-header">
+      <div>
+        <h2>إدارة الكورس</h2>
+        <small id="courseTitleHeader"></small>
+      </div>
+      <button class="btn btn-outline-secondary back-btn" onclick="window.location.href='teacher_courses.html'">
+        ◀ العودة إلى دوراتي
+      </button>
+    </div>
+
+    <div class="course-meta">
+      <div class="meta-pill">
+        المستوى: <span id="metaLevel">—</span>
+      </div>
+      <div class="meta-pill">
+        السعر: <span id="metaPrice">—</span>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <ul class="nav nav-tabs" id="courseTabs">
+      <li class="nav-item"><a class="nav-link active" data-tab="info">معلومات الكورس</a></li>
+      <li class="nav-item"><a class="nav-link" data-tab="lessons">الدروس</a></li>
+      <li class="nav-item"><a class="nav-link" data-tab="quizzes">الاختبارات</a></li>
+      <li class="nav-item"><a class="nav-link" data-tab="students">الطلاب</a></li>
+      <li class="nav-item"><a class="nav-link" data-tab="settings">الإعدادات</a></li>
+    </ul>
+
+    <div id="tabContent">
+
+      <!-- معلومات الكورس -->
+      <div id="tab-info" class="mt-3">
+        <div class="section-title">بيانات الكورس</div>
+
+        <div class="mb-3">
+          <label class="form-label">عنوان الكورس</label>
+          <input type="text" id="courseTitle" class="form-control">
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">الوصف</label>
+          <textarea id="courseDescription" class="form-control"></textarea>
+        </div>
+
+        <div class="row">
+          <div class="col-md-4 mb-3">
+            <label class="form-label">المستوى</label>
+            <select id="courseLevel" class="form-select">
+              <option value="beginner">مبتدئ</option>
+              <option value="intermediate">متوسط</option>
+              <option value="advanced">متقدم</option>
+            </select>
+          </div>
+
+          <div class="col-md-4 mb-3">
+            <label class="form-label">السعر</label>
+            <input type="number" id="coursePrice" class="form-control">
+          </div>
+
+          <div class="col-md-4 mb-3">
+            <label class="form-label">صورة الكورس</label>
+            <input type="file" id="courseImage" class="form-control">
+          </div>
+        </div>
+
+        <button class="btn btn-primary mt-2" onclick="saveCourseInfo()">حفظ التعديلات</button>
+      </div>
+
+      <!-- الدروس -->
+      <div id="tab-lessons" class="mt-3 d-none">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <div class="section-title mb-0">دروس الكورس</div>
+          <button class="btn btn-soft btn-soft-success" onclick="openCreateLessonModal()">+ إضافة درس جديد</button>
+        </div>
+        <div id="lessonsList" class="item-list"></div>
+      </div>
+
+      <!-- الاختبارات -->
+      <div id="tab-quizzes" class="mt-3 d-none">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <div class="section-title mb-0">الاختبارات</div>
+          <button class="btn btn-soft btn-soft-success"
+        onclick="window.location.href='create_quiz.html?course_id=' + courseId">
+    + إضافة اختبار جديد
+</button>
+
+        </div>
+        <div id="quizzesList" class="item-list"></div>
+      </div>
+
+      <!-- الطلاب -->
+      <div id="tab-students" class="mt-3 d-none">
+        <div class="section-title">الطلاب المسجّلين</div>
+        <div id="studentsList" class="item-list"></div>
+      </div>
+
+      <!-- الإعدادات -->
+      <div id="tab-settings" class="mt-3 d-none">
+        <div class="section-title">الإعدادات</div>
+
+        <div class="danger-zone mt-2">
+          <h6>منطقة خطرة</h6>
+          <p>حذف الكورس سيؤدي إلى إزالة جميع الدروس والاختبارات المرتبطة به. لا يمكن التراجع عن هذه العملية.</p>
+          <button class="btn btn-soft btn-soft-danger" onclick="deleteCourse()">حذف الكورس نهائيًا</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- مودال إضافة درس -->
+<div class="modal fade" id="lessonModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">إضافة درس جديد</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <label class="form-label">عنوان الدرس</label>
+        <input type="text" id="lessonTitle" class="form-control mb-2">
+
+        <label class="form-label">نوع المحتوى</label>
+        <select id="lessonContentType" class="form-select mb-2">
+          <option value="text">نص</option>
+          <option value="video">فيديو</option>
+          <option value="file">ملف</option>
+          <option value="link">رابط خارجي</option>
+        </select>
+
+        <label class="form-label">الوصف</label>
+        <textarea id="lessonDescription" class="form-control mb-2"></textarea>
+
+        <label class="form-label">ترتيب الدرس</label>
+        <input type="number" id="lessonOrder" class="form-control mb-2" value="1">
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+        <button class="btn btn-primary" onclick="createLesson()">حفظ</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- مودال إضافة اختبار -->
+<div class="modal fade" id="quizModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">إضافة اختبار جديد</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <label class="form-label">عنوان الاختبار</label>
+        <input type="text" id="quizTitle" class="form-control mb-2">
+
+        <label class="form-label">الوصف</label>
+        <textarea id="quizDescription" class="form-control mb-2"></textarea>
+
+        <label class="form-label">اختر درس</label>
+        <select id="quizLesson" class="form-select"></select>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+        <button class="btn btn-primary" onclick="createQuiz()">حفظ</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="assets/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/teacher-course-manage.js"></script>
+
+</body>
+</html>

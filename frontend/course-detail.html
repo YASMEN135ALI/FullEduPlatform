@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>تفاصيل الكورس</title>
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/theme.css">
+</head>
+
+<body>
+
+<div class="container py-5">
+
+    <!-- ====== Header Section ====== -->
+    <div class="row mb-4">
+
+        <!-- صورة الكورس -->
+        <div class="col-md-4">
+            <img id="courseImage" src="assets/img/course-placeholder.jpg" class="img-fluid rounded shadow">
+        </div>
+
+        <!-- معلومات الكورس -->
+        <div class="col-md-8">
+            <h2 id="courseTitle" class="fw-bold mb-3"></h2>
+
+            <p id="courseDescription" class="text-muted mb-3"></p>
+
+            <p><strong>المدرّس:</strong> <span id="courseTeacher"></span></p>
+            <p><strong>المستوى:</strong> <span id="courseLevel"></span></p>
+            <p><strong>المدة:</strong> <span id="courseDuration"></span></p>
+            <p><strong>السعر:</strong> <span id="coursePrice"></span></p>
+
+            <button id="enrollBtn" class="btn btn-primary mt-3 px-4">التسجيل في الكورس</button>
+        </div>
+
+    </div>
+
+    <!-- ====== Progress Bar ====== -->
+    <div id="progressSection" class="mb-5 d-none">
+        <h4 class="fw-bold mb-3">نسبة التقدّم</h4>
+        <div class="progress" style="height: 25px;">
+            <div id="progressBar" class="progress-bar bg-success" style="width: 0%;">
+                0%
+            </div>
+        </div>
+    </div>
+
+    <!-- ====== Lessons Section ====== -->
+    <div class="mb-5">
+        <h4 class="fw-bold mb-3">الدروس</h4>
+        <div id="lessonsList" class="list-group shadow-sm"></div>
+    </div>
+
+    <!-- ====== Quizzes Section ====== -->
+    <div class="mb-5">
+        <h4 class="fw-bold mb-3">الاختبارات</h4>
+        <div id="quizzesList" class="list-group shadow-sm"></div>
+    </div>
+
+    <!-- ====== Certificate Section ====== -->
+    <div id="certificateSection" class="text-center py-4 d-none">
+        <h4 class="fw-bold mb-3">🎉 مبروك! لقد أكملت الكورس</h4>
+        <button id="certificateBtn" class="btn btn-success px-4">عرض الشهادة</button>
+    </div>
+
+</div>
+
+<script src="assets/js/course-details.js"></script>
+</body>
+</html>

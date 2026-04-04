@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ملف المدرّس - EduPlatform</title>
+
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+        <link rel="stylesheet" href="assets/css/profile.css">
+          <link rel="stylesheet" href="assets/css/theme.css">
+</head>
+
+<body>
+
+<div class="container mt-4">
+
+    <!-- Header -->
+    <div class="profile-header">
+        <img id="teacherPhoto" src="assets/img/default-user.png" alt="Teacher Photo">
+        <div>
+            <h3 id="teacherName">اسم المدرّس</h3>
+            <p id="teacherSpecialization" class="text-muted">التخصص</p>
+            <p><strong>التقييم:</strong> <span id="teacherRating">0.0</span></p>
+            <p><strong>الرصيد:</strong> <span id="teacherBalance">0.00</span> $</p>
+        </div>
+    </div>
+
+    <!-- Profile Info -->
+    <div class="profile-section">
+        <h4>المعلومات الشخصية</h4>
+        <p><strong>الخبرة:</strong> <span id="experienceYears">0</span> سنوات</p>
+        <p><strong>نبذة:</strong></p>
+        <p id="teacherBio">لا توجد نبذة بعد.</p>
+    </div>
+
+    <!-- Files -->
+    <div class="profile-section">
+        <h4>الملفات</h4>
+
+        <p><strong>السيرة الذاتية (CV):</strong></p>
+        <a id="cvLink" href="#" target="_blank" class="file-link">عرض السيرة الذاتية</a>
+
+        <hr>
+
+        <p><strong>الشهادة:</strong></p>
+        <a id="certificateLink" href="#" target="_blank" class="file-link">عرض الشهادة</a>
+    </div>
+
+    <!-- Edit Form -->
+    <div class="profile-section">
+        <h4>تعديل البيانات</h4>
+
+        <form id="updateProfileForm" enctype="multipart/form-data">
+
+            <div class="mb-3">
+                <label class="form-label">التخصص</label>
+                <input type="text" id="specialization" class="form-control">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">سنوات الخبرة</label>
+                <input type="number" id="experience_years" class="form-control">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">النبذة</label>
+                <textarea id="bio" class="form-control" rows="4"></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">الصورة الشخصية</label>
+                <input type="file" id="photo" class="form-control">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">السيرة الذاتية (CV)</label>
+                <input type="file" id="cv" class="form-control">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">الشهادة</label>
+                <input type="file" id="certificate" class="form-control">
+            </div>
+
+            <button type="submit" class="btn btn-primary">حفظ التعديلات</button>
+        </form>
+    </div>
+
+</div>
+
+<script src="assets/js/teacher-profile.js"></script>
+
+</body>
+
+
+</html>

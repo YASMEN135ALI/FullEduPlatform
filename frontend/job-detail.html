@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تفاصيل الوظيفة - EduPlatform</title>
+
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+        <link rel="stylesheet" href="assets/css/style.css">
+          <link rel="stylesheet" href="assets/css/theme.css">
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <div id="navbar"></div>
+
+    <div class="container py-5">
+
+        <!-- Job Header -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+
+                <h2 id="jobTitle" class="fw-bold"></h2>
+
+                <p class="text-muted mb-1">
+                    <strong>الشركة:</strong>
+                    <span id="jobCompany"></span>
+                </p>
+
+                <p class="text-muted">
+                    <strong>نوع الوظيفة:</strong>
+                    <span id="jobType" class="badge bg-primary"></span>
+                </p>
+
+                <button id="applyBtn" class="btn btn-success w-100 mt-3">
+                    التقديم على الوظيفة
+                </button>
+
+            </div>
+        </div>
+
+        <!-- Job Description -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h4 class="fw-bold mb-3">وصف الوظيفة</h4>
+                <p id="jobDescription"></p>
+            </div>
+        </div>
+
+        <!-- Job Requirements -->
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h4 class="fw-bold mb-3">المتطلبات</h4>
+                <ul id="jobRequirements" class="list-group list-group-flush"></ul>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <div id="footer"></div>
+
+  
+     <script src="assets/js/bootstrap.bundle.min.js"></script>
+     <script src="assets/js/bootstrap.min.js"></script>    <script src="assets/js/main.js"></script>
+    <script src="assets/js/job-detail.js"></script>
+
+</body>
+</html>

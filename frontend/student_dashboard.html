@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة الطالب - EduPlatform</title>
+
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+
+
+</head>
+
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h4>EduPlatform</h4>
+        <ul class="nav flex-column">
+            <li><a class="nav-link active" href="#">الصفحة الرئيسية</a></li>
+            <li><a class="nav-link" href="student_courses.html">كورساتي</a></li>
+            <li><a class="nav-link" href="#">الدورات المقترحة</a></li>
+            <li><a class="nav-link" href="student-profile.html">ملفي الشخصي</a></li>
+            <li><a class="nav-link text-danger" id="logoutBtn">تسجيل الخروج</a></li>
+        </ul>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+
+        <!-- Header -->
+        <div class="dashboard-header d-flex justify-content-between align-items-center">
+            <div>
+                <h3 class="fw-bold">مرحبًا، <span id="studentName">الطالب</span></h3>
+                <p class="text-muted">نتمنى لك تعلمًا ممتعًا</p>
+            </div>
+            <img id="studentPhoto" src="assets/img/default_user.png">
+        </div>
+
+        <!-- Stats -->
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="stats-card">
+                    <h4>كورساتي</h4>
+                    <p id="myCoursesCount">0</p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="stats-card">
+                    <h4>الشهادات</h4>
+                    <p id="certificatesCount">0</p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="stats-card">
+                    <h4>طلبات الوظائف</h4>
+                    <p id="applicationsCount">0</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Courses -->
+        <h4 class="fw-bold mb-3">كورساتي</h4>
+        <div class="row" id="myCoursesContainer">
+            <!-- Loader -->
+            <div class="text-center w-100 py-5">
+                <div class="spinner-border text-primary"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="assets/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/dashboard-student.js"></script>
+
+</body>
+</html>

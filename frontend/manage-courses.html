@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إدارة الكورسات - EduPlatform</title>
+
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+        <link rel="stylesheet" href="assets/css/dashboard.css">
+          <link rel="stylesheet" href="assets/css/theme.css">
+</head>
+
+<body>
+
+    <div id="navbar"></div>
+
+    <div class="container py-5">
+
+        <h2 class="fw-bold mb-4 text-center">إدارة الكورسات</h2>
+
+        <div class="text-end mb-3">
+            <a href="create-course.html" class="btn btn-success">إضافة كورس جديد</a>
+        </div>
+
+        <div class="card shadow-sm">
+            <div class="card-body">
+
+                <table class="table table-bordered text-center">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>العنوان</th>
+                            <th>الطلاب</th>
+                            <th>الدروس</th>
+                            <th>إجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="coursesTable">
+                        <!-- سيتم تحميل الكورسات هنا -->
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+
+    </div>
+
+    <div id="footer"></div>
+
+     
+     <script src="assets/js/bootstrap.bundle.min.js"></script>
+     <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/manage-courses.js"></script>
+
+</body>
+</html>

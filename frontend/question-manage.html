@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>إدارة السؤال</title>
+
+  <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+
+  <style>
+    body {
+      background: #eef1f5;
+      font-family: "Tajawal", sans-serif;
+    }
+
+    .page-wrapper {
+      max-width: 900px;
+      margin: 30px auto;
+    }
+
+    .card-main {
+      background: #fff;
+      padding: 25px;
+      border-radius: 14px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+    }
+
+    h2 {
+      font-weight: 800;
+      color: #222;
+    }
+
+    .form-label {
+      font-weight: 600;
+      color: #444;
+    }
+
+    .form-control {
+      border-radius: 10px;
+      height: 45px;
+    }
+
+    .choice-box {
+      background: #f8f9fc;
+      padding: 15px;
+      border-radius: 12px;
+      border: 1px solid #e3e6ee;
+      margin-top: 10px;
+    }
+
+    .btn-primary {
+      background: #0d6efd;
+      border: none;
+      border-radius: 999px;
+      padding: 10px 22px;
+      font-weight: 600;
+    }
+
+    .btn-danger {
+      border-radius: 999px;
+      padding: 10px 22px;
+      font-weight: 600;
+    }
+
+    .back-btn {
+      border-radius: 999px;
+      padding: 6px 14px;
+      font-size: 13px;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="page-wrapper">
+  <div class="card-main">
+
+    <button class="btn btn-outline-secondary back-btn mb-3" onclick="goBackToQuiz()">◀ العودة للاختبار</button>
+
+    <h2 class="mb-3">إدارة السؤال</h2>
+    <p id="questionHeader" class="text-muted"></p>
+
+    <!-- نص السؤال -->
+    <div class="mb-3">
+      <label class="form-label">نص السؤال</label>
+      <input type="text" id="questionText" class="form-control">
+    </div>
+
+    <!-- الخيارات -->
+    <h4 class="mt-4">الخيارات</h4>
+    <div id="choicesList"></div>
+
+    <button class="btn btn-primary mt-3" onclick="addChoice()">➕ إضافة خيار</button>
+
+    <!-- أزرار -->
+    <div class="mt-4 d-flex justify-content-between">
+      <button class="btn btn-danger" onclick="deleteQuestion()">حذف السؤال</button>
+      <button class="btn btn-primary" onclick="saveQuestion()">حفظ التعديلات</button>
+    </div>
+
+  </div>
+</div>
+
+<script src="assets/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/question-manage.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>تفاصيل الدرس</title>
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/theme.css">
+</head>
+<body>
+
+<div class="container mt-5">
+    <h1 id="lessonTitle" class="mb-4 text-center">عنوان الدرس</h1>
+
+    <div class="card p-4 shadow">
+
+        <h5>ترتيب الدرس:</h5>
+        <p id="lessonOrder"></p>
+
+        <!-- 🔥 فيديو -->
+        <div id="videoContainer" style="display:none;">
+            <h5>الفيديو:</h5>
+            <video id="lessonVideo" width="100%" controls></video>
+        </div>
+
+        <!-- 🔥 نص -->
+        <div id="textContainer" style="display:none;">
+            <h5>المحتوى النصي:</h5>
+            <p id="lessonText" class="border p-3 rounded"></p>
+        </div>
+
+        <!-- 🔥 ملف -->
+        <div id="fileContainer" style="display:none;">
+            <h5>ملف الدرس:</h5>
+            <a id="lessonFile" href="#" target="_blank" class="btn btn-primary">تحميل الملف</a>
+        </div>
+
+        <!-- 🔥 رابط خارجي -->
+        <div id="externalContainer" style="display:none;">
+            <h5>رابط خارجي:</h5>
+            <a id="lessonExternal" href="#" target="_blank" class="btn btn-info">فتح الرابط</a>
+        </div>
+
+    </div>
+
+    <div class="mt-4 text-center">
+        <a href="edit_lesson.html?id=" id="editLink" class="btn btn-warning">تعديل الدرس</a>
+        <a href="teacher_course_lessons.html?course=" id="backLink" class="btn btn-secondary">رجوع إلى قائمة الدروس</a>
+    </div>
+</div>
+
+<script src="assets/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/lesson-details.js"></script>
+
+</body>
+</html>

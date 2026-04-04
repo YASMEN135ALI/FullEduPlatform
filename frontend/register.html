@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إنشاء حساب - EduPlatform</title>
+
+    <!-- Bootstrap -->
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/forms.css">
+    <link rel="stylesheet" href="assets/css/theme.css">
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <div id="navbar"></div>
+    <section class="mt-5">
+
+        <div class="login-container mt-5">
+            <div class="login-box shadow mt-5">
+
+                <h2 class="text-center   mt-5 fw-bold">إنشاء حساب جديد</h2>
+
+                <form id="registerForm">
+
+                    <div class="mb-3">
+                        <label class="form-label">اسم المستخدم</label>
+                        <input type="text" id="username" class="form-control" placeholder="أدخل اسم المستخدم">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">البريد الإلكتروني</label>
+                        <input type="email" id="email" class="form-control" placeholder="example@mail.com">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">كلمة المرور</label>
+                        <input type="password" id="password" class="form-control" placeholder="أدخل كلمة المرور">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">تأكيد كلمة المرور</label>
+                        <input type="password" id="confirmPassword" class="form-control"
+                            placeholder="أعد كتابة كلمة المرور">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">نوع الحساب</label>
+                        <select id="role" class="form-select">
+                            <option value="">اختر نوع الحساب</option>
+                            <option value="student">طالب</option>
+                            <option value="teacher">مدرّس</option>
+                            <option value="company">شركة</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-success w-100 mt-3">إنشاء الحساب</button>
+
+                    <p class="text-center mt-3">
+                        لديك حساب بالفعل؟
+                        <a href="login.html">تسجيل الدخول</a>
+                    </p>
+
+                    <div id="errorMsg" class="alert alert-danger text-center d-none"></div>
+                    <div id="successMsg" class="alert alert-success text-center d-none"></div>
+
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <div id="footer"></div>
+
+    <!-- Bootstrap JS -->
+
+    <script src="assets/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <!-- Custom JS -->
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/auth.js"></script>
+
+</body>
+
+</html>

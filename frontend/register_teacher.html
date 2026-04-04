@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EduPlatform - تسجيل مدرس</title>
+
+  <!-- Bootstrap -->
+  <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="assets/css/forms.css">
+  <link rel="stylesheet" href="assets/css/theme.css">
+
+</head>
+
+<body>
+
+  <!-- Navbar -->
+  <div id="navbar"></div>
+<div class="mt-5">
+  <div class="container mt-5">
+    <div class="card shadow p-4 register-card">
+      
+      <h3 class="text-center fw-bold mb-3">تسجيل مدرس</h3>
+      <p class="text-center text-muted mb-4">
+        سجّل كمدرّس لإنشاء الدورات ومشاركة خبراتك مع الطلاب
+      </p>
+
+<form id="teacherForm">
+
+  <!-- Personal Information -->
+  <div class="section-title">المعلومات الشخصية</div>
+
+  <div class="mb-3">
+    <label class="form-label">الاسم الكامل</label>
+    <input id="full_name" type="text" class="form-control" placeholder="أدخل اسمك الكامل" required>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">البريد الإلكتروني</label>
+    <input id="email" type="email" class="form-control" placeholder="example@mail.com" required>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">كلمة المرور</label>
+    <input id="password" type="password" class="form-control" required>
+  </div>
+
+  <!-- Professional Information -->
+  <div class="section-title">المعلومات المهنية</div>
+
+  <div class="mb-3">
+    <label class="form-label">التخصص</label>
+    <input id="specialization" type="text" class="form-control" placeholder="مثال: برمجة، تصميم، إدارة" required>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">سنوات الخبرة</label>
+    <input id="experience_years" type="number" class="form-control" min="0" max="50" required>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">نبذة تعريفية</label>
+    <textarea id="bio" class="form-control" rows="3" placeholder="اكتب نبذة قصيرة عن خبراتك" required></textarea>
+  </div>
+
+  <!-- Documents Section -->
+  <div class="section-title">الوثائق المطلوبة للتحقق</div>
+
+  <p class="text-muted" style="font-size: 14px;">
+    يجب رفع الوثائق التالية للتحقق من مؤهلاتك كمدرّس.  
+    سيبقى الحساب قيد المراجعة حتى يتم التحقق منه.
+  </p>
+
+  <div class="mb-3">
+    <label class="form-label">الشهادة الرسمية (PDF أو صورة)</label>
+    <input id="certificate" type="file" class="form-control" accept=".pdf, .jpg, .jpeg, .png" required>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">السيرة الذاتية (CV)</label>
+    <input id="cv" type="file" class="form-control" accept=".pdf" required>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">صورة شخصية (اختياري)</label>
+    <input id="photo" type="file" class="form-control" accept=".jpg, .jpeg, .png">
+  </div>
+
+  <!-- Submit -->
+  <button class="btn btn-warning w-100 mt-3 text-white">تسجيل كمدرّس</button>
+
+</form>
+
+
+      <p class="text-center mt-3">
+        لديك حساب بالفعل؟
+        <a href="login.html" class="text-decoration-none">تسجيل الدخول</a>
+      </p>
+
+    </div>
+  </div>
+  </div>
+
+  <!-- Footer -->
+  <div id="footer"></div>
+
+  <!-- Bootstrap JS -->
+  <script src="assets/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Custom JS -->
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/register_teacher.js"></script>
+
+
+</body>
+</html>

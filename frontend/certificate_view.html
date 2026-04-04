@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الشهادة - EduPlatform</title>
+
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+
+    <style>
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: #f5f7fa;
+            padding: 40px 0;
+        }
+
+        .certificate {
+            width: 1000px;
+            margin: auto;
+            background: #fff;
+            border: 4px solid #d4af37;
+            padding: 40px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        /* ===== Header ===== */
+        .cert-header {
+            text-align: center;
+            border-bottom: 2px solid #d4af37;
+            padding-bottom: 20px;
+        }
+
+        .cert-logo {
+            width: 120px;
+            margin-bottom: 10px;
+        }
+
+        /* ===== Body ===== */
+        .cert-body {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .cert-body h3 {
+            font-size: 28px;
+            color: #002b5b;
+            font-weight: bold;
+        }
+
+        .cert-body h4 {
+            font-size: 22px;
+            color: #e67e22;
+            font-weight: bold;
+        }
+
+        .cert-details {
+            margin-top: 30px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .cert-details img {
+            width: 120px;
+        }
+
+        /* ===== Footer ===== */
+        .cert-footer {
+            margin-top: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 2px solid #d4af37;
+            padding-top: 20px;
+        }
+
+        .signature img {
+            width: 120px;
+        }
+
+        .seal img {
+            width: 100px;
+        }
+
+        /* ===== Buttons ===== */
+        .actions {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .actions button {
+            width: 250px;
+            margin: 10px;
+            font-size: 18px;
+        }
+
+        /* ===== Print Mode ===== */
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+
+            body {
+                background: white;
+                margin: 0;
+            }
+
+            .certificate {
+                box-shadow: none;
+                border: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="certificate">
+
+    <!-- ===== Header ===== -->
+    <header class="cert-header">
+        <img src="assets/images/cop.jpeg" alt="Education Training Jobs" class="cert-logo">
+        <h1>Certificate of Completion</h1>
+        <h2>شهادة إتمام دورة</h2>
+    </header>
+
+    <!-- ===== Body ===== -->
+    <main class="cert-body">
+        <p>This is to certify that</p>
+        <p>نحن نشهد بأن الطالب:</p>
+        <h3 id="studentName">اسم الطالب</h3>
+
+        <p>has successfully completed the course</p>
+        <p>قد أتم بنجاح دورة:</p>
+        <h4 id="courseTitle">اسم الدورة التدريبية</h4>
+
+        <div class="cert-details">
+            <p>Issue Date: <span id="issuedDate"></span></p>
+            <p>Verification Code: <span id="verifyCode"></span></p>
+            <img id="qrImage" src="" alt="QR Code">
+        </div>
+    </main>
+
+    <!-- ===== Footer ===== -->
+    <footer class="cert-footer">
+        <div class="signature">
+            <img src="assets/images/sign.png" alt="Instructor Signature">
+            <p>Instructor Signature</p>
+        </div>
+
+        <div class="seal">
+            <img src="assets/images/45930.jpg" alt="Official Seal">
+        </div>
+    </footer>
+
+</div>
+
+<!-- ===== Buttons ===== -->
+<div class="actions no-print">
+    <button id="downloadBtn" class="btn btn-success">تحميل PDF</button>
+    <button id="backBtn" class="btn btn-primary">العودة للكورس</button>
+</div>
+
+<script src="assets/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+<script src="assets/js/certificate_view.js"></script>
+
+</body>
+</html>

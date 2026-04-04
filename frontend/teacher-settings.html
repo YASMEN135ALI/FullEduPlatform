@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>إعدادات المدرّس</title>
+
+  <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+
+  <style>
+    body {
+      background: #eef1f5;
+      font-family: "Tajawal", sans-serif;
+    }
+
+    .page-wrapper {
+      max-width: 900px;
+      margin: 30px auto;
+    }
+
+    .card-main {
+      background: #fff;
+      padding: 25px;
+      border-radius: 14px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+    }
+
+    .section-title {
+      font-weight: 700;
+      font-size: 20px;
+      margin-bottom: 15px;
+    }
+
+    .form-control {
+      border-radius: 10px;
+      height: 45px;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="page-wrapper">
+  <div class="card-main">
+
+    <h3 class="mb-4">إعدادات المدرّس</h3>
+
+    <!-- إعدادات الحساب -->
+    <div class="section-title">إعدادات الحساب</div>
+
+    <div class="mb-3">
+      <label class="form-label">الاسم</label>
+      <input type="text" id="teacherName" class="form-control">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">البريد الإلكتروني</label>
+      <input type="email" id="teacherEmail" class="form-control" disabled>
+    </div>
+
+    <hr>
+
+    <!-- إعدادات الإشعارات -->
+    <div class="section-title">إعدادات الإشعارات</div>
+
+    <div class="form-check mb-2">
+      <input class="form-check-input" type="checkbox" id="notifyStudents">
+      <label class="form-check-label">إشعارات تسجيل الطلاب</label>
+    </div>
+
+    <div class="form-check mb-2">
+      <input class="form-check-input" type="checkbox" id="notifyLessons">
+      <label class="form-check-label">إشعارات إكمال الدروس</label>
+    </div>
+
+    <div class="form-check mb-2">
+      <input class="form-check-input" type="checkbox" id="notifyQuizzes">
+      <label class="form-check-label">إشعارات إكمال الاختبارات</label>
+    </div>
+
+    <hr>
+
+    <!-- إعدادات النظام -->
+    <div class="section-title">إعدادات النظام</div>
+
+    <div class="form-check mb-2">
+      <input class="form-check-input" type="checkbox" id="darkMode">
+      <label class="form-check-label">الوضع الليلي</label>
+    </div>
+
+    <div class="form-check mb-2">
+      <input class="form-check-input" type="checkbox" id="soundEnabled">
+      <label class="form-check-label">تفعيل الأصوات</label>
+    </div>
+
+    <button class="btn btn-primary mt-4" onclick="saveSettings()">حفظ الإعدادات</button>
+
+  </div>
+</div>
+
+<script src="assets/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/teacher-settings.js"></script>
+
+</body>
+</html>

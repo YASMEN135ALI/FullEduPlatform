@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المتقدمون للوظيفة</title>
+
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+</head>
+
+<body>
+
+<div class="container py-5">
+
+    <h2 class="fw-bold mb-4 text-center">المتقدمون للوظيفة</h2>
+
+    <div class="card shadow-sm p-4">
+
+        <table class="table table-striped text-center align-middle">
+            <thead>
+                <tr>
+                    <th>الاسم</th>
+                    <th>البريد</th>
+                    <th>السيرة الذاتية</th>
+                    <th>الحالة</th>
+                    <th>إجراءات</th>
+                </tr>
+            </thead>
+            <tbody id="applicantsTable">
+                <!-- يتم تعبئتها من الجافاسكربت -->
+            </tbody>
+        </table>
+
+        <p id="noApplicantsMsg" class="text-center text-muted d-none">
+            لا يوجد متقدمون حتى الآن.
+        </p>
+
+    </div>
+
+</div>
+
+<script src="assets/js/company-applicants.js"></script>
+
+</body>
+</html>

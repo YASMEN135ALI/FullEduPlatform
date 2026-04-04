@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة الشركة - EduPlatform</title>
+
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/theme.css">
+    <link rel="stylesheet" href="assets/css/dashboard.css">
+</head>
+
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h3>لوحة الشركة</h3>
+        <a href="company_dashboard.html">الصفحة الرئيسية</a>
+        <a href="company_jobs.html">الوظائف</a>
+        <a href="company_create_job.html">إضافة وظيفة</a>
+        <a href="company_applicants.html">المتقدمون</a>
+        <a href="company_notifications.html">الإشعارات</a>
+        <a href="company_settings.html">الإعدادات</a>
+        <a href="#" id="logoutBtn">تسجيل الخروج</a>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+
+        <!-- Header -->
+        <div class="header">
+            <h4>مرحبًا، <span id="companyName">الشركة</span></h4>
+            <span id="companyIndustry">الصناعة</span>
+        </div>
+
+        <!-- Stats -->
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="stats-card">
+                    <h3 id="jobsCount">0</h3>
+                    <p>عدد الوظائف المنشورة</p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="stats-card">
+                    <h3 id="applicantsCount">0</h3>
+                    <p>عدد المتقدمين</p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="stats-card">
+                    <h3 id="acceptedCount">0</h3>
+                    <p>عدد المقبولين</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Jobs Section -->
+        <h4 class="mb-3">الوظائف المنشورة</h4>
+        <div id="jobsList">
+            <!-- سيتم تعبئتها من الجافاسكربت -->
+        </div>
+
+    </div>
+
+    <!-- ربط ملف الجافاسكربت الصحيح -->
+    <script src="assets/js/company_dashboard.js"></script>
+
+</body>
+</html>

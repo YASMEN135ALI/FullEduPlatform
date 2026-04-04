@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>إضافة درس جديد</title>
+
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/forms.css">
+</head>
+
+<body>
+
+<div class="container mt-5">
+    <h1 class="mb-4 text-center">إضافة درس جديد</h1>
+
+    <form id="createLessonForm" class="p-4 shadow rounded bg-white">
+
+        <!-- عنوان الدرس -->
+        <div class="mb-3">
+            <label class="form-label">عنوان الدرس</label>
+            <input type="text" id="title" class="form-control" required>
+        </div>
+
+        <!-- نوع الدرس -->
+        <div class="mb-3">
+            <label class="form-label">نوع الدرس</label>
+            <select id="content_type" class="form-select" required>
+                <option value="video">فيديو</option>
+                <option value="text">محتوى نصي</option>
+                <option value="file">ملف مرفق</option>
+                <option value="quiz">اختبار</option>
+            </select>
+        </div>
+
+        <!-- محتوى نصي -->
+        <div class="mb-3" id="textContentGroup" style="display:none;">
+            <label class="form-label">المحتوى النصي</label>
+            <textarea id="content" class="form-control" rows="4"></textarea>
+        </div>
+
+        <!-- فيديو -->
+        <div class="mb-3" id="videoGroup" style="display:none;">
+            <label class="form-label">رفع فيديو</label>
+            <input type="file" id="video" class="form-control" accept="video/*">
+
+            <label class="form-label mt-2">أو رابط فيديو خارجي</label>
+            <input type="url" id="external_url" class="form-control">
+        </div>
+
+        <!-- ملف مرفق -->
+        <div class="mb-3" id="fileGroup" style="display:none;">
+            <label class="form-label">ملف مرفق</label>
+            <input type="file" id="file" class="form-control">
+        </div>
+
+        <!-- زر الإرسال -->
+        <button type="submit" class="btn btn-primary w-100 mt-3">إضافة الدرس</button>
+
+    </form>
+</div>
+
+<script src="assets/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/create-lesson.js"></script>
+
+</body>
+</html>

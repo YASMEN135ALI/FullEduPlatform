@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نتيجة الاختبار - EduPlatform</title>
+
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+
+    <style>
+        body {
+            background: #f7f9fa;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        .result-card {
+            background: white;
+            padding: 35px;
+            border-radius: 14px;
+            box-shadow: 0 4px 18px rgba(0,0,0,0.06);
+            margin-top: 60px;
+            text-align: center;
+        }
+
+        .score-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 42px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .success { background: #4caf50; }
+        .fail { background: #f44336; }
+
+        .message {
+            font-size: 20px;
+            margin-top: 15px;
+            font-weight: 500;
+        }
+
+        .btn-custom {
+            width: 100%;
+            padding: 14px;
+            font-size: 18px;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <div class="result-card mx-auto col-md-6">
+
+        <div id="scoreCircle" class="score-circle"></div>
+
+        <h2 id="resultTitle" class="fw-bold"></h2>
+
+        <p id="resultMessage" class="message"></p>
+
+        <button id="retryBtn" class="btn btn-outline-primary btn-custom">إعادة المحاولة</button>
+        <button id="backBtn" class="btn btn-primary btn-custom">العودة للدرس</button>
+
+    </div>
+</div>
+
+<script src="assets/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/result_view.js"></script>
+
+</body>
+</html>

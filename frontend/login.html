@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الدخول - EduPlatform</title>
+
+    <!-- Bootstrap -->
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/forms.css">
+    <link rel="stylesheet" href="assets/css/theme.css">
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <div id="navbar"></div>
+    <section class="mt-5">
+
+        <div class="login-container">
+            <div class="login-box shadow">
+
+                <h2 class="text-center mb-4 fw-bold">تسجيل الدخول</h2>
+
+                <form id="loginForm">
+
+                    <div class="mb-3">
+                        <label class="form-label">البريد الالكتروني</label>
+                        <input type="text" id="email" class="form-control">
+
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">كلمة المرور</label>
+                        <input type="password" id="password" class="form-control" placeholder="أدخل كلمة المرور">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100 mt-3">تسجيل الدخول</button>
+
+                    <p class="text-center mt-3">
+                        ليس لديك حساب؟
+                        <a href="choose.html">إنشاء حساب</a>
+                    </p>
+
+                    <div id="errorMsg" class="alert alert-danger text-center d-none"></div>
+
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <div id="footer"></div>
+
+    <!-- Bootstrap JS -->
+
+    <script src="assets/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <!-- Custom JS -->
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/auth.js"></script>
+
+</body>
+
+</html>

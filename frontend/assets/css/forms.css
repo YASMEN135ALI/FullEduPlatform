@@ -1,0 +1,270 @@
+body {
+    background-color: #f0f2f5;
+    font-family: "Tajawal", sans-serif;
+}
+
+    .register-card {
+      max-width: 650px;
+      margin: auto;
+      border-radius: 12px;
+      background: #fff;
+    }
+
+    .form-label {
+      font-weight: 600;
+    }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-top: 20px;
+      margin-bottom: 10px;
+      color: #198754;
+    }
+ 
+
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 85vh;
+}
+
+.login-box {
+    background: #fff;
+    padding: 35px;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 420px;
+}
+
+.login-box input {
+    height: 45px;
+}
+
+.login-box button {
+    height: 45px;
+    font-size: 1.1rem;
+}
+
+
+    .page-wrapper {
+      max-width: 1100px;
+      margin: 30px auto;
+    }
+
+    .card-main {
+      background: #ffffff;
+      border-radius: 14px;
+      padding: 20px 22px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+    }
+
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+
+    .page-header h2 {
+      font-weight: 800;
+      font-size: 24px;
+      margin: 0;
+      color: #222;
+    }
+
+    .page-header small {
+      color: #777;
+      font-size: 13px;
+    }
+
+    .back-btn {
+      border-radius: 999px;
+      font-size: 13px;
+      padding: 6px 14px;
+    }
+
+    .course-meta {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 15px;
+    }
+
+    .meta-pill {
+      background: #f5f7fb;
+      border-radius: 999px;
+      padding: 6px 14px;
+      font-size: 13px;
+      color: #555;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .meta-pill span {
+      font-weight: 700;
+      color: #111;
+    }
+
+    .nav-tabs {
+      border-bottom: 1px solid #e3e6ee;
+      margin-top: 10px;
+    }
+
+    .nav-tabs .nav-link {
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: #666;
+      font-weight: 600;
+      padding: 10px 18px;
+      font-size: 14px;
+    }
+
+    .nav-tabs .nav-link.active {
+      color: #0d6efd;
+      border-bottom-color: #0d6efd;
+      background: transparent;
+    }
+
+    #tabContent {
+      margin-top: 18px;
+    }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: #222;
+    }
+
+    .form-label {
+      font-weight: 600;
+      font-size: 13px;
+      color: #444;
+    }
+
+    .form-control, .form-select {
+      border-radius: 10px;
+      font-size: 14px;
+    }
+
+    textarea.form-control {
+      min-height: 110px;
+    }
+
+    .btn-primary {
+      background: #0d6efd;
+      border: none;
+      border-radius: 999px;
+      padding: 8px 20px;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .btn-primary:hover {
+      background: #0b5ed7;
+    }
+
+    .btn-soft {
+      border-radius: 999px;
+      font-size: 13px;
+      padding: 6px 14px;
+      font-weight: 600;
+    }
+
+    .btn-soft-success {
+      background: #e7f7ee;
+      color: #198754;
+      border: 1px solid #cfe9da;
+    }
+
+    .btn-soft-success:hover {
+      background: #d8f0e3;
+    }
+
+    .btn-soft-danger {
+      background: #fde8ea;
+      color: #dc3545;
+      border: 1px solid #f5c2c7;
+    }
+
+    .btn-soft-danger:hover {
+      background: #f9d4d9;
+    }
+
+    .item-list {
+      margin-top: 10px;
+    }
+
+    .item-box {
+      background: #f9fafc;
+      border-radius: 12px;
+      padding: 10px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      border: 1px solid #e3e6ee;
+      transition: 0.15s;
+    }
+
+    .item-box:hover {
+      background: #f3f5fb;
+      transform: translateY(-1px);
+    }
+
+    .item-title {
+      font-weight: 700;
+      font-size: 14px;
+      margin-bottom: 2px;
+    }
+
+    .item-sub {
+      font-size: 12px;
+      color: #777;
+    }
+
+    .item-actions .btn {
+      margin-left: 4px;
+      margin-right: 4px;
+    }
+
+    .danger-zone {
+      background: #fff5f5;
+      border-radius: 12px;
+      padding: 14px 16px;
+      border: 1px dashed #f5c2c7;
+    }
+
+    .danger-zone h6 {
+      font-weight: 700;
+      color: #b02a37;
+      margin-bottom: 8px;
+    }
+
+    .danger-zone p {
+      font-size: 13px;
+      color: #7a1f28;
+      margin-bottom: 10px;
+    }
+
+    .modal-content {
+      border-radius: 14px;
+    }
+
+    .modal-header {
+      border-bottom: none;
+      padding-bottom: 6px;
+    }
+
+    .modal-title {
+      font-weight: 700;
+      font-size: 16px;
+    }
+
+    .modal-footer {
+      border-top: none;
+    }
+  

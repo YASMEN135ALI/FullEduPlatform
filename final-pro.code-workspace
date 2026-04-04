@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "../final-pro"
+		},
+		{
+			"path": "../frontend"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "frontend",
+		"liveServer.settings.port": 5501
+	}
+}

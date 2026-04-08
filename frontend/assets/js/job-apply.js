@@ -1,39 +1,70 @@
-// الحصول على ID الوظيفة من الرابط (اختياري للربط لاحقًا)
+// استخراج ID الوظيفة من الرابط
 const urlParams = new URLSearchParams(window.location.search);
 const jobId = urlParams.get("id");
 
-// عناصر الصفحة
-const applyForm = document.getElementById("applyForm");
-const errorMsg = document.getElementById("errorMsg");
-const successMsg = document.getElementById("successMsg");
+const JOB_API = `http://127.0.0.1:8000/api/accounts/jobs/${jobId}/`;
+const APPLY_API = `http://127.0.0.1:8000/api/accounts/jobs/${jobId}/apply/`;
 
-applyForm.addEventListener("submit", function (e) {
+document.addEventListener("DOMContentLoaded", () => {
+    loadJobTitle();
+});
+
+// جلب عنوان الوظيفة
+async function loadJobTitle() {
+    try {
+        const token = localStorage.getItem("token");
+
+        const response = await fetch(JOB_API, {
+            method: "GET",
+            headers: {
+                "Authorization": `Token ${token}`
+            }
+        });
+
+        const job = await response.json();
+        document.getElementById("jobTitleText").textContent = `الوظيفة: ${job.title}`;
+
+    } catch (error) {
+        console.error("Error loading job:", error);
+    }
+}
+
+// إرسال الطلب
+document.getElementById("applyForm").addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const fullName = document.getElementById("fullName").value.trim();
-    const email = document.getElementById("email").value.trim();
-    const phone = document.getElementById("phone").value.trim();
-    const message = document.getElementById("message").value.trim();
+    const token = localStorage.getItem("token");
     const cvFile = document.getElementById("cvFile").files[0];
+    const coverLetter = document.getElementById("coverLetter").value;
 
-    if (!fullName || !email || !phone || !message) {
-        errorMsg.textContent = "يرجى تعبئة جميع الحقول المطلوبة";
-        errorMsg.classList.remove("d-none");
-        successMsg.classList.add("d-none");
-        return;
+    const formData = new FormData();
+    formData.append("cv", cvFile);
+    formData.append("cover_letter", coverLetter);
+
+    try {
+        const response = await fetch(APPLY_API, {
+            method: "POST",
+            headers: {
+                "Authorization": `Token ${token}`
+            },
+            body: formData
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+            document.getElementById("successMsg").classList.remove("d-none");
+            document.getElementById("successMsg").textContent = "تم إرسال طلبك بنجاح!";
+        } else {
+            document.getElementById("errorMsg").classList.remove("d-none");
+            document.getElementById("errorMsg").textContent =
+                result.error || "حدث خطأ أثناء إرسال الطلب";
+        }
+
+    } catch (error) {
+        console.error("Error applying:", error);
+        document.getElementById("errorMsg").classList.remove("d-none");
+        document.getElementById("errorMsg").textContent =
+            "حدث خطأ أثناء إرسال الطلب";
     }
-
-    if (!cvFile) {
-        errorMsg.textContent = "يرجى إرفاق السيرة الذاتية (CV)";
-        errorMsg.classList.remove("d-none");
-        successMsg.classList.add("d-none");
-        return;
-    }
-
-    errorMsg.classList.add("d-none");
-    successMsg.textContent = "تم تجهيز الطلب للإرسال (جاهز للربط مع الـ API)";
-    successMsg.classList.remove("d-none");
-
-    console.log("Job ID:", jobId);
-    console.log("Application Data:", { fullName, email, phone, message, cvFile });
 });

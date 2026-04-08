@@ -45,7 +45,7 @@ from .views import (
     CourseDetailsView,
     CourseLessonsView,
     CompleteLessonView,
-
+    ai_lesson_assistant,
     # ---------------- CERTIFICATES ----------------
     GenerateCertificateView,
     CertificateDetailAPI,
@@ -151,7 +151,7 @@ urlpatterns = [
     path('courses/<int:course_id>/enroll/', EnrollCourseView.as_view(), name='course-enroll'),
     path('course/<int:course_id>/lessons/', CourseLessonsView.as_view(), name='course-lessons'),
     path('lesson/<int:lesson_id>/complete/', CompleteLessonView.as_view(), name='lesson-complete'),
-
+     path("ai/lesson/", ai_lesson_assistant),
     # -----------------------------------------------------
     # CERTIFICATES
     # -----------------------------------------------------
@@ -200,7 +200,8 @@ urlpatterns = [
     path('company/create-job/', CreateJobPostView.as_view(), name='create-job'),
     path('jobs/', JobListView.as_view(), name='job-list'),
     path('jobs/<int:id>/', JobDetailView.as_view(), name='job-detail'),
-    path('jobs/apply/', ApplyJobView.as_view(), name='job-apply'),
+    path('jobs/<int:job_id>/apply/', ApplyJobView.as_view(), name='job-apply'),
+
     path('student/my-applications/', MyJobApplicationsView.as_view(), name='my-job-applications'),
     path('company/job/<int:id>/', JobDetailUpdateView.as_view(), name='company-job-update'),
     path('company/job/<int:id>/delete/', JobDeleteView.as_view(), name='company-job-delete'),

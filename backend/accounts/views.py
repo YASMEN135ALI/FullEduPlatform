@@ -1243,3 +1243,35 @@ class CertificatesCountAPIView(APIView):
     def get(self, request):
         count = Certificate.objects.filter(student=request.user).count()
         return Response({"count": count})
+
+from textblob import TextBlob
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def ai_lesson_assistant(request):
+    question = request.data.get("question", "")
+    lesson_content = request.data.get("lesson_content", "")
+
+    if not question:
+        return Response({"error": "No question provided"}, status=400)
+
+    # ندمج السؤال مع الدرس
+    combined = f"{lesson_content}\n\nالسؤال: {question}"
+
+    blob = TextBlob(combined)
+
+    # إعادة صياغة بسيطة عبر الترجمة
+    try:
+        simplified = blob.translate(to="en").translate(to="ar")
+    except:
+        simplified = combined  # fallback لو صار خطأ
+
+    # نعمل تلخيص بسيط
+    summary = str(simplified)[:250]
+
+    return Response({
+        "answer": summary
+    })

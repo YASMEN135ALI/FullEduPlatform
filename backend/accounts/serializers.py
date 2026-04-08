@@ -317,30 +317,52 @@ class QuizSerializer(serializers.ModelSerializer):
 
 #                     JOBS & APPLICATIONS
 # =========================================================
-
 class JobPostSerializer(serializers.ModelSerializer):
-    company_name = serializers.CharField(
-        source='company.company_profile.company_name',
-        read_only=True
-    )
+    company_name = serializers.SerializerMethodField()
+    requirements = serializers.SerializerMethodField()
 
     class Meta:
         model = JobPost
         fields = [
-            'id', 'title', 'description', 'job_type',
-            'salary', 'requirements', 'location',
-            'skills', 'is_active', 'created_at',
+            'id',
+            'title',
+            'description',
+            'job_type',
+            'salary',
+            'requirements',   # هنا
+            'location',
+            'skills',
+            'is_active',
+            'created_at',
             'company_name'
         ]
 
-    def create(self, validated_data):
-        validated_data['company'] = self.context['request'].user
-        return super().create(validated_data)
+    def get_company_name(self, obj):
+        if hasattr(obj.company, "company_profile"):
+            return obj.company.company_profile.company_name
+        return obj.company.username
 
-    student_name = serializers.CharField(source='student.full_name', read_only=True)
-    student_email = serializers.EmailField(source='student.email', read_only=True)
-    student_phone = serializers.CharField(source='student.phone', read_only=True)
-    cv_url = serializers.FileField(source='cv', read_only=True)
+    def get_requirements(self, obj):
+        # لو القيمة None أو فاضية يرجّع نص فاضي بدل null
+        return obj.requirements or ""
+
+class JobApplicationSerializer(serializers.ModelSerializer):
+    student_name = serializers.CharField(
+        source='student.student_profile.full_name',
+        read_only=True
+    )
+    student_email = serializers.EmailField(
+        source='student.email',
+        read_only=True
+    )
+    student_phone = serializers.CharField(
+        source='student.student_profile.phone',
+        read_only=True
+    )
+    cv_url = serializers.FileField(
+        source='cv',
+        read_only=True
+    )
 
     class Meta:
         model = JobApplication
@@ -352,19 +374,6 @@ class JobPostSerializer(serializers.ModelSerializer):
             'cv_url',
             'status',
             'applied_at'
-        ]
-
-class JobApplicationSerializer(serializers.ModelSerializer):
-    student_name = serializers.CharField(source='student.full_name', read_only=True)
-    student_email = serializers.EmailField(source='student.email', read_only=True)
-    student_phone = serializers.CharField(source='student.phone', read_only=True)
-    cv_url = serializers.FileField(source='cv', read_only=True)
-
-    class Meta:
-        model = JobApplication
-        fields = [
-            'id', 'student_name', 'student_email',
-            'student_phone', 'cv_url', 'status', 'applied_at'
         ]
 
 class NotificationSettingsSerializer(serializers.ModelSerializer):

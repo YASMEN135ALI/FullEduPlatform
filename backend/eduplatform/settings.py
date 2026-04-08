@@ -4,6 +4,10 @@ from datetime import timedelta
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'CHANGE_ME_IN_PRODUCTION'
+import os
+
+AI_API_KEY = os.getenv("AI_API_KEY")
+
 
 DEBUG = True
 

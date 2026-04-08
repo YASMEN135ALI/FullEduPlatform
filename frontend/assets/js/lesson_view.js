@@ -23,6 +23,9 @@ document.addEventListener("DOMContentLoaded", async function () {
     document.getElementById("completeBtn").onclick = () => {
         completeLesson(lessonId);
     };
+
+    // تفعيل أزرار الذكاء الاصطناعي بعد تحميل الصفحة
+    setupAIAssistant();
 });
 
 let COURSE_ID = null;
@@ -152,4 +155,64 @@ async function completeLesson(lessonId) {
         console.error(error);
         alert("حدث خطأ أثناء إكمال الدرس.");
     }
+}
+
+
+// ======================================================
+// 4) الذكاء الاصطناعي داخل صفحة الدرس
+// ======================================================
+function setupAIAssistant() {
+    const toggleBtn = document.getElementById("aiToggleBtn");
+    const section = document.getElementById("aiSection");
+    const sendBtn = document.getElementById("aiSendBtn");
+    const questionInput = document.getElementById("aiQuestion");
+    const answerBox = document.getElementById("aiAnswerBox");
+    const answerText = document.getElementById("aiAnswer");
+
+    if (!toggleBtn || !section || !sendBtn) {
+        console.warn("عناصر الذكاء الاصطناعي غير موجودة في الصفحة.");
+        return;
+    }
+
+    toggleBtn.onclick = () => {
+        section.style.display = section.style.display === "none" ? "block" : "none";
+    };
+
+    sendBtn.onclick = async () => {
+        const question = questionInput.value;
+        const lessonContent = document.getElementById("lessonContent").innerText;
+
+        if (!question.trim()) {
+            alert("يرجى كتابة سؤال.");
+            return;
+        }
+
+        try {
+            const res = await fetch("http://127.0.0.1:8000/api/accounts/ai/lesson/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    question: question,
+                    lesson_content: lessonContent
+                })
+            });
+
+            const data = await res.json();
+
+            if (data.answer) {
+                answerText.textContent = data.answer;
+                answerBox.style.display = "block";
+            } else if (data.error) {
+                alert("خطأ من الخادم: " + data.error);
+            } else {
+                alert("لم يتم استلام إجابة من الذكاء الاصطناعي.");
+            }
+
+        } catch (error) {
+            console.error(error);
+            alert("حدث خطأ أثناء الاتصال بالذكاء الاصطناعي.");
+        }
+    };
 }

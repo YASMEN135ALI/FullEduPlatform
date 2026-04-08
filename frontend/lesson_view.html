@@ -61,6 +61,17 @@
             border-radius: 10px;
             border: 1px solid #bfe8ff;
         }
+
+        /* ====== AI Assistant Styling ====== */
+        #aiSection textarea {
+            font-size: 18px;
+        }
+
+        #aiAnswerBox {
+            background: #f1f3f5;
+            border-radius: 10px;
+            border-left: 4px solid #0d6efd;
+        }
     </style>
 </head>
 
@@ -81,6 +92,29 @@
     ============================ -->
     <div id="lessonContent" class="content-box">
         <!-- المحتوى يتم تحميله ديناميكياً -->
+    </div>
+
+    <!-- ============================
+         AI ASSISTANT
+    ============================ -->
+    <div class="content-box mt-4">
+        <h4 class="fw-bold mb-3">💬 اسأل الذكاء الاصطناعي عن الدرس</h4>
+
+        <button id="aiToggleBtn" class="btn btn-primary mb-3">
+            فتح المساعد الذكي
+        </button>
+
+        <div id="aiSection" style="display:none;">
+            <textarea id="aiQuestion" class="form-control" rows="3"
+                      placeholder="اكتب سؤالك هنا..."></textarea>
+
+            <button id="aiSendBtn" class="btn btn-success mt-3">إرسال</button>
+
+            <div id="aiAnswerBox" class="mt-4 p-3" style="display:none;">
+                <h5 class="fw-bold">إجابة الذكاء الاصطناعي:</h5>
+                <p id="aiAnswer" style="font-size:18px; white-space:pre-line;"></p>
+            </div>
+        </div>
     </div>
 
     <!-- ============================

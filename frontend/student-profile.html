@@ -2,98 +2,240 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ملف الطالب - EduPlatform</title>
-
-    <link rel="stylesheet" href="assets/css/bootstrap.min.css">   
-      <link rel="stylesheet" href="assets/css/theme.css">
-       <link rel="stylesheet" href="assets/css/profile.css">
+    <title>الملف الشخصي — السيرة الذاتية</title>
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/cv.css">
 </head>
 
 <body>
 
-    
-    <div class="container py-5">
+<div class="container py-5">
 
-        <div class="card shadow-sm mb-4">
-            <div class="card-body text-center">
+    <!-- HEADER -->
+    <div class="profile-header mb-4 text-center">
+        <img id="profileImage" src="assets/images/default-user.png" class="profile-img mb-3">
 
-                <img id="studentAvatar" class="profile-img mb-3" src="assets/img/user.png" alt="Student">
+        <h2 id="studentName" class="fw-bold">اسم الطالب</h2>
+        <p id="studentTitle" class="text-muted">الهدف الوظيفي</p>
 
-                <h3 id="studentName" class="fw-bold"></h3>
-                <p id="studentEmail" class="text-muted"></p>
-
-                <span class="badge bg-primary" id="progressBadge"></span>
-
-            </div>
+        <div class="cv-score-circle mt-3" id="cvScoreCircle" style="--percent: 75%;">
+            <span id="cvScoreText">75%</span>
         </div>
 
-        <!-- Lessons Progress -->
-        <div class="card shadow-sm mb-4">
-            <div class="card-body">
-                <h4 class="fw-bold mb-3">الدروس المكتملة</h4>
-
-                <ul id="completedLessons" class="list-group list-group-flush"></ul>
-            </div>
-        </div>
-
-        <!-- Certificates -->
-        <div class="card shadow-sm">
-            <div class="card-body">
-                <h4 class="fw-bold mb-3">الشهادات</h4>
-
-                <div id="certificatesContainer" class="row">
-                    <!-- سيتم تحميل الشهادات هنا -->
-                </div>
-            </div>
-        </div>
-
+        <button class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#editCVModal">
+            تعديل السيرة الذاتية
+        </button>
     </div>
-    <!-- Edit Profile -->
-<div class="card shadow-sm mb-4">
-    <div class="card-body">
-        <h4 class="fw-bold mb-3">تعديل المعلومات</h4>
 
-        <form id="editStudentForm">
+    <!-- BASIC INFO -->
+    <div class="section-card">
+        <div class="section-title">المعلومات الأساسية</div>
 
-            <div class="mb-3">
-                <label class="form-label">الاسم الكامل</label>
-                <input type="text" id="fullNameInput" class="form-control">
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">العمر</label>
-                <input type="number" id="ageInput" class="form-control">
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">المستوى التعليمي</label>
-                <input type="text" id="educationInput" class="form-control">
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">الدولة</label>
-                <input type="text" id="countryInput" class="form-control">
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">رقم الهاتف</label>
-                <input type="text" id="phoneInput" class="form-control">
-            </div>
-
-            <button type="submit" class="btn btn-primary w-100">حفظ التعديلات</button>
-        </form>
+        <p><strong>العمر:</strong> <span id="age">—</span></p>
+        <p><strong>الدولة:</strong> <span id="country">—</span></p>
+        <p><strong>المستوى التعليمي:</strong> <span id="education">—</span></p>
+        <p><strong>رقم الهاتف:</strong> <span id="phone">—</span></p>
+        <p><strong>البريد الإلكتروني:</strong> <span id="email">—</span></p>
     </div>
+
+    <!-- SKILLS -->
+    <div class="section-card">
+        <div class="section-title">المهارات</div>
+        <div id="skillsContainer">
+            <!-- JS -->
+        </div>
+        <button class="btn btn-outline-primary mt-2" data-bs-toggle="modal" data-bs-target="#addSkillModal">
+            + إضافة مهارة
+        </button>
+    </div>
+
+    <!-- EXPERIENCE -->
+    <div class="section-card">
+        <div class="section-title">الخبرات العملية</div>
+        <div id="experienceContainer">
+            <!-- JS -->
+        </div>
+        <button class="btn btn-outline-primary mt-2" data-bs-toggle="modal" data-bs-target="#addExperienceModal">
+            + إضافة خبرة
+        </button>
+    </div>
+
+    <!-- PROJECTS -->
+    <div class="section-card">
+        <div class="section-title">المشاريع</div>
+        <div id="projectsContainer">
+            <!-- JS -->
+        </div>
+        <button class="btn btn-outline-primary mt-2" data-bs-toggle="modal" data-bs-target="#addProjectModal">
+            + إضافة مشروع
+        </button>
+    </div>
+
+    <!-- LANGUAGES -->
+    <div class="section-card">
+        <div class="section-title">اللغات</div>
+        <div id="languagesContainer">
+            <!-- JS -->
+        </div>
+        <button class="btn btn-outline-primary mt-2" data-bs-toggle="modal" data-bs-target="#addLanguageModal">
+            + إضافة لغة
+        </button>
+    </div>
+
 </div>
 
+<!-- ========================= -->
+<!--        MODALS             -->
+<!-- ========================= -->
 
+<!-- Edit CV Modal -->
+<div class="modal fade" id="editCVModal" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
 
+      <div class="modal-header">
+        <h5 class="modal-title">تعديل السيرة الذاتية</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
 
-     
-     <script src="assets/js/bootstrap.bundle.min.js"></script>
-     <script src="assets/js/bootstrap.min.js"></script>
-   
-    <script src="assets/js/student-profile.js"></script>
+      <div class="modal-body">
+
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">الاسم الكامل</label>
+            <input id="editFullName" class="form-control">
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label class="form-label">العمر</label>
+            <input id="editAge" class="form-control" type="number">
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label class="form-label">الدولة</label>
+            <input id="editCountry" class="form-control">
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label class="form-label">رقم الهاتف</label>
+            <input id="editPhone" class="form-control">
+          </div>
+
+          <div class="col-md-12 mb-3">
+            <label class="form-label">المستوى التعليمي</label>
+            <input id="editEducation" class="form-control">
+          </div>
+
+          <div class="col-md-12 mb-3">
+            <label class="form-label">الهدف الوظيفي</label>
+            <textarea id="editObjective" class="form-control" rows="3"></textarea>
+          </div>
+
+          <div class="col-md-12 mb-3">
+            <label class="form-label">الصورة الشخصية</label>
+            <input id="editPhoto" type="file" class="form-control">
+          </div>
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-primary" onclick="updateCV()">حفظ التعديلات</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Add Skill Modal -->
+<div class="modal fade" id="addSkillModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">إضافة مهارة</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+        <input id="skillInput" type="text" class="form-control" placeholder="مثال: Python">
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-primary" onclick="addSkill()">إضافة</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add Experience Modal -->
+<div class="modal fade" id="addExperienceModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">إضافة خبرة عملية</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+        <input id="expTitle" class="form-control mb-2" placeholder="المسمى الوظيفي">
+        <input id="expCompany" class="form-control mb-2" placeholder="اسم الشركة">
+        <input id="expYears" class="form-control mb-2" placeholder="عدد السنوات">
+        <textarea id="expDesc" class="form-control" placeholder="وصف الخبرة"></textarea>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-primary" onclick="addExperience()">إضافة</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add Project Modal -->
+<div class="modal fade" id="addProjectModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">إضافة مشروع</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+        <input id="projName" class="form-control mb-2" placeholder="اسم المشروع">
+        <textarea id="projDesc" class="form-control mb-2" placeholder="وصف المشروع"></textarea>
+        <input id="projTech" class="form-control mb-2" placeholder="التقنيات المستخدمة">
+        <input id="projLink" class="form-control" placeholder="رابط المشروع (اختياري)">
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-primary" onclick="addProject()">إضافة</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add Language Modal -->
+<div class="modal fade" id="addLanguageModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">إضافة لغة</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+        <input id="langName" class="form-control mb-2" placeholder="اسم اللغة">
+        <input id="langLevel" class="form-control" placeholder="المستوى (ممتاز - جيد جدًا - جيد)">
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-primary" onclick="addLanguage()">إضافة</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="assets/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/student-profile.js"></script>
 
 </body>
 </html>

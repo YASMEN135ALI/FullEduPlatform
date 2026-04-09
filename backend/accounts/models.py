@@ -28,17 +28,25 @@ class User(AbstractUser):
 # =========================================================
 
 class StudentProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='student_profile')
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="student_profile")
 
-    full_name = models.CharField(max_length=200)
-    age = models.IntegerField()
-    education_level = models.CharField(max_length=100)
-    country = models.CharField(max_length=100)
-    phone = models.CharField(max_length=20, blank=True, null=True)
+    full_name = models.CharField(max_length=255)
+    age = models.IntegerField(null=True, blank=True)
+    education_level = models.CharField(max_length=255, blank=True, null=True)
+    country = models.CharField(max_length=255, blank=True, null=True)
+    phone = models.CharField(max_length=50, blank=True, null=True)
+    photo = models.ImageField(upload_to="students/photos/", blank=True, null=True)
+
+    # 🔥 حقول السيرة الذاتية الجديدة
+    objective = models.TextField(blank=True, null=True)  # الهدف الوظيفي
+    skills = models.JSONField(default=list, blank=True)  # قائمة مهارات
+    experience = models.JSONField(default=list, blank=True)  # قائمة خبرات
+    projects = models.JSONField(default=list, blank=True)  # قائمة مشاريع
+    languages = models.JSONField(default=list, blank=True)  # قائمة لغات
+    certifications = models.JSONField(default=list, blank=True)  # شهادات (اختياري)
 
     def __str__(self):
-        return f"StudentProfile: {self.user.username}"
-
+        return self.full_name
 
 # =========================================================
 #                     TEACHER PROFILE
@@ -426,3 +434,4 @@ class TeacherSettings(models.Model):
 
     def __str__(self):
         return f"Settings for {self.teacher.email}"
+

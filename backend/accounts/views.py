@@ -406,9 +406,27 @@ class JobDetailView(generics.RetrieveAPIView):
     serializer_class = JobPostSerializer
     lookup_field = 'id'
 
-class ApplyJobView(generics.CreateAPIView):
-    serializer_class = JobApplicationSerializer
+class ApplyJobView(APIView):
     permission_classes = [IsAuthenticated, IsStudent]
+
+    def post(self, request, job_id):
+        job = get_object_or_404(JobPost, id=job_id)
+        student = request.user
+
+        cv = request.FILES.get("cv")
+        cover_letter = request.data.get("cover_letter")
+
+        if not cv:
+            return Response({"error": "CV is required"}, status=400)
+
+        JobApplication.objects.create(
+            job=job,
+            student=student,
+            cv=cv,
+            cover_letter=cover_letter
+        )
+
+        return Response({"message": "Application submitted successfully"})
 
 
 class MyJobApplicationsView(generics.ListAPIView):
@@ -530,25 +548,25 @@ class StudentProfileView(APIView):
             "profile": StudentProfileSerializer(profile, context={'request': request}).data
         })
 
-class UpdateStudentProfileView(APIView):
+class UpdateStudentProfile(APIView):
     permission_classes = [IsAuthenticated, IsStudent]
 
-    def put(self, request):
-        user = request.user
-        profile = user.student_profile
+    def post(self, request):
+        profile = request.user.student_profile
 
         profile.full_name = request.data.get("full_name", profile.full_name)
         profile.age = request.data.get("age", profile.age)
-        profile.education_level = request.data.get("education_level", profile.education_level)
         profile.country = request.data.get("country", profile.country)
         profile.phone = request.data.get("phone", profile.phone)
+        profile.education_level = request.data.get("education_level", profile.education_level)
+        profile.objective = request.data.get("objective", profile.objective)
+
+        if "photo" in request.FILES:
+            profile.photo = request.FILES["photo"]
 
         profile.save()
 
-        return Response({
-            "message": "Student profile updated successfully",
-            "profile": StudentProfileSerializer(profile, context={'request': request}).data
-        })
+        return Response({"message": "Profile updated successfully"})
 
 
 class TeacherRegisterView(APIView):
@@ -1275,3 +1293,98 @@ def ai_lesson_assistant(request):
     return Response({
         "answer": summary
     })
+
+    
+class AddSkillView(APIView):
+    permission_classes = [IsAuthenticated, IsStudent]
+
+    def post(self, request):
+        skill = request.data.get("skill")
+        profile = request.user.student_profile
+
+        if not skill:
+            return Response({"error": "Skill is required"}, status=400)
+
+        skills = profile.skills
+        skills.append(skill)
+        profile.skills = skills
+        profile.save()
+
+        return Response({"message": "Skill added successfully", "skills": skills})
+
+class AddExperienceView(APIView):
+    permission_classes = [IsAuthenticated, IsStudent]
+
+    def post(self, request):
+        profile = request.user.student_profile
+
+        experience = {
+            "title": request.data.get("title"),
+            "company": request.data.get("company"),
+            "years": request.data.get("years"),
+            "description": request.data.get("description")
+        }
+
+        if not experience["title"]:
+            return Response({"error": "Experience title is required"}, status=400)
+
+        exp_list = profile.experience
+        exp_list.append(experience)
+        profile.experience = exp_list
+        profile.save()
+
+        return Response({"message": "Experience added", "experience": exp_list})
+
+class AddProjectView(APIView):
+    permission_classes = [IsAuthenticated, IsStudent]
+
+    def post(self, request):
+        profile = request.user.student_profile
+
+        project = {
+            "name": request.data.get("name"),
+            "description": request.data.get("description"),
+            "tech": request.data.get("tech"),
+            "link": request.data.get("link")
+        }
+
+        if not project["name"]:
+            return Response({"error": "Project name is required"}, status=400)
+
+        projects = profile.projects
+        projects.append(project)
+        profile.projects = projects
+        profile.save()
+
+        return Response({"message": "Project added", "projects": projects})
+
+class AddLanguageView(APIView):
+    permission_classes = [IsAuthenticated, IsStudent]
+
+    def post(self, request):
+        profile = request.user.student_profile
+
+        language = {
+            "name": request.data.get("name"),
+            "level": request.data.get("level")
+        }
+
+        if not language["name"]:
+            return Response({"error": "Language name is required"}, status=400)
+
+        langs = profile.languages
+        langs.append(language)
+        profile.languages = langs
+        profile.save()
+
+        return Response({"message": "Language added", "languages": langs})
+
+class UpdateObjectiveView(APIView):
+    permission_classes = [IsAuthenticated, IsStudent]
+
+    def put(self, request):
+        profile = request.user.student_profile
+        profile.objective = request.data.get("objective", "")
+        profile.save()
+
+        return Response({"message": "Objective updated", "objective": profile.objective})

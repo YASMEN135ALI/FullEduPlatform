@@ -9,11 +9,16 @@ from .views import (
     # ---------------- STUDENT ----------------
     StudentRegisterView,
     StudentProfileView,
-    UpdateStudentProfileView,
+    UpdateStudentProfile,
     MyCoursesView,
     StudentCoursesView,
     EnrollCourseView,
     AddCourseReviewView,
+   AddSkillView,
+   AddExperienceView,
+   AddProjectView,
+   AddLanguageView,
+   UpdateObjectiveView,
 
     # ---------------- TEACHER ----------------
     TeacherRegisterView,
@@ -110,11 +115,18 @@ urlpatterns = [
     # -----------------------------------------------------
     path('register/student/', StudentRegisterView.as_view(), name='register-student'),
     path('student/profile/', StudentProfileView.as_view(), name='student-profile'),
-    path('student/profile/update/', UpdateStudentProfileView.as_view(), name='student-profile-update'),
+   path('student/profile/update/', UpdateStudentProfile.as_view(), name='student-profile-update'),
+
     path('student/my-courses/', MyCoursesView.as_view(), name='my-courses'),
     path('student/courses/', StudentCoursesView.as_view(), name='student-courses'),
     path('courses/<int:course_id>/review/add/', AddCourseReviewView.as_view(), name='course-review'),
     path("student/lesson/<int:lesson_id>/", StudentLessonDetailView.as_view(), name="student-lesson-detail"),
+    path('student/my-applications/', MyJobApplicationsView.as_view(), name='my-job-applications'),
+    path("student/add-skill/", AddSkillView.as_view()),
+    path("student/add-experience/", AddExperienceView.as_view()),
+    path("student/add-project/", AddProjectView.as_view()),
+    path("student/add-language/", AddLanguageView.as_view()),
+    path("student/update-objective/", UpdateObjectiveView.as_view()),
 
     # -----------------------------------------------------
     # TEACHER

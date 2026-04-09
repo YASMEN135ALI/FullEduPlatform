@@ -110,14 +110,14 @@ class TeacherProfileSerializer(serializers.ModelSerializer):
 #                     STUDENT PROFILE
 # =========================================================
 class StudentProfileSerializer(serializers.ModelSerializer):
+    email = serializers.CharField(source="user.email", read_only=True)
+
     class Meta:
         model = StudentProfile
         fields = [
-            'full_name',
-            'age',
-            'education_level',
-            'country',
-            'phone'
+            "full_name", "age", "education_level", "country", "phone", "photo",
+            "email",
+            "objective", "skills", "experience", "projects", "languages", "certifications"
         ]
 
 # =========================================================
@@ -347,34 +347,22 @@ class JobPostSerializer(serializers.ModelSerializer):
         return obj.requirements or ""
 
 class JobApplicationSerializer(serializers.ModelSerializer):
-    student_name = serializers.CharField(
-        source='student.student_profile.full_name',
-        read_only=True
-    )
-    student_email = serializers.EmailField(
-        source='student.email',
-        read_only=True
-    )
-    student_phone = serializers.CharField(
-        source='student.student_profile.phone',
-        read_only=True
-    )
-    cv_url = serializers.FileField(
-        source='cv',
-        read_only=True
-    )
+    job_title = serializers.CharField(source="job.title", read_only=True)
+    company_name = serializers.CharField(source="job.company.company_profile.company_name", read_only=True)
+    job_id = serializers.IntegerField(source="job.id", read_only=True)
 
     class Meta:
         model = JobApplication
         fields = [
-            'id',
-            'student_name',
-            'student_email',
-            'student_phone',
-            'cv_url',
-            'status',
-            'applied_at'
+            "id",
+            "job_id",
+            "job_title",
+            "company_name",
+            "status",
+            "applied_at",   # ← بدل created_at
         ]
+
+
 
 class NotificationSettingsSerializer(serializers.ModelSerializer):
     class Meta:

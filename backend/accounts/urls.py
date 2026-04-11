@@ -33,6 +33,10 @@ from .views import (
     UpdateCourseView,
     DeleteCourseView,
     StudentLessonDetailView,
+    
+    ProfileDataView,
+     JobMatchView,
+
     # Teacher Lessons
     TeacherLessonsListView,
     CreateLessonView,
@@ -127,6 +131,10 @@ urlpatterns = [
     path("student/add-project/", AddProjectView.as_view()),
     path("student/add-language/", AddLanguageView.as_view()),
     path("student/update-objective/", UpdateObjectiveView.as_view()),
+    
+    path("student/profile-data/", ProfileDataView.as_view(), name="profile-data"),
+    path("student/job-matching/", JobMatchView.as_view(), name="job-matching"),
+
 
     # -----------------------------------------------------
     # TEACHER

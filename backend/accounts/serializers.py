@@ -21,6 +21,10 @@ from .models import (
     Choice,
      Question,
       Quiz,
+      Skill,
+      Project,
+      Experience,
+      Language,
 )
 
 
@@ -440,3 +444,47 @@ class TeacherSettingsSerializer(serializers.ModelSerializer):
         model = TeacherSettings
         fields = "__all__"
 
+
+class SkillSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Skill
+        fields = ["id", "name"]
+
+
+class ExperienceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Experience
+        fields = ["id", "title", "company", "years", "description"]
+
+
+class ProjectSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Project
+        fields = ["id", "name", "description", "technologies", "link"]
+
+class LanguageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Language
+        fields = ["id", "name", "level"]
+
+class StudentFullCVSerializer(serializers.ModelSerializer):
+    skills = SkillSerializer(many=True, read_only=True)
+    experiences = ExperienceSerializer(many=True, read_only=True)
+    projects = ProjectSerializer(many=True, read_only=True)
+    languages = LanguageSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = StudentProfile
+        fields = [
+            "full_name",
+            "age",
+            "country",
+            "phone",
+            "education_level",
+            "objective",
+            "photo",
+            "skills",
+            "experiences",
+            "projects",
+            "languages",
+        ]

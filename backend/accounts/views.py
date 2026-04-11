@@ -1388,3 +1388,357 @@ class UpdateObjectiveView(APIView):
         profile.save()
 
         return Response({"message": "Objective updated", "objective": profile.objective})
+
+class ProfileDataView(APIView):
+    permission_classes = [IsAuthenticated, IsStudent]
+
+    # -----------------------------------------
+    # 1) Career Skills Map
+    # -----------------------------------------
+    CAREER_SKILLS = {
+        "backend developer": [
+            "python", "django", "rest api", "sql", "git", "docker"
+        ],
+        "frontend developer": [
+            "html", "css", "javascript", "react", "git"
+        ],
+        "fullstack developer": [
+            "html", "css", "javascript", "react", "python", "django", "git"
+        ],
+        "data analyst": [
+            "python", "pandas", "numpy", "sql", "excel", "power bi"
+        ],
+        "ui ux designer": [
+            "figma", "wireframing", "prototyping", "user research"
+        ]
+    }
+
+    # -----------------------------------------
+    # 2) Career Path Details
+    # -----------------------------------------
+    CAREER_PATHS = {
+        "backend developer": {
+            "description": "مسؤول عن بناء السيرفر، قواعد البيانات، والـ APIs.",
+            "recommended_projects": [
+                "REST API project",
+                "Django CRUD system",
+                "Authentication system"
+            ],
+            "recommended_courses": [
+                "Python",
+                "Django",
+                "REST Framework",
+                "SQL Databases"
+            ]
+        },
+        "frontend developer": {
+            "description": "مسؤول عن بناء واجهات المستخدم وتجربة الاستخدام.",
+            "recommended_projects": [
+                "Landing page",
+                "React dashboard",
+                "Portfolio website"
+            ],
+            "recommended_courses": [
+                "HTML & CSS",
+                "JavaScript",
+                "React"
+            ]
+        },
+        "fullstack developer": {
+            "description": "يجمع بين تطوير الواجهة الأمامية والخلفية.",
+            "recommended_projects": [
+                "Fullstack e-commerce",
+                "Fullstack blog",
+                "Authentication system"
+            ],
+            "recommended_courses": [
+                "HTML/CSS",
+                "JavaScript",
+                "React",
+                "Python",
+                "Django"
+            ]
+        },
+        "data analyst": {
+            "description": "تحليل البيانات واستخراج insights.",
+            "recommended_projects": [
+                "Data cleaning project",
+                "Power BI dashboard",
+                "Pandas analysis project"
+            ],
+            "recommended_courses": [
+                "Python",
+                "Pandas",
+                "SQL",
+                "Power BI"
+            ]
+        }
+    }
+
+    # -----------------------------------------
+    # 3) Course Recommendation Map
+    # -----------------------------------------
+    COURSE_MAP = {
+        "python": "Python for Beginners",
+        "django": "Django Web Development",
+        "rest api": "REST API with Django",
+        "sql": "SQL for Data Management",
+        "git": "Git & GitHub Mastery",
+        "docker": "Docker Essentials",
+
+        "html": "HTML Fundamentals",
+        "css": "CSS Mastery",
+        "javascript": "JavaScript Basics",
+        "react": "React for Beginners",
+
+        "pandas": "Data Analysis with Pandas",
+        "numpy": "NumPy Essentials",
+        "excel": "Excel for Data Analysis",
+        "power bi": "Power BI Dashboarding",
+
+        "figma": "Figma UI/UX Design",
+        "wireframing": "Wireframing Basics",
+        "prototyping": "Prototyping for UX",
+        "user research": "User Research Fundamentals"
+    }
+
+    # -----------------------------------------
+    # 4) CV SCORE CALCULATOR
+    # -----------------------------------------
+    def calculate_cv_score(self, profile, completed_courses, certificates):
+        score = 0
+
+        score += len(profile.skills) * 5
+        score += len(profile.experience) * 10
+        score += len(profile.projects) * 7
+        score += len(profile.languages) * 4
+        score += len(completed_courses) * 3
+        score += len(certificates) * 5
+
+        if profile.objective:
+            score += 5
+
+        if profile.photo:
+            score += 3
+
+        if profile.objective:
+            for exp in profile.experience:
+                if profile.objective.lower() in str(exp).lower():
+                    score += 5
+                    break
+
+        if profile.objective:
+            for proj in profile.projects:
+                if profile.objective.lower() in str(proj).lower():
+                    score += 5
+                    break
+
+        return min(score, 100)
+
+    # -----------------------------------------
+    # 5) SKILLS GAP ANALYSIS
+    # -----------------------------------------
+    def get_skills_gap(self, student_skills, objective):
+        if not objective:
+            return {
+                "career_path": None,
+                "required_skills": [],
+                "student_skills": student_skills,
+                "missing_skills": []
+            }
+
+        obj = objective.lower()
+
+        matched_role = None
+        for role in self.CAREER_SKILLS:
+            if role in obj:
+                matched_role = role
+                break
+
+        if not matched_role:
+            return {
+                "career_path": None,
+                "required_skills": [],
+                "student_skills": student_skills,
+                "missing_skills": []
+            }
+
+        required = self.CAREER_SKILLS[matched_role]
+        student_lower = [s.lower() for s in student_skills]
+        missing = [skill for skill in required if skill not in student_lower]
+
+        return {
+            "career_path": matched_role,
+            "required_skills": required,
+            "student_skills": student_skills,
+            "missing_skills": missing
+        }
+
+    # -----------------------------------------
+    # 6) CAREER PATH RECOMMENDATION
+    # -----------------------------------------
+    def get_career_path_recommendation(self, objective, skills_gap):
+        if not objective:
+            return None
+
+        obj = objective.lower()
+
+        matched_role = None
+        for role in self.CAREER_PATHS:
+            if role in obj:
+                matched_role = role
+                break
+
+        if not matched_role:
+            return None
+
+        path_info = self.CAREER_PATHS[matched_role]
+
+        return {
+            "career_path": matched_role,
+            "description": path_info["description"],
+            "recommended_projects": path_info["recommended_projects"],
+            "recommended_courses": path_info["recommended_courses"],
+            "missing_skills": skills_gap["missing_skills"]
+        }
+
+    # -----------------------------------------
+    # 7) COURSE RECOMMENDATIONS
+    # -----------------------------------------
+    def get_course_recommendations(self, skills_gap, completed_courses):
+        missing = skills_gap["missing_skills"]
+        recommendations = []
+
+        for skill in missing:
+            if skill in self.COURSE_MAP:
+                recommendations.append(self.COURSE_MAP[skill])
+
+        # إزالة الكورسات اللي الطالب أخذها
+        recommendations = [c for c in recommendations if c not in completed_courses]
+
+        return recommendations
+
+    # -----------------------------------------
+    # 8) MAIN GET API
+    # -----------------------------------------
+    def get(self, request):
+        profile = request.user.student_profile
+
+        completed_courses = CourseEnrollment.objects.filter(
+            student=request.user,
+            progress_percentage=100
+        ).values_list("course__title", flat=True)
+
+        certificates = Certificate.objects.filter(
+            student=request.user
+        ).values_list("id", flat=True)
+
+        cv_score = self.calculate_cv_score(profile, completed_courses, certificates)
+        skills_gap = self.get_skills_gap(profile.skills, profile.objective)
+        career_path = self.get_career_path_recommendation(profile.objective, skills_gap)
+        course_recommendations = self.get_course_recommendations(skills_gap, completed_courses)
+
+        data = {
+            "full_name": profile.full_name,
+            "age": profile.age,
+            "country": profile.country,
+            "phone": profile.phone,
+            "education_level": profile.education_level,
+            "objective": profile.objective,
+            "photo": request.build_absolute_uri(profile.photo.url) if profile.photo else None,
+
+            "skills": profile.skills,
+            "experience": profile.experience,
+            "projects": profile.projects,
+            "languages": profile.languages,
+
+            "completed_courses": list(completed_courses),
+            "certificates": list(certificates),
+
+            "cv_score": cv_score,
+            "skills_gap": skills_gap,
+            "career_path_recommendation": career_path,
+            "course_recommendations": course_recommendations
+        }
+
+        return Response(data)
+
+
+class JobMatchView(APIView):
+    permission_classes = [IsAuthenticated, IsStudent]
+
+    # -----------------------------------------
+    # 1) حساب نسبة التطابق
+    # -----------------------------------------
+    def calculate_job_match(self, profile, job):
+        score = 0
+
+        # تحويل مهارات الوظيفة من نص → قائمة
+        if job.skills:
+            job_skills = [s.strip().lower() for s in job.skills.split(",")]
+        else:
+            job_skills = []
+
+        student_skills = [s.lower() for s in profile.skills]
+
+        # 1) تطابق المهارات
+        for skill in job_skills:
+            if skill in student_skills:
+                score += 10
+            else:
+                score -= 5
+
+        # 2) تطابق الخبرة
+        for exp in profile.experience:
+            if any(skill in str(exp).lower() for skill in job_skills):
+                score += 15
+                break
+
+        # 3) CV Score (من ProfileDataView)
+        cv_score = 50
+        if hasattr(profile, "cv_score"):
+            cv_score = profile.cv_score
+
+        score += (cv_score * 0.3)
+
+        return max(0, min(int(score), 100))
+
+    # -----------------------------------------
+    # 2) GET API
+    # -----------------------------------------
+    def get(self, request):
+        profile = request.user.student_profile
+        jobs = JobPost.objects.filter(is_active=True)
+
+        results = []
+
+        for job in jobs:
+
+            # تحويل مهارات الوظيفة لقائمة
+            if job.skills:
+                job_skills = [s.strip().lower() for s in job.skills.split(",")]
+            else:
+                job_skills = []
+
+            match_score = self.calculate_job_match(profile, job)
+
+            missing_skills = [
+                s for s in job_skills
+                if s not in [x.lower() for x in profile.skills]
+            ]
+
+            results.append({
+                "job_id": job.id,
+                "title": job.title,
+                "company": job.company.company_profile.company_name,
+                "match_score": match_score,
+                "required_skills": job_skills,
+                "student_skills": profile.skills,
+                "missing_skills": missing_skills,
+                "is_good_match": match_score >= 60,
+                "location": job.location,
+                "job_type": job.job_type,
+                "salary": job.salary,
+            })
+
+        return Response(results)

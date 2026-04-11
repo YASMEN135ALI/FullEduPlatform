@@ -435,3 +435,43 @@ class TeacherSettings(models.Model):
     def __str__(self):
         return f"Settings for {self.teacher.email}"
 
+
+
+
+class Skill(models.Model):
+    student = models.ForeignKey("StudentProfile", on_delete=models.CASCADE, related_name="cv_skills")
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+
+
+class Experience(models.Model):
+    student = models.ForeignKey("StudentProfile", on_delete=models.CASCADE, related_name="cv_experiences")
+    title = models.CharField(max_length=150)
+    company = models.CharField(max_length=150)
+    years = models.IntegerField(default=1)
+    description = models.TextField(blank=True)
+
+    def __str__(self):
+        return f"{self.title} - {self.company}"
+
+
+class Project(models.Model):
+    student = models.ForeignKey("StudentProfile", on_delete=models.CASCADE, related_name="cv_projects")
+    name = models.CharField(max_length=150)
+    description = models.TextField(blank=True)
+    technologies = models.CharField(max_length=200)
+    link = models.URLField(blank=True, null=True)
+
+    def __str__(self):
+        return self.name
+
+
+class Language(models.Model):
+    student = models.ForeignKey("StudentProfile", on_delete=models.CASCADE, related_name="cv_languages")
+    name = models.CharField(max_length=100)
+    level = models.CharField(max_length=100)
+
+    def __str__(self):
+        return f"{self.name} ({self.level})"

@@ -8,12 +8,40 @@
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/css/style.css">
 
-
+    <style>
+        .ai-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            margin-bottom: 25px;
+        }
+        .badge-skill {
+            background: #eef2ff;
+            color: #3730a3;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+        .badge-missing {
+            background: #fee2e2;
+            color: #b91c1c;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+        .match-box {
+            border: 1px solid #eee;
+            border-radius: 12px;
+            padding: 15px;
+        }
+    </style>
 </head>
 
 <body>
-   <!-- Navbar -->
-    <div id="navbar"></div>
+
+
+
     <!-- Sidebar -->
     <div class="sidebar">
         <h4>EduPlatform</h4>
@@ -21,7 +49,7 @@
             <li><a class="nav-link active" href="#">الصفحة الرئيسية</a></li>
             <li><a class="nav-link" href="student_courses.html">كورساتي</a></li>
             <li><a class="nav-link" href="#">الدورات المقترحة</a></li>
-               <li><a class="nav-link" href="my-applications.html">الطلبات المقدمة</a></li>
+            <li><a class="nav-link" href="my-applications.html">الطلبات المقدمة</a></li>
             <li><a class="nav-link" href="student-profile.html">ملفي الشخصي</a></li>
             <li><a class="nav-link text-danger" id="logoutBtn">تسجيل الخروج</a></li>
         </ul>
@@ -66,18 +94,94 @@
         <!-- Courses -->
         <h4 class="fw-bold mb-3">كورساتي</h4>
         <div class="row" id="myCoursesContainer">
-            <!-- Loader -->
             <div class="text-center w-100 py-5">
                 <div class="spinner-border text-primary"></div>
             </div>
         </div>
 
+        <!-- ============================= -->
+        <!-- AI DASHBOARD SECTIONS BELOW -->
+        <!-- ============================= -->
+
+        <h3 class="fw-bold mt-5 mb-3">لوحة الذكاء للطالب</h3>
+
+        <!-- CV SCORE -->
+        <div class="ai-card text-center" id="cvScoreSection">
+
+            <h4 class="fw-bold mb-4">تقييم السيرة الذاتية (CV Score)</h4>
+
+            <div class="cv-circle-container mx-auto mb-3">
+                <svg class="cv-progress" width="160" height="160">
+                    <circle class="bg" cx="80" cy="80" r="70"></circle>
+                    <circle class="progress" cx="80" cy="80" r="70"></circle>
+                </svg>
+
+                <div class="cv-score-text">
+                    <span id="cvScoreValue">0%</span>
+                </div>
+            </div>
+
+            <h5 id="cvScoreLabel" class="fw-bold mt-3">...</h5>
+            <p id="cvScoreTip" class="text-muted small">...</p>
+
+        </div>
+
+        <!-- SKILLS CATEGORY CHART -->
+        <div class="card mt-4">
+            <div class="card-body">
+                <h4 class="fw-bold mb-3">📊 تحليل فئات المهارات</h4>
+                <canvas id="skillsCategoryChart" height="120"></canvas>
+            </div>
+        </div>
+        <div class="card mt-4">
+    <div class="card-body">
+        <h4 class="fw-bold mb-3">📈 تطوّر السيرة الذاتية عبر الزمن (CV Timeline)</h4>
+        <canvas id="cvTimelineChart" height="120"></canvas>
     </div>
-    <!-- Footer -->
-    <div id="footer"></div>
-     <script src="assets/js/main.js"></script>
+</div>
+
+
+        <!-- SKILLS GAP -->
+        <div class="ai-card" id="skillsGapSection"></div>
+
+        <!-- SKILLS GAP RADAR -->
+        <div class="card mt-4">
+            <div class="card-body">
+                <h4 class="fw-bold mb-3">🕸️ تحليل فجوة المهارات (Skills Gap Radar)</h4>
+                <canvas id="skillsGapRadar" height="200"></canvas>
+            </div>
+        </div>
+         <div class="card mt-4">
+    <div class="card-body">
+        <h4 class="fw-bold mb-3">🌐 تقدّم الطالب في 5 محاور</h4>
+        <canvas id="studentProgressRadar" height="220"></canvas>
+    </div>
+</div>
+
+        <!-- CAREER PATH -->
+        <div class="ai-card" id="careerPathSection"></div>
+
+        <!-- COURSE RECOMMENDATIONS -->
+        <div class="ai-card" id="courseRecommendationsSection"></div>
+
+        <!-- JOB MATCHING -->
+        <div class="ai-card" id="jobMatchingSection"></div>
+
+    </div>
+
+
+
+    <script src="assets/js/main.js"></script>
     <script src="assets/js/bootstrap.bundle.min.js"></script>
+
+    <!-- AI Dashboard -->
+    <script src="assets/js/dashboard-ai.js"></script>
+
+    <!-- Student Dashboard -->
     <script src="assets/js/dashboard-student.js"></script>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 </body>
 </html>

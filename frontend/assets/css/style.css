@@ -247,4 +247,41 @@ footer {
             border-radius: 50%;
             object-fit: cover;
         }
+        .cv-circle-container {
+    position: relative;
+    width: 160px;
+    height: 160px;
+}
+
+.cv-circle-container svg {
+    transform: rotate(-90deg);
+}
+
+.cv-progress circle {
+    fill: none;
+    stroke-width: 12;
+    stroke-linecap: round;
+}
+
+.cv-progress .bg {
+    stroke: #eee;
+}
+
+.cv-progress .progress {
+    stroke: #4f46e5; /* اللون الافتراضي */
+    stroke-dasharray: 440;
+    stroke-dashoffset: 440;
+    transition: stroke-dashoffset 1s ease, stroke 0.3s ease;
+}
+
+.cv-score-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 32px;
+    font-weight: bold;
+    color: #333;
+}
+
     

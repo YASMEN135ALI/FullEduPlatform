@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>طلبات الوظائف - EduPlatform</title>
+
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/theme.css">
+
+    <style>
+        body {
+            background: #f8fafc;
+        }
+
+        .page-container {
+            padding: 30px 20px;
+        }
+
+        .section-title-main {
+            font-size: 26px;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .section-subtitle {
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .summary-card {
+            background: #fff;
+            border-radius: 14px;
+            padding: 18px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+            text-align: center;
+        }
+
+        .summary-card h5 {
+            font-size: 16px;
+            margin-bottom: 8px;
+            color: #6b7280;
+        }
+
+        .summary-card p {
+            font-size: 24px;
+            font-weight: 800;
+            margin: 0;
+        }
+
+        .summary-card span {
+            font-size: 12px;
+            color: #9ca3af;
+        }
+
+        .filter-pill {
+            border-radius: 999px;
+            padding: 6px 14px;
+            border: 1px solid #e5e7eb;
+            background: #fff;
+            font-size: 13px;
+            cursor: pointer;
+            margin-left: 8px;
+        }
+
+        .filter-pill.active {
+            background: #1d4ed8;
+            color: #fff;
+            border-color: #1d4ed8;
+        }
+
+        .app-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 18px 20px;
+            box-shadow: 0 4px 18px rgba(15,23,42,0.06);
+            margin-bottom: 18px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .app-title {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .app-company {
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        .badge-status {
+            font-size: 12px;
+            padding: 4px 10px;
+            border-radius: 999px;
+        }
+
+        .badge-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .badge-accepted {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .badge-rejected {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .match-score {
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .match-bar {
+            height: 6px;
+            border-radius: 999px;
+            background: #e5e7eb;
+            overflow: hidden;
+        }
+
+        .match-bar-inner {
+            height: 100%;
+            border-radius: 999px;
+            background: linear-gradient(90deg, #22c55e, #16a34a);
+        }
+
+        .meta-text {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        .skills-badge {
+            font-size: 11px;
+            padding: 4px 8px;
+            border-radius: 999px;
+            background: #eff6ff;
+            color: #1d4ed8;
+            margin-left: 4px;
+            margin-bottom: 4px;
+            display: inline-block;
+        }
+
+        .insight-box {
+            background: #f9fafb;
+            border-radius: 12px;
+            padding: 10px 12px;
+            margin-top: 10px;
+            border: 1px dashed #e5e7eb;
+        }
+
+        .insight-title {
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .insight-text {
+            font-size: 12px;
+            color: #6b7280;
+            margin: 0;
+        }
+
+        .btn-view {
+            font-size: 13px;
+            padding: 6px 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <div id="navbar"></div>
+
+    <div class="container page-container">
+
+        <!-- Header -->
+        <div class="mb-4">
+            <h2 class="section-title-main">طلبات الوظائف</h2>
+            <p class="section-subtitle">
+                هنا يمكنك متابعة كل الوظائف التي قدّمت عليها، ومعرفة حالتها وتطور مسارك الوظيفي.
+            </p>
+        </div>
+
+        <!-- Summary -->
+        <div class="row mb-4">
+            <div class="col-md-3 col-6 mb-3">
+                <div class="summary-card">
+                    <h5>إجمالي الطلبات</h5>
+                    <p id="totalApplications">0</p>
+                    <span>كل الوظائف التي قدّمت عليها</span>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 mb-3">
+                <div class="summary-card">
+                    <h5>قيد المراجعة</h5>
+                    <p id="pendingApplications">0</p>
+                    <span>بانتظار رد الشركات</span>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 mb-3">
+                <div class="summary-card">
+                    <h5>مقبولة</h5>
+                    <p id="acceptedApplications">0</p>
+                    <span>فرص تحتاج متابعة</span>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 mb-3">
+                <div class="summary-card">
+                    <h5>مرفوضة</h5>
+                    <p id="rejectedApplications">0</p>
+                    <span>دروس لتحسين ملفك</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="d-flex align-items-center mb-3">
+            <span class="me-2 meta-text">تصفية حسب الحالة:</span>
+            <button class="filter-pill active" data-status="all">الكل</button>
+            <button class="filter-pill" data-status="pending">قيد المراجعة</button>
+            <button class="filter-pill" data-status="accepted">مقبولة</button>
+            <button class="filter-pill" data-status="rejected">مرفوضة</button>
+        </div>
+
+        <!-- Applications List -->
+        <div id="applicationsContainer">
+            <div class="text-center py-5 text-muted" id="loadingState">
+                جاري تحميل طلباتك الوظيفية...
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <div id="footer"></div>
+
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/applications.js"></script>
+</body>
+</html>

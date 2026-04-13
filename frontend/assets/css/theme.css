@@ -29,29 +29,182 @@ body {
 /* ------------------------------
    🧭 Navbar
 ------------------------------ */
+/* ------------------------------
+   🧭 Premium Navbar (فخم + متناسق)
+------------------------------ */
+
 .navbar {
-  background-color: #2183c6 !important;
- padding: 14px 0;
+  background: linear-gradient(90deg, #1e73be, #2183c6, #3ba4e0);
+  padding: 14px 0;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.12);
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  transition: 0.3s ease;
 }
- 
 
-
+/* الشعار */
 .navbar-brand {
-  font-weight: 700;
-  font-size: 22px;
+  display: flex;
+  align-items: center;
+  font-weight: 800;
+  font-size: 26px;
   color: var(--white) !important;
+  letter-spacing: 0.5px;
 }
 
+.navbar-brand img {
+  height: 52px;
+  width: 52px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 12px;
+  border: 3px solid rgba(255,255,255,0.7);
+  box-shadow: 0 0 8px rgba(255,255,255,0.4);
+}
+
+/* توسيط الروابط */
+.navbar-nav {
+  margin: 0 auto;
+}
+
+/* الروابط */
 .nav-link {
-  color: var(--light) !important;
-  margin-left: 15px;
-  font-weight: 500;
-  transition: 0.3s;
+  color: var(--white) !important;
+  margin: 0 18px;
+  font-weight: 600;
+  font-size: 17px;
+  transition: 0.3s ease;
+  position: relative;
+}
+
+/* خط تحت الرابط عند المرور */
+.nav-link::after {
+  content: "";
+  position: absolute;
+  width: 0%;
+  height: 2px;
+  background: #ffffff;
+  left: 50%;
+  bottom: -4px;
+  transition: 0.3s ease;
+  transform: translateX(-50%);
+}
+
+.nav-link:hover::after {
+  width: 60%;
 }
 
 .nav-link:hover {
-  color: var(--text-dark) !important;
+  color: #e9f6ff !important;
+  transform: translateY(-2px);
 }
+
+/* زر التسجيل */
+.navbar .btn-primary {
+  background: #ffffff;
+  color: #2183c6;
+  font-weight: 700;
+  border-radius: 10px;
+  padding: 8px 20px;
+  transition: 0.3s ease;
+  box-shadow: 0 2px 8px rgba(255,255,255,0.4);
+}
+
+.navbar .btn-primary:hover {
+  background: #dff3ff;
+  color: #0b5fa8;
+  transform: translateY(-2px);
+}
+
+/* زر القائمة في الموبايل */
+.navbar-toggler {
+  border: none;
+}
+
+.navbar-toggler:focus {
+  box-shadow: none;
+}
+/* ------------------------------
+   🧭 Premium Navbar (مشترك لكل الأدوار)
+------------------------------ */
+
+.role-navbar {
+  background: linear-gradient(90deg, #1e73be, #2183c6, #3ba4e0);
+  padding: 14px 0;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.12);
+  position: sticky;
+  top: 0;
+  z-index: 999;
+}
+
+/* الشعار */
+.role-navbar .navbar-brand {
+  display: flex;
+  align-items: center;
+  font-weight: 800;
+  font-size: 26px;
+  color: var(--white) !important;
+}
+
+.role-navbar .navbar-brand img {
+  height: 48px;
+  width: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 12px;
+  border: 3px solid rgba(255,255,255,0.7);
+  box-shadow: 0 0 8px rgba(255,255,255,0.4);
+}
+
+/* الروابط */
+.role-navbar .nav-link {
+  color: var(--white) !important;
+  margin: 0 15px;
+  font-weight: 600;
+  font-size: 16px;
+  transition: 0.3s ease;
+  position: relative;
+}
+
+/* خط تحت الرابط */
+.role-navbar .nav-link::after {
+  content: "";
+  position: absolute;
+  width: 0%;
+  height: 2px;
+  background: #ffffff;
+  left: 50%;
+  bottom: -4px;
+  transition: 0.3s ease;
+  transform: translateX(-50%);
+}
+
+.role-navbar .nav-link:hover::after {
+  width: 60%;
+}
+
+.role-navbar .nav-link:hover {
+  color: #e9f6ff !important;
+  transform: translateY(-2px);
+}
+
+/* زر تسجيل الخروج */
+.role-navbar .logout-btn {
+  background: #ffffff;
+  color: #2183c6;
+  font-weight: 700;
+  border-radius: 10px;
+  padding: 8px 18px;
+  transition: 0.3s ease;
+}
+
+.role-navbar .logout-btn:hover {
+  background: #dff3ff;
+  color: #0b5fa8;
+  transform: translateY(-2px);
+}
+
 
 /* ------------------------------
    🎡 Carousel

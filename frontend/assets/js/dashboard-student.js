@@ -51,42 +51,38 @@ document.addEventListener("DOMContentLoaded", async function () {
             courses.forEach(item => {
                 const course = item.course;
 
-                // ============================
                 // زر حسب نسبة التقدم
-                // ============================
                 let actionButton = "";
 
                 if (item.progress_percentage === 100) {
                     actionButton = `
-                        <button class="btn btn-success btn-sm w-100" onclick="viewCertificate(${course.id})">
+                        <button class="btn btn-success w-100" onclick="viewCertificate(${course.id})">
                             عرض الشهادة
                         </button>
                     `;
                 } else {
                     actionButton = `
-                        <button class="btn btn-primary btn-sm w-100" onclick="openCourse(${course.id})">
+                        <button class="btn btn-primary w-100" onclick="openCourse(${course.id})">
                             متابعة
                         </button>
                     `;
                 }
 
-                // ============================
                 // بطاقة الكورس
-                // ============================
                 container.innerHTML += `
-                    <div class="col-md-4 mb-3">
+                    <div class="col-md-4">
                         <div class="course-card">
 
                             <img src="${course.image || 'assets/img/course_default.png'}" 
-                                class="w-100 mb-2 rounded">
+                                class="w-100 mb-3 rounded">
 
-                            <h5 class="fw-bold">${course.title}</h5>
+                            <h5 class="fw-bold mb-2">${course.title}</h5>
 
                             <div class="progress mb-2">
                                 <div class="progress-bar bg-primary" style="width: ${item.progress_percentage}%"></div>
                             </div>
 
-                            <p class="text-muted" style="font-size: 13px;">
+                            <p class="text-muted small mb-3">
                                 نسبة التقدم: ${item.progress_percentage}%
                             </p>
 

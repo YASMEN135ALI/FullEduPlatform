@@ -7,9 +7,6 @@ async function loadAIDashboard() {
     if (!token) return;
 
     try {
-        // ============================
-        // 1) جلب بيانات الذكاء
-        // ============================
         const profileRes = await fetch(
             "http://127.0.0.1:8000/api/accounts/student/profile-data/",
             { headers: { "Authorization": "Token " + token } }
@@ -17,45 +14,22 @@ async function loadAIDashboard() {
 
         const profile = await profileRes.json();
 
-        // تشغيل دائرة CV Score
+        // تحليلات أساسية
         animateCVScore(profile.cv_score);
         renderCVTimeline(profile.cv_score);
-
-
-        // ============================
-        // 2) جلب الوظائف
-        // ============================
-        const jobsRes = await fetch(
-            "http://127.0.0.1:8000/api/accounts/student/job-matching/",
-            { headers: { "Authorization": "Token " + token } }
-        );
-
-        const jobs = await jobsRes.json();
-
-        // ============================
-        // 3) عرض الأقسام
-        // ============================
         renderSkillsGap(profile.skills_gap);
-        renderCareerPath(profile.career_path_recommendation);
-        renderCourseRecommendations(profile.course_recommendations);
-        renderJobMatching(jobs);
-
-        // الرسوم البيانية الجديدة
         renderSkillsCategoryChart(profile.skills);
         renderSkillsGapRadar(profile.skills_gap);
-        renderStudentProgressRadar(profile, jobs);
-
+        renderStudentProgressRadar(profile);
 
     } catch (err) {
         console.error("AI Dashboard Error:", err);
     }
 }
 
-//
 // ===============================
-//  CV SCORE
+// CV SCORE
 // ===============================
-//
 function animateCVScore(score) {
     const circle = document.querySelector(".cv-progress .progress");
     const scoreText = document.getElementById("cvScoreValue");
@@ -107,22 +81,34 @@ function animateCVScore(score) {
 
     label.textContent = labelText;
     tip.textContent = tipText;
+
+    // توصية ذكية حسب النتيجة
+    const cvActionTip = document.getElementById("cvActionTip");
+    if (!cvActionTip) return;
+
+    if (score < 40) {
+        cvActionTip.textContent = "ابدأ بإكمال كورس واحد على الأقل هذا الأسبوع لرفع تقييمك.";
+    } else if (score < 60) {
+        cvActionTip.textContent = "أضف مشروعًا صغيرًا إلى ملفك لرفع تقييمك بسرعة.";
+    } else if (score < 80) {
+        cvActionTip.textContent = "أنت قريب جدًا من الجاهزية! أضف مهارة واحدة جديدة.";
+    } else {
+        cvActionTip.textContent = "ممتاز! أنت جاهز للتقديم على الوظائف المناسبة لك.";
+    }
 }
 
-//
 // ===============================
-//  SKILLS GAP
+// SKILLS GAP
 // ===============================
-//
 function renderSkillsGap(gap) {
     const container = document.getElementById("skillsGapSection");
 
-    const required = gap.required_skills || [];
-    const student = gap.student_skills || [];
-    const missing = gap.missing_skills || [];
+    const required = gap?.required_skills || [];
+    const student = gap?.student_skills || [];
+    const missing = gap?.missing_skills || [];
 
     container.innerHTML = `
-        <h4 class="fw-bold mb-3">فجوة المهارات</h4>
+        <h4 class="section-title">فجوة المهارات</h4>
 
         <h6 class="text-muted">المهارات المطلوبة للمسار</h6>
         <div class="d-flex flex-wrap gap-2 mb-3">
@@ -142,13 +128,20 @@ function renderSkillsGap(gap) {
             }
         </div>
     `;
+
+    const gapInsight = document.getElementById("gapInsight");
+    if (!gapInsight) return;
+
+    if (missing.length === 0) {
+        gapInsight.textContent = "لا توجد فجوة مهارية! أنت متوافق تمامًا مع متطلبات المسار.";
+    } else {
+        gapInsight.textContent = `ابدأ بتعلم المهارة: ${missing[0]} لأنها الأكثر تأثيرًا على جاهزيتك.`;
+    }
 }
 
-//
 // ===============================
-//  SKILL CATEGORY MAP (واسعة)
+// SKILL CATEGORY MAP
 // ===============================
-//
 const skillCategoriesMap = {
     "python": "Programming Languages",
     "java script": "Programming Languages",
@@ -169,11 +162,9 @@ const skillCategoriesMap = {
     "linux": "DevOps & Tools"
 };
 
-//
 // ===============================
-//  SKILLS CATEGORY CHART
+// SKILLS CATEGORY CHART
 // ===============================
-//
 function renderSkillsCategoryChart(skills) {
     if (!skills || skills.length === 0) return;
 
@@ -214,13 +205,20 @@ function renderSkillsCategoryChart(skills) {
             scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
         }
     });
+
+    const skillsInsight = document.getElementById("skillsInsight");
+    if (!skillsInsight) return;
+
+    const minVal = Math.min(...values);
+    const weakestCategory = labels[values.indexOf(minVal)];
+
+    skillsInsight.textContent =
+        `أضعف فئة لديك هي: ${weakestCategory}. حاول تطوير مهارة واحدة ضمن هذه الفئة هذا الأسبوع.`;
 }
 
-//
 // ===============================
-//  SKILLS GAP RADAR CHART
+// SKILLS GAP RADAR CHART
 // ===============================
-//
 function renderSkillsGapRadar(gap) {
     if (!gap) return;
 
@@ -269,111 +267,11 @@ function renderSkillsGapRadar(gap) {
     });
 }
 
-//
 // ===============================
-//  CAREER PATH
+// CV TIMELINE
 // ===============================
-//
-function renderCareerPath(cp) {
-    const container = document.getElementById("careerPathSection");
-
-    if (!cp) {
-        container.innerHTML = `
-            <h4 class="fw-bold mb-3">المسار الوظيفي المقترح</h4>
-            <p class="text-muted">لم يتم تحديد هدف وظيفي بعد.</p>
-        `;
-        return;
-    }
-
-    container.innerHTML = `
-        <h4 class="fw-bold mb-3">المسار الوظيفي المقترح</h4>
-
-        <h5>${cp.career_path}</h5>
-        <p class="text-muted small">${cp.description}</p>
-
-        <div class="row">
-            <div class="col-md-6">
-                <h6 class="text-muted">مشاريع مقترحة</h6>
-                <ul>
-                    ${cp.recommended_projects.map(p => `<li>${p}</li>`).join("")}
-                </ul>
-            </div>
-
-            <div class="col-md-6">
-                <h6 class="text-muted">كورسات أساسية</h6>
-                <ul>
-                    ${cp.recommended_courses.map(c => `<li>${c}</li>`).join("")}
-                </ul>
-            </div>
-        </div>
-    `;
-}
-
-//
-// ===============================
-//  COURSE RECOMMENDATIONS
-// ===============================
-function renderCourseRecommendations(courses) {
-    const container = document.getElementById("courseRecommendationsSection");
-
-    container.innerHTML = `
-        <h4 class="fw-bold mb-3">كورسات مقترحة لك</h4>
-        <ul>
-            ${courses.length === 0
-                ? `<li class="text-muted">لا توجد كورسات مقترحة حالياً.</li>`
-                : courses.map(c => `<li>${c}</li>`).join("")
-            }
-        </ul>
-    `;
-}
-
-//
-// ===============================
-//  JOB MATCHING
-// ===============================
-function renderJobMatching(jobs) {
-    const container = document.getElementById("jobMatchingSection");
-
-    container.innerHTML = `<h4 class="fw-bold mb-3">وظائف مناسبة لك</h4>`;
-
-    if (jobs.length === 0) {
-        container.innerHTML += `<p class="text-muted">لا توجد وظائف متاحة حالياً.</p>`;
-        return;
-    }
-
-    jobs.forEach(job => {
-        container.innerHTML += `
-            <div class="match-box mb-3">
-                <h5>${job.title}</h5>
-                <p class="text-muted small">${job.company}</p>
-
-                <p class="mb-1">نسبة التطابق: <strong>${job.match_score}%</strong></p>
-
-                <p class="small text-muted">
-                    المهارات الناقصة:
-                    ${job.missing_skills.length === 0
-                        ? "لا يوجد"
-                        : job.missing_skills.join("، ")}
-                </p>
-
-                <span class="badge ${job.is_good_match ? "bg-success" : "bg-warning"}">
-                    ${job.is_good_match ? "مناسب للتقديم" : "يحتاج تطوير"}
-                </span>
-
-                <button class="btn btn-primary btn-sm mt-2" onclick="goToApplyPage(${job.id})">
-                    قدّم الآن
-                </button>
-            </div>
-        `;
-    });
-}
-
-function goToApplyPage(jobId) {
-    window.location.href = `job-apply.html?id=${jobId}`;
-}
 function renderCVTimeline(score) {
 
-    // توليد بيانات منطقية لآخر 6 أشهر
     const months = ["قبل 6 أشهر", "قبل 5 أشهر", "قبل 4 أشهر", "قبل 3 أشهر", "قبل شهرين", "قبل شهر", "الآن"];
 
     const values = [
@@ -415,36 +313,39 @@ function renderCVTimeline(score) {
             }
         }
     });
+
+    const timelineInsight = document.getElementById("timelineInsight");
+    if (!timelineInsight) return;
+
+    if (values[6] > values[5]) {
+        timelineInsight.textContent = "أداء ممتاز! سيرتك الذاتية تتحسن باستمرار.";
+    } else {
+        timelineInsight.textContent = "لاحظنا ثباتًا أو انخفاضًا بسيطًا. حاول إضافة مهارة أو مشروع جديد هذا الشهر.";
+    }
 }
 
-function renderStudentProgressRadar(profile, jobs) {
+// ===============================
+// STUDENT PROGRESS RADAR
+// ===============================
+function renderStudentProgressRadar(profile) {
 
-    const skillsScore = Math.min(100, profile.skills.length * 10);
+    const skillsScore = Math.min(100, (profile.skills?.length || 0) * 10);
     const projectsScore = Math.min(100, (profile.projects?.length || 0) * 20);
     const coursesScore = Math.min(100, (profile.completed_courses || 0) * 10);
     const cvScore = profile.cv_score;
-
-    // حساب جاهزية الوظائف
-    let jobReadiness = 0;
-    if (jobs.length > 0) {
-        const avgMatch = jobs.reduce((a, b) => a + b.match_score, 0) / jobs.length;
-        jobReadiness = Math.min(100, avgMatch);
-    }
 
     const labels = [
         "المهارات",
         "المشاريع",
         "الكورسات",
-        "السيرة الذاتية",
-        "الجاهزية للوظائف"
+        "السيرة الذاتية"
     ];
 
     const values = [
         skillsScore,
         projectsScore,
         coursesScore,
-        cvScore,
-        jobReadiness
+        cvScore
     ];
 
     const ctx = document.getElementById("studentProgressRadar").getContext("2d");
@@ -474,4 +375,11 @@ function renderStudentProgressRadar(profile, jobs) {
             }
         }
     });
+
+    const progressInsight = document.getElementById("progressInsight");
+    if (!progressInsight) return;
+
+    const minIndex = values.indexOf(Math.min(...values));
+    progressInsight.textContent =
+        `أضعف محور لديك هو: ${labels[minIndex]}. ركّز عليه هذا الأسبوع لتحسين تقدمك العام.`;
 }

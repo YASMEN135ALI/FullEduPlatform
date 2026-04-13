@@ -434,7 +434,9 @@ class MyJobApplicationsView(generics.ListAPIView):
     permission_classes = [IsAuthenticated, IsStudent]
 
     def get_queryset(self):
-        return JobApplication.objects.filter(student=self.request.user)
+        return JobApplication.objects.filter(
+            student=self.request.user
+        ).order_by("-applied_at")
 
 class JobDetailUpdateView(generics.RetrieveUpdateAPIView):
     queryset = JobPost.objects.all()

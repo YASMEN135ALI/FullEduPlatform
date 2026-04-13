@@ -231,7 +231,7 @@ class Certificate(models.Model):
 # =========================================================
 
 class JobPost(models.Model):
-    company = models.ForeignKey(User, on_delete=models.CASCADE, related_name='job_posts')
+    company = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='job_posts')
 
     title = models.CharField(max_length=200)
     description = models.TextField()
@@ -258,15 +258,23 @@ class JobPost(models.Model):
         return self.title
 
 
+
+from django.conf import settings
+from django.contrib.postgres.fields import ArrayField
+
 class JobApplication(models.Model):
     job = models.ForeignKey(JobPost, on_delete=models.CASCADE, related_name='applications')
-    student = models.ForeignKey(User, on_delete=models.CASCADE, related_name='job_applications')
+    student = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='job_applications')
 
     cv = models.FileField(upload_to='cvs/', blank=True, null=True)
     cover_letter = models.TextField(blank=True, null=True)
 
     status = models.CharField(max_length=20, default='pending')
     applied_at = models.DateTimeField(auto_now_add=True)
+
+    match_score = models.IntegerField(default=0)
+    missing_skills = models.JSONField(default=list, blank=True)
+    skills_snapshot = models.JSONField(default=list, blank=True)
 
     class Meta:
         unique_together = ('job', 'student')
@@ -276,19 +284,20 @@ class JobApplication(models.Model):
 
 
 class CompanyNotificationSettings(models.Model):
-    company = models.OneToOneField(User, on_delete=models.CASCADE)
+    company = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     notify_new_applicant = models.BooleanField(default=True)
     notify_status_change = models.BooleanField(default=True)
 
 
 class Notification(models.Model):
-    company = models.ForeignKey(User, on_delete=models.CASCADE)
+    company = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     message = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     is_read = models.BooleanField(default=False)
 
     def __str__(self):
         return self.message
+
 
 
 # =========================================================
@@ -400,8 +409,14 @@ class CourseProgress(models.Model):
     def __str__(self):
         return f"{self.student} - {self.course} - {'مكتمل' if self.completed else 'غير مكتمل'}"
 
+from django.conf import settings
+
 class TeacherNotification(models.Model):
-    teacher = models.ForeignKey(User, on_delete=models.CASCADE, related_name="teacher_notifications")
+    teacher = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="teacher_notifications"
+    )
     title = models.CharField(max_length=255)
     message = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
@@ -412,7 +427,11 @@ class TeacherNotification(models.Model):
 
 
 class TeacherNotificationSettings(models.Model):
-    teacher = models.OneToOneField(User, on_delete=models.CASCADE, related_name="teacher_notification_settings")
+    teacher = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="teacher_notification_settings"
+    )
     receive_course_updates = models.BooleanField(default=True)
     receive_quiz_updates = models.BooleanField(default=True)
     receive_student_activity = models.BooleanField(default=True)
@@ -420,21 +439,23 @@ class TeacherNotificationSettings(models.Model):
     def __str__(self):
         return f"Settings for {self.teacher.email}"
 
-class TeacherSettings(models.Model):
-    teacher = models.OneToOneField(User, on_delete=models.CASCADE, related_name="teacher_settings")
 
-    # إعدادات الإشعارات
+class TeacherSettings(models.Model):
+    teacher = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="teacher_settings"
+    )
+
     notify_students = models.BooleanField(default=True)
     notify_lessons = models.BooleanField(default=True)
     notify_quizzes = models.BooleanField(default=True)
 
-    # إعدادات النظام
     dark_mode = models.BooleanField(default=False)
     sound_enabled = models.BooleanField(default=True)
 
     def __str__(self):
         return f"Settings for {self.teacher.email}"
-
 
 
 

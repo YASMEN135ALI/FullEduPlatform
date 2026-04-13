@@ -351,9 +351,15 @@ class JobPostSerializer(serializers.ModelSerializer):
         return obj.requirements or ""
 
 class JobApplicationSerializer(serializers.ModelSerializer):
-    job_title = serializers.CharField(source="job.title", read_only=True)
-    company_name = serializers.CharField(source="job.company.company_profile.company_name", read_only=True)
     job_id = serializers.IntegerField(source="job.id", read_only=True)
+    job_title = serializers.CharField(source="job.title", read_only=True)
+    company_name = serializers.CharField(
+        source="job.company.company_profile.company_name",
+        read_only=True
+    )
+
+    match_score = serializers.IntegerField(read_only=True)
+    missing_skills = serializers.ListField(child=serializers.CharField(), read_only=True)
 
     class Meta:
         model = JobApplication
@@ -363,7 +369,9 @@ class JobApplicationSerializer(serializers.ModelSerializer):
             "job_title",
             "company_name",
             "status",
-            "applied_at",   # ← بدل created_at
+            "applied_at",
+            "match_score",
+            "missing_skills",
         ]
 
 

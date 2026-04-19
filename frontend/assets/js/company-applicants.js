@@ -11,10 +11,16 @@ document.addEventListener("DOMContentLoaded", async function () {
     const urlParams = new URLSearchParams(window.location.search);
     const jobId = urlParams.get("job_id");
 
+    // 🔥 حماية من فتح الصفحة بدون job_id
+    if (!jobId || jobId === "null" || jobId === "undefined") {
+        alert("لا يمكن فتح صفحة المتقدمين بدون رقم الوظيفة");
+        window.location.href = "company_jobs.html";
+        return;
+    }
+
     const tableBody = document.getElementById("applicantsTable");
     const noApplicantsMsg = document.getElementById("noApplicantsMsg");
 
-    // جلب المتقدمين
     try {
         const response = await fetch(`http://127.0.0.1:8000/api/accounts/company/job/${jobId}/applicants/`, {
             method: "GET",
@@ -23,9 +29,16 @@ document.addEventListener("DOMContentLoaded", async function () {
             }
         });
 
+        // 🔥 إذا الرد ليس JSON → يظهر خطأ
+        if (!response.ok) {
+            console.error("Server returned:", await response.text());
+            alert("حدث خطأ أثناء تحميل المتقدمين");
+            return;
+        }
+
         const applicants = await response.json();
 
-        if (applicants.length === 0) {
+        if (!Array.isArray(applicants) || applicants.length === 0) {
             noApplicantsMsg.classList.remove("d-none");
             return;
         }
@@ -35,8 +48,8 @@ document.addEventListener("DOMContentLoaded", async function () {
         applicants.forEach(app => {
             tableBody.innerHTML += `
                 <tr>
-                    <td>${app.student_name}</td>
-                    <td>${app.student_email}</td>
+                    <td>${app.student_name || "غير متوفر"}</td>
+                    <td>${app.student_email || "غير متوفر"}</td>
                     <td>
                         ${app.cv_url 
                             ? `<a href="${app.cv_url}" target="_blank" class="btn btn-sm btn-outline-primary">عرض CV</a>` 
@@ -64,13 +77,12 @@ document.addEventListener("DOMContentLoaded", async function () {
         });
 
     } catch (error) {
-        console.error(error);
-        alert("حدث خطأ أثناء تحميل المتقدمين");
+        console.error("Error:", error);
+        alert("تعذر الاتصال بالخادم");
     }
 
 });
 
-// تغيير حالة المتقدم
 async function updateStatus(applicantId, newStatus) {
     const token = localStorage.getItem("token");
 

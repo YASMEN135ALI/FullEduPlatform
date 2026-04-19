@@ -110,10 +110,13 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 
     // تسجيل الخروج
-    document.getElementById("logoutBtn").addEventListener("click", function () {
-        localStorage.clear();
-        window.location.href = "login.html";
-    });
+    const logoutBtn = document.getElementById("logoutBtn");
+    if (logoutBtn) {
+        logoutBtn.addEventListener("click", function () {
+            localStorage.clear();
+            window.location.href = "login.html";
+        });
+    }
 
 });
 

@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     const noJobsMsg = document.getElementById("noJobsMsg");
 
     try {
+        // 🔥 السلاش الأخير مهم جداً
         const response = await fetch("http://127.0.0.1:8000/api/accounts/company/jobs/", {
             method: "GET",
             headers: {
@@ -21,7 +22,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         const jobs = await response.json();
 
-        if (jobs.length === 0) {
+        if (!Array.isArray(jobs) || jobs.length === 0) {
             noJobsMsg.classList.remove("d-none");
             return;
         }

@@ -1,19 +1,21 @@
-<nav class="navbar navbar-expand-lg role-navbar">
+<nav class="navbar navbar-expand-lg role-navbar shadow-sm">
   <div class="container">
 
-    <a class="navbar-brand" href="student-dashboard.html">
-      <img src="assets/images/cop.jpeg" alt="Logo">
-     
+    <!-- Logo -->
+    <a class="navbar-brand d-flex align-items-center" href="student_dashboard.html">
+      <img src="assets/images/cop.jpeg" alt="Logo" class="rounded-circle"
+           style="width:45px; height:45px; object-fit:cover;">
     </a>
 
+    <!-- Mobile Toggle -->
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#studentNavbar">
       <span class="navbar-toggler-icon"></span>
     </button>
 
+    <!-- Navbar Links -->
     <div class="collapse navbar-collapse" id="studentNavbar">
-      <ul class="navbar-nav mx-auto align-items-center">
+      <ul class="navbar-nav mx-auto align-items-center gap-2">
 
-    
         <li class="nav-item"><a class="nav-link" href="student_courses.html">Courses</a></li>
         <li class="nav-item"><a class="nav-link" href="recommendents.html">Recommended</a></li>
         <li class="nav-item"><a class="nav-link" href="jobs.html">Jobs</a></li>
@@ -21,8 +23,36 @@
         <li class="nav-item"><a class="nav-link" href="student_dashboard.html">Dashboard</a></li>
         <li class="nav-item"><a class="nav-link" href="student-profile.html">Profile</a></li>
 
+        <!-- Logout -->
         <li class="nav-item">
           <button class="logout-btn ms-3" onclick="logout()">Logout</button>
+        </li>
+
+        <!-- Notifications Dropdown -->
+        <li class="nav-item dropdown">
+          <a class="nav-link position-relative" href="#" id="notifDropdown" data-bs-toggle="dropdown">
+            <i class="bi bi-bell fs-4"></i>
+
+            <!-- Badge -->
+            <span id="notif-count"
+                  class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                  style="font-size: 10px; display:none;">
+            </span>
+          </a>
+
+          <!-- Dropdown List -->
+          <ul class="dropdown-menu dropdown-menu-end p-2 shadow"
+              style="width: 350px; max-height: 400px; overflow-y: auto;"
+              id="notif-list">
+            <li class="text-center text-muted py-2">Loading...</li>
+          </ul>
+        </li>
+
+        <!-- Full Notifications Page -->
+        <li class="nav-item ms-2">
+          <a href="student-notifications.html" class="btn btn-outline-primary btn-sm">
+            كل الإشعارات
+          </a>
         </li>
 
       </ul>
@@ -30,3 +60,72 @@
 
   </div>
 </nav>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+    async function loadNavbarNotifications() {
+
+        const token = localStorage.getItem("token");
+        if (!token) return;
+
+        try {
+            const response = await fetch("http://127.0.0.1:8000/api/accounts/notifications/student/", {
+                method: "GET",
+                headers: {
+                    "Authorization": "Token " + token
+                }
+            });
+
+            const data = await response.json();
+
+            const notifList = document.getElementById("notif-list");
+            const notifCount = document.getElementById("notif-count");
+
+            notifList.innerHTML = "";
+
+            // unread count
+            const unread = data.filter(n => !n.is_read).length;
+
+            if (unread > 0) {
+                notifCount.style.display = "inline-block";
+                notifCount.textContent = unread;
+            } else {
+                notifCount.style.display = "none";
+            }
+
+            // no notifications
+            if (data.length === 0) {
+                notifList.innerHTML = `<li class="text-center text-muted py-2">لا توجد إشعارات</li>`;
+                return;
+            }
+
+            // show notifications
+            data.slice(0, 5).forEach(n => {
+                notifList.innerHTML += `
+                    <li class="mb-1">
+                        <a href="${n.link || 'student-notifications.html'}"
+                           class="dropdown-item d-flex align-items-start">
+
+                            <div class="me-2">
+                                <i class="bi bi-${n.icon || 'bell'} fs-4 text-primary"></i>
+                            </div>
+
+                            <div>
+                                <strong>${n.title}</strong>
+                                <p class="small text-muted mb-0">${n.message}</p>
+                            </div>
+
+                        </a>
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                `;
+            });
+
+        } catch (error) {
+            console.error("Error loading navbar notifications:", error);
+        }
+    }
+
+    loadNavbarNotifications();
+});
+</script>

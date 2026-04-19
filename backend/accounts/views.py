@@ -49,10 +49,12 @@ from .models import (
     JobApplication,
 
     # الإشعارات
-    CompanyNotificationSettings,
-    Notification,
+    StudentNotification,
     TeacherNotification,
+    CompanyNotification,
+    StudentNotificationSettings,
     TeacherNotificationSettings,
+    CompanyNotificationSettings
 )
 
 # إعادة تعريف User بشكل صحيح
@@ -76,14 +78,17 @@ from .serializers import (
     CompanyProfileSerializer,
     JobPostSerializer,
     JobApplicationSerializer,
-    NotificationSettingsSerializer,
-    NotificationSerializer,
+    StudentNotificationSerializer,
+    TeacherNotificationSerializer,
+    CompanyNotificationSerializer,
+    StudentNotificationSettingsSerializer,
+    TeacherNotificationSettingsSerializer,
+    CompanyNotificationSettingsSerializer,
+
     QuizCreateSerializer,
     QuestionStudentSerializer,
     LessonUpdateSerializer,
     QuizSerializer,
-    TeacherNotificationSerializer,
-    TeacherNotificationSettingsSerializer,
     TeacherSettings,
     TeacherSettingsSerializer,
 )
@@ -395,6 +400,17 @@ class CreateJobPostView(generics.CreateAPIView):
     serializer_class = JobPostSerializer
     permission_classes = [IsAuthenticated, IsCompany]
 
+    def perform_create(self, serializer):
+        serializer.save(company=self.request.user)
+
+class DeleteJobPostView(generics.DestroyAPIView):
+    queryset = JobPost.objects.all()
+    permission_classes = [IsAuthenticated, IsCompany]
+
+    def get_queryset(self):
+        # الشركة لا تستطيع حذف إلا وظائفها فقط
+        return JobPost.objects.filter(company=self.request.user)
+
 
 class JobListView(generics.ListAPIView):
     queryset = JobPost.objects.filter(is_active=True)
@@ -496,20 +512,6 @@ class CompanyChangePasswordView(generics.UpdateAPIView):
 
         return Response({"message": "تم تغيير كلمة المرور بنجاح"})
 
-class CompanyNotificationSettingsView(generics.UpdateAPIView):
-    serializer_class = NotificationSettingsSerializer
-    permission_classes = [IsAuthenticated, IsCompany]
-
-    def get_object(self):
-        settings, created = CompanyNotificationSettings.objects.get_or_create(company=self.request.user)
-        return settings
-
-class CompanyNotificationsView(generics.ListAPIView):
-    serializer_class = NotificationSerializer
-    permission_classes = [IsAuthenticated, IsCompany]
-
-    def get_queryset(self):
-        return Notification.objects.filter(company=self.request.user).order_by('-created_at')
 
 # ---------------------------------------------------------
 # 6) CUSTOM REGISTRATION (NO TOKEN REQUIRED)
@@ -1144,36 +1146,6 @@ class SubmitQuizView(APIView):
             "remaining_attempts": quiz.max_attempts - attempt.attempt_number
         }, status=200)
 
-class TeacherNotificationsView(APIView):
-    permission_classes = [IsAuthenticated, IsTeacher]
-
-    def get(self, request):
-        notifications = TeacherNotification.objects.filter(teacher=request.user).order_by("-created_at")
-        serializer = TeacherNotificationSerializer(notifications, many=True)
-        return Response(serializer.data)
-
-class ClearTeacherNotificationsView(APIView):
-    permission_classes = [IsAuthenticated, IsTeacher]
-
-    def delete(self, request):
-        TeacherNotification.objects.filter(teacher=request.user).delete()
-        return Response({"message": "تم مسح جميع الإشعارات"})
-
-class TeacherNotificationSettingsView(APIView):
-    permission_classes = [IsAuthenticated, IsTeacher]
-
-    def get(self, request):
-        settings, _ = TeacherNotificationSettings.objects.get_or_create(teacher=request.user)
-        serializer = TeacherNotificationSettingsSerializer(settings)
-        return Response(serializer.data)
-
-    def put(self, request):
-        settings, _ = TeacherNotificationSettings.objects.get_or_create(teacher=request.user)
-        serializer = TeacherNotificationSettingsSerializer(settings, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=400)
 
 class TeacherSettingsView(APIView):
     permission_classes = [IsAuthenticated, IsTeacher]
@@ -1744,3 +1716,121 @@ class JobMatchView(APIView):
             })
 
         return Response(results)
+
+
+
+
+# ----------------------------------------------------
+# Student Notifications
+# ----------------------------------------------------
+class StudentNotificationsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        notifications = StudentNotification.objects.filter(student=request.user).order_by("-created_at")
+        serializer = StudentNotificationSerializer(notifications, many=True)
+        return Response(serializer.data)
+
+
+class StudentMarkAllReadView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        StudentNotification.objects.filter(student=request.user, is_read=False).update(is_read=True)
+        return Response({"message": "All notifications marked as read"})
+
+
+class StudentDeleteNotificationView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request, pk):
+        try:
+            notif = StudentNotification.objects.get(id=pk, student=request.user)
+            notif.delete()
+            return Response({"message": "Notification deleted"})
+        except StudentNotification.DoesNotExist:
+            return Response({"error": "Not found"}, status=404)
+
+
+class StudentNotificationSettingsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        settings, _ = StudentNotificationSettings.objects.get_or_create(student=request.user)
+        serializer = StudentNotificationSettingsSerializer(settings)
+        return Response(serializer.data)
+
+    def post(self, request):
+        settings, _ = StudentNotificationSettings.objects.get_or_create(student=request.user)
+        serializer = StudentNotificationSettingsSerializer(settings, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"message": "Settings updated"})
+        return Response(serializer.errors, status=400)
+
+
+# ----------------------------------------------------
+# Teacher Notifications
+# ----------------------------------------------------
+class TeacherNotificationsView(APIView):
+    permission_classes = [IsAuthenticated, IsTeacher]
+
+    def get(self, request):
+        notifications = TeacherNotification.objects.filter(teacher=request.user).order_by("-created_at")
+        serializer = TeacherNotificationSerializer(notifications, many=True)
+        return Response(serializer.data)
+
+
+class ClearTeacherNotificationsView(APIView):
+    permission_classes = [IsAuthenticated, IsTeacher]
+
+    def delete(self, request):
+        TeacherNotification.objects.filter(teacher=request.user).delete()
+        return Response({"message": "تم مسح جميع الإشعارات"})
+
+
+class TeacherNotificationSettingsView(APIView):
+    permission_classes = [IsAuthenticated, IsTeacher]
+
+    def get(self, request):
+        settings, _ = TeacherNotificationSettings.objects.get_or_create(teacher=request.user)
+        serializer = TeacherNotificationSettingsSerializer(settings)
+        return Response(serializer.data)
+
+    def put(self, request):
+        settings, _ = TeacherNotificationSettings.objects.get_or_create(teacher=request.user)
+        serializer = TeacherNotificationSettingsSerializer(settings, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
+
+
+# ----------------------------------------------------
+# Company Notifications
+# ----------------------------------------------------
+class CompanyNotificationsView(APIView):
+    permission_classes = [IsAuthenticated, IsCompany]
+
+    def get(self, request):
+        notifications = CompanyNotification.objects.filter(company=request.user).order_by("-created_at")
+        serializer = CompanyNotificationSerializer(notifications, many=True)
+        return Response(serializer.data)
+
+
+class CompanyNotificationSettingsView(APIView):
+    permission_classes = [IsAuthenticated, IsCompany]
+
+    def get(self, request):
+        settings, _ = CompanyNotificationSettings.objects.get_or_create(company=request.user)
+        serializer = CompanyNotificationSettingsSerializer(settings)
+        return Response(serializer.data)
+
+    def put(self, request):
+        settings, _ = CompanyNotificationSettings.objects.get_or_create(company=request.user)
+        serializer = CompanyNotificationSettingsSerializer(settings, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
+

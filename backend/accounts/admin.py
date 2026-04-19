@@ -10,6 +10,7 @@ from .models import (
     Certificate,
     JobPost,
     JobApplication,
+    Notification, StudentNotificationSettings,
 )
 
 
@@ -29,3 +30,6 @@ admin.site.register(CourseReview)
 admin.site.register(Certificate)
 admin.site.register(JobPost)
 admin.site.register(JobApplication)
+
+admin.site.register(Notification)
+admin.site.register(StudentNotificationSettings)

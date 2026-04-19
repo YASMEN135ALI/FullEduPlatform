@@ -283,20 +283,27 @@ class JobApplication(models.Model):
         return f"{self.student.username} -> {self.job.title}"
 
 
-class CompanyNotificationSettings(models.Model):
-    company = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    notify_new_applicant = models.BooleanField(default=True)
-    notify_status_change = models.BooleanField(default=True)
-
 
 class Notification(models.Model):
-    company = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="notifications"
+    )
+
+    title = models.CharField(max_length=255)
     message = models.TextField()
+
+    type = models.CharField(max_length=50, default="system")  
+    icon = models.CharField(max_length=50, blank=True, null=True)
+    link = models.CharField(max_length=255, blank=True, null=True)
+
     created_at = models.DateTimeField(auto_now_add=True)
     is_read = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.message
+        return f"{self.user} - {self.title}"
+
 
 
 
@@ -411,34 +418,6 @@ class CourseProgress(models.Model):
 
 from django.conf import settings
 
-class TeacherNotification(models.Model):
-    teacher = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        related_name="teacher_notifications"
-    )
-    title = models.CharField(max_length=255)
-    message = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    is_read = models.BooleanField(default=False)
-
-    def __str__(self):
-        return f"{self.teacher.email} - {self.title}"
-
-
-class TeacherNotificationSettings(models.Model):
-    teacher = models.OneToOneField(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        related_name="teacher_notification_settings"
-    )
-    receive_course_updates = models.BooleanField(default=True)
-    receive_quiz_updates = models.BooleanField(default=True)
-    receive_student_activity = models.BooleanField(default=True)
-
-    def __str__(self):
-        return f"Settings for {self.teacher.email}"
-
 
 class TeacherSettings(models.Model):
     teacher = models.OneToOneField(
@@ -496,3 +475,104 @@ class Language(models.Model):
 
     def __str__(self):
         return f"{self.name} ({self.level})"
+
+
+
+
+# ----------------------------------------------------
+# 1) إشعارات الطالب
+# ----------------------------------------------------
+class StudentNotification(models.Model):
+    student = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="student_notifications"
+    )
+    title = models.CharField(max_length=255)
+    message = models.TextField()
+    type = models.CharField(max_length=50, default="system")
+    icon = models.CharField(max_length=50, blank=True, null=True)
+    link = models.CharField(max_length=255, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_read = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.student.email} - {self.title}"
+
+
+class StudentNotificationSettings(models.Model):
+    student = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="student_notification_settings"
+    )
+    job_updates = models.BooleanField(default=True)
+    course_updates = models.BooleanField(default=True)
+    progress_updates = models.BooleanField(default=True)
+    system_updates = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f"Notification Settings for {self.student.username}"
+
+
+# ----------------------------------------------------
+# 2) إشعارات المعلم
+# ----------------------------------------------------
+class TeacherNotification(models.Model):
+    teacher = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="teacher_notifications"
+    )
+    title = models.CharField(max_length=255)
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_read = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.teacher.email} - {self.title}"
+
+
+class TeacherNotificationSettings(models.Model):
+    teacher = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="teacher_notification_settings"
+    )
+    receive_course_updates = models.BooleanField(default=True)
+    receive_quiz_updates = models.BooleanField(default=True)
+    receive_student_activity = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f"Settings for {self.teacher.email}"
+
+
+# ----------------------------------------------------
+# 3) إشعارات الشركة
+# ----------------------------------------------------
+class CompanyNotification(models.Model):
+    company = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="company_notifications"
+    )
+    title = models.CharField(max_length=255)
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_read = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.company.email} - {self.title}"
+
+
+class CompanyNotificationSettings(models.Model):
+    company = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="company_notification_settings"
+    )
+    notify_new_applicant = models.BooleanField(default=True)
+    notify_status_change = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f"Company Settings for {self.company.email}"

@@ -91,6 +91,7 @@ from .views import (
     CompanyProfileView,
     UpdateCompanyProfileView,
     CreateJobPostView,
+     DeleteJobPostView,
     JobListView,
     JobDetailView,
     ApplyJobView,
@@ -101,9 +102,18 @@ from .views import (
     JobApplicationStatusUpdateView,
     CompanyJobsListView,
     CompanyChangePasswordView,
-    CompanyNotificationSettingsView,
+    StudentNotificationsView,
+    StudentMarkAllReadView,
+    StudentDeleteNotificationView,
+    StudentNotificationSettingsView,
+    TeacherNotificationsView,
+    ClearTeacherNotificationsView,
+    TeacherNotificationSettingsView,
     CompanyNotificationsView,
+    CompanyNotificationSettingsView
 )
+
+
 
 urlpatterns = [
 
@@ -135,6 +145,21 @@ urlpatterns = [
     path("student/profile-data/", ProfileDataView.as_view(), name="profile-data"),
     path("student/job-matching/", JobMatchView.as_view(), name="job-matching"),
 
+
+# ---------------- Student Notifications ----------------
+path("notifications/student/", StudentNotificationsView.as_view(), name="student-notifications"),
+path("notifications/student/mark-read/", StudentMarkAllReadView.as_view(), name="student-notifications-mark-read"),
+path("notifications/student/delete/<int:pk>/", StudentDeleteNotificationView.as_view(), name="student-notification-delete"),
+path("notifications/student/settings/", StudentNotificationSettingsView.as_view(), name="student-notification-settings"),
+
+    # ---------------- Teacher ----------------
+    path("teacher/", TeacherNotificationsView.as_view(), name="teacher-notifications"),
+    path("teacher/clear/", ClearTeacherNotificationsView.as_view(), name="teacher-notifications-clear"),
+    path("teacher/settings/", TeacherNotificationSettingsView.as_view(), name="teacher-notification-settings"),
+
+    # ---------------- Company ----------------
+    path("company/", CompanyNotificationsView.as_view(), name="company-notifications"),
+    path("company/settings/", CompanyNotificationSettingsView.as_view(), name="company-notification-settings"),
 
     # -----------------------------------------------------
     # TEACHER
@@ -221,13 +246,15 @@ urlpatterns = [
     path('jobs/', JobListView.as_view(), name='job-list'),
     path('jobs/<int:id>/', JobDetailView.as_view(), name='job-detail'),
     path('jobs/<int:job_id>/apply/', ApplyJobView.as_view(), name='job-apply'),
+path("company/jobs/<int:pk>/delete/", DeleteJobPostView.as_view(), name="delete-job"),
+path("company/jobs/", CompanyJobsListView.as_view(), name="company-jobs"),
 
     path('student/my-applications/', MyJobApplicationsView.as_view(), name='my-job-applications'),
     path('company/job/<int:id>/', JobDetailUpdateView.as_view(), name='company-job-update'),
     path('company/job/<int:id>/delete/', JobDeleteView.as_view(), name='company-job-delete'),
     path('company/job/<int:job_id>/applicants/', JobApplicantsListView.as_view(), name='job-applicants'),
     path('company/applicant/<int:id>/status/', JobApplicationStatusUpdateView.as_view(), name='applicant-status'),
-    path('company/jobs/', CompanyJobsListView.as_view(), name='company-job-list'),
+   
     path('company/change-password/', CompanyChangePasswordView.as_view(), name='company-change-password'),
     path('company/notification-settings/', CompanyNotificationSettingsView.as_view(), name='company-notification-settings'),
     path('company/notifications/', CompanyNotificationsView.as_view(), name='company-notifications'),

@@ -14,6 +14,7 @@ from .models import (
     JobPost,
     JobApplication,
     CompanyNotificationSettings,
+    StudentNotificationSettings,
     Notification,
     TeacherNotification,
     TeacherNotificationSettings,
@@ -328,12 +329,12 @@ class JobPostSerializer(serializers.ModelSerializer):
     class Meta:
         model = JobPost
         fields = [
-            'id',
+            'id',               # ← مهم جداً
             'title',
             'description',
             'job_type',
             'salary',
-            'requirements',   # هنا
+            'requirements',
             'location',
             'skills',
             'is_active',
@@ -347,7 +348,6 @@ class JobPostSerializer(serializers.ModelSerializer):
         return obj.company.username
 
     def get_requirements(self, obj):
-        # لو القيمة None أو فاضية يرجّع نص فاضي بدل null
         return obj.requirements or ""
 
 class JobApplicationSerializer(serializers.ModelSerializer):
@@ -374,18 +374,6 @@ class JobApplicationSerializer(serializers.ModelSerializer):
             "missing_skills",
         ]
 
-
-
-class NotificationSettingsSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CompanyNotificationSettings
-        fields = ['notify_new_applicant', 'notify_status_change']
-
-
-class NotificationSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Notification
-        fields = ['id', 'message', 'created_at', 'is_read']
 
 
 class ChoiceSerializer(serializers.ModelSerializer):
@@ -434,17 +422,6 @@ class QuestionStudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Question
         fields = ["id", "text", "choices"]
-
-class TeacherNotificationSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TeacherNotification
-        fields = "__all__"
-
-
-class TeacherNotificationSettingsSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TeacherNotificationSettings
-        fields = "__all__"
 
 
 class TeacherSettingsSerializer(serializers.ModelSerializer):
@@ -496,3 +473,63 @@ class StudentFullCVSerializer(serializers.ModelSerializer):
             "projects",
             "languages",
         ]
+
+from rest_framework import serializers
+from .models import (
+    StudentNotification,
+    TeacherNotification,
+    CompanyNotification,
+    StudentNotificationSettings,
+    TeacherNotificationSettings,
+    CompanyNotificationSettings
+)
+
+# ----------------------------------------------------
+# 1) Student Notification Serializers
+# ----------------------------------------------------
+
+class StudentNotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StudentNotification
+        fields = "__all__"
+
+
+class StudentNotificationSettingsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StudentNotificationSettings
+        fields = "__all__"
+        read_only_fields = ["student"]
+
+
+# ----------------------------------------------------
+# 2) Teacher Notification Serializers
+# ----------------------------------------------------
+
+class TeacherNotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TeacherNotification
+        fields = "__all__"
+
+
+class TeacherNotificationSettingsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TeacherNotificationSettings
+        fields = "__all__"
+        read_only_fields = ["teacher"]
+
+
+# ----------------------------------------------------
+# 3) Company Notification Serializers
+# ----------------------------------------------------
+
+class CompanyNotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CompanyNotification
+        fields = "__all__"
+
+
+class CompanyNotificationSettingsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CompanyNotificationSettings
+        fields = "__all__"
+        read_only_fields = ["company"]

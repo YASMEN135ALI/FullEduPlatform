@@ -12,10 +12,13 @@ async function loadCourses() {
         table.innerHTML = "";
 
         courses.forEach(course => {
+            // إذا الصورة فارغة أو null → استخدم صورة افتراضية
+            const imageUrl = course.image ? course.image : "assets/images/default-course.jpg";
+
             table.innerHTML += `
                 <tr>
                     <td>
-                        <img src="${course.image}" width="80" style="border-radius:6px;">
+                        <img src="${imageUrl}" width="80" style="border-radius:6px;">
                     </td>
 
                     <td>${course.title}</td>
@@ -26,13 +29,9 @@ async function loadCourses() {
 
                     <td>
                         <a href="course-detail.html?id=${course.id}" class="btn btn-secondary">عرض</a>
-
                         <a href="edit-course.html?id=${course.id}" class="btn btn-warning">تعديل</a>
-
                         <a href="teacher-course-manage.html?id=${course.id}" class="btn btn-manage">إدارة</a>
-
                         <button onclick="deleteCourse(${course.id})" class="btn btn-danger">حذف</button>
-
                         <a href="teacher_course_lessons.html?course=${course.id}" class="btn btn-info">الدروس</a>
                     </td>
                 </tr>

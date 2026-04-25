@@ -1,9 +1,8 @@
 <nav class="navbar navbar-expand-lg role-navbar">
   <div class="container">
 
-    <a class="navbar-brand" href="instructor-dashboard.html">
-      <img src="assets/images/logo.png" alt="Logo">
-      Instructor Panel
+    <a class="navbar-brand" href="dashboard-teacher.html">
+      <img src="assets/images/cop.jpeg" alt="Logo">
     </a>
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#instructorNavbar">
@@ -13,15 +12,32 @@
     <div class="collapse navbar-collapse" id="instructorNavbar">
       <ul class="navbar-nav mx-auto align-items-center">
 
-        <li class="nav-item"><a class="nav-link" href="instructor-dashboard.html">Dashboard</a></li>
-        <li class="nav-item"><a class="nav-link" href="add-course.html">Add Course</a></li>
-        <li class="nav-item"><a class="nav-link" href="instructor-courses.html">My Courses</a></li>
-        <li class="nav-item"><a class="nav-link" href="students.html">Students</a></li>
-        <li class="nav-item"><a class="nav-link" href="certificates.html">Certificates</a></li>
-        <li class="nav-item"><a class="nav-link" href="profile.html">Profile</a></li>
+        <li class="nav-item"><a class="nav-link" href="dashboard-teacher.html">Dashboard</a></li>
+        <li class="nav-item"><a class="nav-link" href="create-course.html">Add Course</a></li>
+        <li class="nav-item"><a class="nav-link" href="teacher_courses.html">My Courses</a></li>
+        <li class="nav-item"><a class="nav-link" href="teacher_students.html">Students</a></li>
+        
+        <li class="nav-item"><a class="nav-link" href="teacher-profile.html">Profile</a></li>
+
+        <!-- 🔔 Notifications -->
+        <li class="nav-item dropdown">
+          <a class="nav-link position-relative" href="#" id="teacherNotifDropdown" data-bs-toggle="dropdown">
+              <i class="bi bi-bell fs-4"></i>
+
+              <span id="teacherNotifCount"
+                    class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger d-none">
+              </span>
+          </a>
+
+          <ul class="dropdown-menu dropdown-menu-end p-2 shadow"
+              style="width: 350px; max-height: 400px; overflow-y: auto;"
+              id="teacherNotifList">
+              <li class="text-center text-muted py-2">Loading...</li>
+          </ul>
+        </li>
 
         <li class="nav-item">
-          <button class="logout-btn ms-3" onclick="logout()">Logout</button>
+          <button class="logout-btn ms-3 btn btn-danger btn-sm">Logout</button>
         </li>
 
       </ul>
@@ -29,3 +45,4 @@
 
   </div>
 </nav>
+

@@ -1,13 +1,5 @@
-from django.urls import reverse
-from .models import (
-    StudentNotification,
-    TeacherNotification,
-    CompanyNotification
-)
+from .models import StudentNotification, TeacherNotification, CompanyNotification
 
-# ----------------------------------------------------
-# Student Helpers
-# ----------------------------------------------------
 def notify_student(student, title, message, type="system", icon="info", link=None):
     StudentNotification.objects.create(
         student=student,
@@ -18,24 +10,22 @@ def notify_student(student, title, message, type="system", icon="info", link=Non
         link=link
     )
 
-
-# ----------------------------------------------------
-# Teacher Helpers
-# ----------------------------------------------------
-def notify_teacher(teacher, title, message):
+def notify_teacher(teacher, title, message, type="system", icon="info", link=None):
     TeacherNotification.objects.create(
         teacher=teacher,
         title=title,
-        message=message
+        message=message,
+        type=type,
+        icon=icon,
+        link=link
     )
 
-
-# ----------------------------------------------------
-# Company Helpers
-# ----------------------------------------------------
-def notify_company(company, title, message):
+def notify_company(company, title, message, type="system", icon="info", link=None):
     CompanyNotification.objects.create(
         company=company,
         title=title,
-        message=message
+        message=message,
+        type=type,
+        icon=icon,
+        link=link
     )

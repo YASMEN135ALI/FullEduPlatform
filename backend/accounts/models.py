@@ -54,7 +54,7 @@ class StudentProfile(models.Model):
 
 class TeacherProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='teacher_profile')
-
+    full_name = models.CharField(max_length=150, null=True, blank=True)
     specialization = models.CharField(max_length=100, null=True, blank=True)
     experience_years = models.IntegerField(null=True, blank=True)
     bio = models.TextField(blank=True, null=True)
@@ -526,6 +526,12 @@ class TeacherNotification(models.Model):
     )
     title = models.CharField(max_length=255)
     message = models.TextField()
+
+    # إضافات مهمة
+    type = models.CharField(max_length=50, default="system")  # مثل: enrollment, progress, rating
+    icon = models.CharField(max_length=50, null=True, blank=True)  # مثل: user-plus, star, check
+    link = models.CharField(max_length=255, null=True, blank=True)  # رابط يفتح صفحة معينة
+
     created_at = models.DateTimeField(auto_now_add=True)
     is_read = models.BooleanField(default=False)
 

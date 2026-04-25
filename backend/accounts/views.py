@@ -153,14 +153,14 @@ class TeacherProfileView(APIView):
 
 
 class UpdateTeacherProfileView(APIView):
-    permission_classes = [IsAuthenticated, IsTeacher]
+    permission_classes = [IsAuthenticated]
 
     def post(self, request):
         user = request.user
         profile = user.teacher_profile
 
-        user.full_name = request.data.get("full_name", user.full_name)
-        user.save()
+        # ⭐ تحديث الاسم الكامل داخل TeacherProfile
+        profile.full_name = request.data.get("full_name", profile.full_name)
 
         profile.specialization = request.data.get("specialization", profile.specialization)
         profile.experience_years = request.data.get("experience_years", profile.experience_years)
@@ -177,10 +177,7 @@ class UpdateTeacherProfileView(APIView):
 
         profile.save()
 
-        return Response({
-            "message": "Profile updated successfully",
-            "profile": TeacherProfileSerializer(profile, context={'request': request}).data
-        })
+        return Response({"message": "Profile updated successfully"})
 
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
@@ -579,6 +576,7 @@ class TeacherRegisterView(APIView):
     def post(self, request):
         data = request.data
 
+        # 1) إنشاء المستخدم
         user = User.objects.create_user(
             username=data['email'],
             email=data['email'],
@@ -587,13 +585,15 @@ class TeacherRegisterView(APIView):
             is_approved=False
         )
 
+        # 2) إنشاء بروفايل المدرّس مع full_name
         TeacherProfile.objects.create(
             user=user,
-            specialization=data['specialization'],
-            experience_years=data['experience_years'],
-            bio=data['bio'],
-            certificate=request.FILES['certificate'],
-            cv=request.FILES['cv'],
+            full_name=data.get('full_name'),  # ← تمت إضافتها هنا
+            specialization=data.get('specialization'),
+            experience_years=data.get('experience_years'),
+            bio=data.get('bio'),
+            certificate=request.FILES.get('certificate'),
+            cv=request.FILES.get('cv'),
             photo=request.FILES.get('photo')
         )
 
@@ -733,6 +733,11 @@ class TeacherCoursesListView(generics.ListAPIView):
 
     def get_queryset(self):
         return Course.objects.filter(teacher=self.request.user)
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True, context={"request": request})
+        return Response(serializer.data)
 
 class CreateCourseView(generics.CreateAPIView):
     serializer_class = CourseSerializer
@@ -1834,3 +1839,57 @@ class CompanyNotificationSettingsView(APIView):
             return Response(serializer.data)
         return Response(serializer.errors, status=400)
 
+class TeacherStudentsListView(generics.ListAPIView):
+    serializer_class = CourseEnrollmentSerializer
+    permission_classes = [IsAuthenticated, IsTeacher]
+
+    def get_queryset(self):
+        # جميع الطلاب المسجّلين في كورسات المدرّس الحالي
+        return CourseEnrollment.objects.filter(course__teacher=self.request.user)
+
+class StudentProgressView(APIView):
+    permission_classes = [IsAuthenticated, IsTeacher]
+
+    def get(self, request, student_id, course_id):
+        lessons_completed = LessonProgress.objects.filter(
+            student_id=student_id,
+            lesson__course_id=course_id,
+            completed=True
+        ).count()
+
+        total_lessons = Lesson.objects.filter(course_id=course_id).count()
+
+        quizzes_passed = QuizResult.objects.filter(
+            student_id=student_id,
+            quiz__lesson__course_id=course_id,
+            passed=True
+        ).count()
+
+        total_quizzes = Quiz.objects.filter(lesson__course_id=course_id).count()
+
+        return Response({
+            "lessons_completed": lessons_completed,
+            "total_lessons": total_lessons,
+            "quizzes_passed": quizzes_passed,
+            "total_quizzes": total_quizzes,
+            "percentage": int((lessons_completed / total_lessons) * 100) if total_lessons > 0 else 0
+        })
+
+class SendMessageView(APIView):
+    permission_classes = [IsAuthenticated, IsTeacher]
+
+    def post(self, request, student_id):
+        message = request.data.get("message")
+
+        if not message:
+            return Response({"error": "الرسالة مطلوبة"}, status=400)
+
+        student = get_object_or_404(User, id=student_id)
+
+        TeacherNotification.objects.create(
+            teacher=request.user,
+            student=student,
+            message=message
+        )
+
+        return Response({"message": "تم إرسال الرسالة بنجاح"})

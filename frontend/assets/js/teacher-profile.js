@@ -17,15 +17,22 @@ document.addEventListener("DOMContentLoaded", function () {
     .then(res => res.json())
     .then(data => {
         const profile = data.profile;
-        const user = data.user;
 
-        document.getElementById("teacherName").textContent = user.first_name + " " + user.last_name;
-        document.getElementById("teacherSpecialization").textContent = profile.specialization || "غير محدد";
+        // ⭐ الاسم الكامل من TeacherProfile
+        document.getElementById("teacherName").textContent =
+            profile.full_name || "المدرّس";
+
+        document.getElementById("teacherSpecialization").textContent =
+            profile.specialization || "غير محدد";
+
         document.getElementById("teacherRating").textContent = profile.rating_avg;
         document.getElementById("teacherBalance").textContent = profile.balance;
 
-        document.getElementById("experienceYears").textContent = profile.experience_years || 0;
-        document.getElementById("teacherBio").textContent = profile.bio || "لا توجد نبذة.";
+        document.getElementById("experienceYears").textContent =
+            profile.experience_years || 0;
+
+        document.getElementById("teacherBio").textContent =
+            profile.bio || "لا توجد نبذة.";
 
         if (profile.photo) {
             document.getElementById("teacherPhoto").src = profile.photo;
@@ -39,7 +46,8 @@ document.addEventListener("DOMContentLoaded", function () {
             document.getElementById("certificateLink").href = profile.certificate;
         }
 
-        // تعبئة النموذج
+        // ⭐ تعبئة النموذج
+        document.getElementById("full_name").value = profile.full_name || "";
         document.getElementById("specialization").value = profile.specialization || "";
         document.getElementById("experience_years").value = profile.experience_years || "";
         document.getElementById("bio").value = profile.bio || "";
@@ -50,6 +58,9 @@ document.addEventListener("DOMContentLoaded", function () {
         e.preventDefault();
 
         const formData = new FormData();
+
+        // ⭐ إرسال full_name
+        formData.append("full_name", document.getElementById("full_name").value);
 
         formData.append("specialization", document.getElementById("specialization").value);
         formData.append("experience_years", document.getElementById("experience_years").value);

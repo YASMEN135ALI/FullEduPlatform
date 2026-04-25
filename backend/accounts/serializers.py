@@ -94,6 +94,7 @@ class TeacherProfileSerializer(serializers.ModelSerializer):
             'specialization',
             'experience_years',
             'bio',
+            'full_name',
             'certificate',
             'cv',
             'photo',
@@ -251,14 +252,18 @@ class LessonUpdateSerializer(serializers.ModelSerializer):
 
 
 
-
 class CourseEnrollmentSerializer(serializers.ModelSerializer):
-    course = CourseSerializer(read_only=True)
+    student_name = serializers.CharField(source="student.username", read_only=True)
+    student_email = serializers.CharField(source="student.email", read_only=True)
+    course_title = serializers.CharField(source="course.title", read_only=True)
 
     class Meta:
         model = CourseEnrollment
-        fields = ["course", "progress_percentage", "enrolled_at"]
-   
+        fields = [
+            "id", "student_name", "student_email",
+            "course_title", "progress_percentage", "enrolled_at"
+        ]
+
 class CourseReviewSerializer(serializers.ModelSerializer):
     student_name = serializers.CharField(source="student.username", read_only=True)
 

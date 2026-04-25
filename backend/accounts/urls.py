@@ -1,117 +1,66 @@
 from django.urls import path
 from .views import (
+    # AUTH & ADMIN
+    RegisterView, ApproveUserView, LoginView,
 
-    # ---------------- AUTH & ADMIN ----------------
-    RegisterView,
-    ApproveUserView,
-    LoginView,
+    # STUDENT
+    StudentRegisterView, StudentProfileView, UpdateStudentProfile,
+    MyCoursesView, StudentCoursesView, EnrollCourseView,
+    AddCourseReviewView, AddSkillView, AddExperienceView,
+    AddProjectView, AddLanguageView, UpdateObjectiveView,
+    ProfileDataView, JobMatchView,
 
-    # ---------------- STUDENT ----------------
-    StudentRegisterView,
-    StudentProfileView,
-    UpdateStudentProfile,
-    MyCoursesView,
-    StudentCoursesView,
-    EnrollCourseView,
-    AddCourseReviewView,
-   AddSkillView,
-   AddExperienceView,
-   AddProjectView,
-   AddLanguageView,
-   UpdateObjectiveView,
+    # STUDENT NOTIFICATIONS
+    StudentNotificationsView, StudentMarkAllReadView,
+    StudentDeleteNotificationView, StudentNotificationSettingsView,
 
-    # ---------------- TEACHER ----------------
-    TeacherRegisterView,
-    TeacherDashboardView,
-    TeacherProfileView,
-    UpdateTeacherProfileView,
+    # TEACHER
+    TeacherRegisterView, TeacherDashboardView, TeacherProfileView,
+    UpdateTeacherProfileView, TeacherSettingsView,
 
-    # Teacher Courses
-    TeacherCoursesListView,
-    CreateCourseView,
-    TeacherCourseDetailView,
-    UpdateCourseView,
-    DeleteCourseView,
-    StudentLessonDetailView,
-    
-    ProfileDataView,
-     JobMatchView,
+    # TEACHER COURSES
+    TeacherCoursesListView, CreateCourseView, TeacherCourseDetailView,
+    UpdateCourseView, DeleteCourseView, StudentLessonDetailView,
 
-    # Teacher Lessons
-    TeacherLessonsListView,
-    CreateLessonView,
-    LessonDetailView,
-    UpdateLessonView,
-    DeleteLessonView,
-    TeacherNotificationsView,
-    ClearTeacherNotificationsView,
-    TeacherNotificationSettingsView,TeacherSettingsView,
+    # TEACHER LESSONS
+    TeacherLessonsListView, CreateLessonView, LessonDetailView,
+    UpdateLessonView, DeleteLessonView,
 
-
-
-    # ---------------- COURSES & LESSONS ----------------
-    CourseListView,
-    CourseDetailsView,
-    CourseLessonsView,
-    CompleteLessonView,
-    ai_lesson_assistant,
-    # ---------------- CERTIFICATES ----------------
-    GenerateCertificateView,
-    CertificateDetailAPI,
-    CertificateVerifyView,
-    StudentCertificatesAPIView,
-    CertificatesCountAPIView,
-
-    # ---------------- QUIZ SYSTEM (Teacher) ----------------
-    CreateQuizView,
-    GetQuizForTeacherView,
-    UpdateQuizView,
-    DeleteQuizView,
-    TeacherCourseQuizzesView,
-
-    # Questions
-    CreateQuestionView,
-    GetQuestionView,
-    UpdateQuestionView,
-    DeleteQuestionView,
-
-    # Choices
-    CreateChoiceView,
-    UpdateChoiceView,
-    DeleteChoiceView,
-    SetCorrectChoiceView,
-
-    # ---------------- QUIZ SYSTEM (Student) ----------------
-    GetQuizView,
-    SubmitQuizView,
-
-    # ---------------- COMPANY & JOBS ----------------
-    CompanyRegisterView,
-    CompanyDashboardView,
-    CompanyProfileView,
-    UpdateCompanyProfileView,
-    CreateJobPostView,
-     DeleteJobPostView,
-    JobListView,
-    JobDetailView,
-    ApplyJobView,
-    MyJobApplicationsView,
-    JobDetailUpdateView,
-    JobDeleteView,
-    JobApplicantsListView,
-    JobApplicationStatusUpdateView,
-    CompanyJobsListView,
-    CompanyChangePasswordView,
-    StudentNotificationsView,
-    StudentMarkAllReadView,
-    StudentDeleteNotificationView,
-    StudentNotificationSettingsView,
-    TeacherNotificationsView,
-    ClearTeacherNotificationsView,
+    # TEACHER NOTIFICATIONS
+    TeacherNotificationsView, ClearTeacherNotificationsView,
     TeacherNotificationSettingsView,
-    CompanyNotificationsView,
+
+    # STUDENT MANAGEMENT (الجديد)
+    TeacherStudentsListView, StudentProgressView, SendMessageView,
+
+    # COURSES & LESSONS
+    CourseListView, CourseDetailsView, CourseLessonsView,
+    CompleteLessonView, ai_lesson_assistant,
+
+    # CERTIFICATES
+    GenerateCertificateView, CertificateDetailAPI, CertificateVerifyView,
+    StudentCertificatesAPIView, CertificatesCountAPIView,
+
+    # QUIZ SYSTEM (Teacher)
+    CreateQuizView, GetQuizForTeacherView, UpdateQuizView,
+    DeleteQuizView, TeacherCourseQuizzesView,
+    CreateQuestionView, GetQuestionView, UpdateQuestionView,
+    DeleteQuestionView, CreateChoiceView, UpdateChoiceView,
+    DeleteChoiceView, SetCorrectChoiceView,
+
+    # QUIZ SYSTEM (Student)
+    GetQuizView, SubmitQuizView,
+
+    # COMPANY & JOBS
+    CompanyRegisterView, CompanyDashboardView, CompanyProfileView,
+    UpdateCompanyProfileView, CreateJobPostView, DeleteJobPostView,
+    JobListView, JobDetailView, ApplyJobView, MyJobApplicationsView,
+    JobDetailUpdateView, JobDeleteView, JobApplicantsListView,
+    JobApplicationStatusUpdateView, CompanyJobsListView,
+    CompanyChangePasswordView, CompanyNotificationsView,
     CompanyNotificationSettingsView
 )
+
 
 
 
@@ -258,4 +207,26 @@ path("company/jobs/", CompanyJobsListView.as_view(), name="company-jobs"),
     path('company/change-password/', CompanyChangePasswordView.as_view(), name='company-change-password'),
     path('company/notification-settings/', CompanyNotificationSettingsView.as_view(), name='company-notification-settings'),
     path('company/notifications/', CompanyNotificationsView.as_view(), name='company-notifications'),
+    
+    # قائمة الطلاب المسجّلين في كورسات المدرّس
+    path(
+        "teacher/students/",
+        TeacherStudentsListView.as_view(),
+        name="teacher-students"
+    ),
+
+    # تقدّم الطالب في كورس معيّن
+    path(
+        "teacher/student/<int:student_id>/course/<int:course_id>/progress/",
+        StudentProgressView.as_view(),
+        name="student-progress"
+    ),
+
+    # إرسال رسالة للطالب
+    path(
+        "teacher/student/<int:student_id>/message/",
+        SendMessageView.as_view(),
+        name="send-message"
+    ),
 ]
+

@@ -4,9 +4,10 @@ from .models import (
     JobApplication,
     LessonProgress,
     Certificate,
-    CourseEnrollment
+    CourseEnrollment,CourseReview,Quiz
+
 )
-from .triggers import notify_student
+from .triggers import notify_student, notify_teacher
 
 
 @receiver(post_save, sender=CourseEnrollment)
@@ -67,4 +68,83 @@ def certificate_issued(sender, instance, created, **kwargs):
             message=f"لقد حصلت على شهادة في كورس {instance.course.title}.",
             type="certificate",
             icon="award"
+        )
+
+@receiver(post_save, sender=CourseEnrollment)
+def notify_teacher_student_enrolled(sender, instance, created, **kwargs):
+    if created:
+        course = instance.course
+        teacher = course.teacher
+        student = instance.student
+
+        notify_teacher(
+            teacher=teacher,
+            title="طالب جديد سجّل في دورتك",
+            message=f"{student.full_name} سجّل في دورة {course.title}",
+            type="enrollment",
+            icon="user-plus",
+            link=f"/teacher/course/{course.id}/"
+        )
+
+@receiver(post_save, sender=LessonProgress)
+def notify_teacher_lesson_completed(sender, instance, created, **kwargs):
+    if not created and instance.completed:
+        lesson = instance.lesson
+        course = lesson.course
+        teacher = course.teacher
+        student = instance.student
+
+        notify_teacher(
+            teacher=teacher,
+            title="طالب أكمل درسًا",
+            message=f"{student.full_name} أكمل درس {lesson.title} في دورة {course.title}",
+            type="progress",
+            icon="check-circle",
+            link=f"/teacher/lesson/{lesson.id}/"
+        )
+
+@receiver(post_save, sender=Certificate)
+def notify_teacher_course_completed(sender, instance, created, **kwargs):
+    if created:
+        course = instance.course
+        teacher = course.teacher
+        student = instance.student
+
+        notify_teacher(
+            teacher=teacher,
+            title="طالب أكمل الدورة",
+            message=f"{student.full_name} أكمل دورة {course.title} وحصل على شهادة",
+            type="course-complete",
+            icon="award",
+            link=f"/teacher/course/{course.id}/"
+        )
+
+@receiver(post_save, sender=CourseReview)
+def notify_teacher_new_review(sender, instance, created, **kwargs):
+    if created:
+        course = instance.course
+        teacher = course.teacher
+        student = instance.student
+
+        notify_teacher(
+            teacher=teacher,
+            title="تقييم جديد",
+            message=f"{student.full_name} قيّم دورتك {course.title}",
+            type="review",
+            icon="star",
+            link=f"/teacher/course/{course.id}/"
+        )
+
+@receiver(post_save, sender=Quiz)
+def notify_teacher_quiz_created(sender, instance, created, **kwargs):
+    if created:
+        teacher = instance.course.teacher
+
+        notify_teacher(
+            teacher=teacher,
+            title="تم إنشاء اختبار جديد",
+            message=f"تم إنشاء اختبار {instance.title} بنجاح",
+            type="quiz",
+            icon="file-plus",
+            link=f"/teacher/quiz/{instance.id}/"
         )

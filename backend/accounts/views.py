@@ -1893,3 +1893,39 @@ class SendMessageView(APIView):
         )
 
         return Response({"message": "تم إرسال الرسالة بنجاح"})
+
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+
+from .search import (
+    search_courses,
+    search_teachers,
+    search_companies,
+    search_jobs,
+    search_lessons
+)
+
+from accounts.serializers import CourseSerializer, LessonSerializer,JobPostSerializer,TeacherProfileSerializer, CompanyProfileSerializer
+
+
+
+@api_view(['GET'])
+def live_search(request):
+    q = request.GET.get('q', '').strip()
+
+    if not q:
+        return Response({
+            "courses": [],
+            "lessons": [],
+            "teachers": [],
+            "companies": [],
+            "jobs": []
+        })
+
+    return Response({
+        "courses": CourseSerializer(search_courses(q)[:5], many=True).data,
+        "lessons": LessonSerializer(search_lessons(q)[:5], many=True).data,
+        "teachers": TeacherProfileSerializer(search_teachers(q)[:5], many=True).data,
+        "companies": CompanyProfileSerializer(search_companies(q)[:5], many=True).data,
+        "jobs": JobPostSerializer(search_jobs(q)[:5], many=True).data,
+    })

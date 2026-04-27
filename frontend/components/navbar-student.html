@@ -12,8 +12,10 @@
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <!-- Navbar Links -->
+    <!-- Navbar Content -->
     <div class="collapse navbar-collapse" id="studentNavbar">
+
+      <!-- Center Links -->
       <ul class="navbar-nav mx-auto align-items-center gap-2">
 
         <li class="nav-item"><a class="nav-link" href="student_courses.html">Courses</a></li>
@@ -33,14 +35,12 @@
           <a class="nav-link position-relative" href="#" id="notifDropdown" data-bs-toggle="dropdown">
             <i class="bi bi-bell fs-4"></i>
 
-            <!-- Badge -->
             <span id="notif-count"
                   class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
                   style="font-size: 10px; display:none;">
             </span>
           </a>
 
-          <!-- Dropdown List -->
           <ul class="dropdown-menu dropdown-menu-end p-2 shadow"
               style="width: 350px; max-height: 400px; overflow-y: auto;"
               id="notif-list">
@@ -56,76 +56,86 @@
         </li>
 
       </ul>
+
+      <!-- 🔍 Live Search -->
+      <form class="d-flex position-relative ms-3" id="live-search-form" autocomplete="off">
+        <input class="form-control" id="live-search-input" type="search"
+               placeholder="ابحث عن كورس، شركة، مدرس..." style="width: 260px;">
+        <div id="live-search-results" class="search-dropdown"></div>
+      </form>
+
     </div>
 
   </div>
 </nav>
 <script>
-document.addEventListener("DOMContentLoaded", () => {
+const input = document.getElementById("live-search-input");
+const box = document.getElementById("live-search-results");
 
-    async function loadNavbarNotifications() {
+let timer = null;
 
-        const token = localStorage.getItem("token");
-        if (!token) return;
+input.addEventListener("input", function () {
+    const q = this.value.trim();
 
-        try {
-            const response = await fetch("http://127.0.0.1:8000/api/accounts/notifications/student/", {
-                method: "GET",
-                headers: {
-                    "Authorization": "Token " + token
-                }
-            });
+    clearTimeout(timer);
 
-            const data = await response.json();
-
-            const notifList = document.getElementById("notif-list");
-            const notifCount = document.getElementById("notif-count");
-
-            notifList.innerHTML = "";
-
-            // unread count
-            const unread = data.filter(n => !n.is_read).length;
-
-            if (unread > 0) {
-                notifCount.style.display = "inline-block";
-                notifCount.textContent = unread;
-            } else {
-                notifCount.style.display = "none";
-            }
-
-            // no notifications
-            if (data.length === 0) {
-                notifList.innerHTML = `<li class="text-center text-muted py-2">لا توجد إشعارات</li>`;
-                return;
-            }
-
-            // show notifications
-            data.slice(0, 5).forEach(n => {
-                notifList.innerHTML += `
-                    <li class="mb-1">
-                        <a href="${n.link || 'student-notifications.html'}"
-                           class="dropdown-item d-flex align-items-start">
-
-                            <div class="me-2">
-                                <i class="bi bi-${n.icon || 'bell'} fs-4 text-primary"></i>
-                            </div>
-
-                            <div>
-                                <strong>${n.title}</strong>
-                                <p class="small text-muted mb-0">${n.message}</p>
-                            </div>
-
-                        </a>
-                    </li>
-                    <li><hr class="dropdown-divider"></li>
-                `;
-            });
-
-        } catch (error) {
-            console.error("Error loading navbar notifications:", error);
-        }
+    if (q.length < 2) {
+        box.style.display = "none";
+        return;
     }
 
-    loadNavbarNotifications();
+    timer = setTimeout(async () => {
+        const res = await fetch(`http://127.0.0.1:8000/api/search/live/?q=${encodeURIComponent(q)}`, {
+            headers: {
+                "Authorization": "Token " + localStorage.getItem("token")
+            }
+        });
+
+        const data = await res.json();
+        renderResults(data);
+    }, 250);
+});
+
+
+function renderResults(data) {
+    let html = "";
+
+    if (data.courses?.length) {
+        html += `<div class="px-2 py-1 text-primary fw-bold">📘 كورسات</div>`;
+        data.courses.forEach(c => {
+            html += `<div class="search-item" onclick="location.href='/course/${c.id}/'">${c.title}</div>`;
+        });
+    }
+
+    if (data.teachers?.length) {
+        html += `<div class="px-2 py-1 text-primary fw-bold">👨‍🏫 مدرسين</div>`;
+        data.teachers.forEach(t => {
+            html += `<div class="search-item" onclick="location.href='/teacher/${t.id}/'">${t.full_name}</div>`;
+        });
+    }
+
+    if (data.companies?.length) {
+        html += `<div class="px-2 py-1 text-primary fw-bold">🏢 شركات</div>`;
+        data.companies.forEach(c => {
+            html += `<div class="search-item" onclick="location.href='/company/${c.id}/'">${c.company_name}</div>`;
+        });
+    }
+
+    if (data.jobs?.length) {
+        html += `<div class="px-2 py-1 text-primary fw-bold">💼 وظائف</div>`;
+        data.jobs.forEach(j => {
+            html += `<div class="search-item" onclick="location.href='/job/${j.id}/'">${j.title}</div>`;
+        });
+    }
+
+    box.innerHTML = html;
+    box.style.display = "block";
+}
+
+
+document.addEventListener("click", function (e) {
+    if (!input.contains(e.target) && !box.contains(e.target)) {
+        box.style.display = "none";
+    }
 });
 </script>

@@ -316,3 +316,27 @@ footer, #footer {
   background-image: url('../images/img/footer_background.png') !important;
   background-attachment: fixed !important;
 }
+.search-dropdown {
+    position: absolute;
+    top: 45px;
+    left: 0;
+    width: 100%;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 9999;
+    display: none;
+    max-height: 350px;
+    overflow-y: auto;
+}
+
+.search-item {
+    padding: 10px 14px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+}
+
+.search-item:hover {
+    background: #f5faff;
+}
+

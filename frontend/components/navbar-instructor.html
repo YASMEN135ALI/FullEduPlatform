@@ -1,29 +1,31 @@
 <nav class="navbar navbar-expand-lg role-navbar">
   <div class="container">
 
+    <!-- Logo -->
     <a class="navbar-brand" href="dashboard-teacher.html">
       <img src="assets/images/cop.jpeg" alt="Logo">
     </a>
 
+    <!-- Toggle -->
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#instructorNavbar">
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="instructorNavbar">
+
+      <!-- Center Links -->
       <ul class="navbar-nav mx-auto align-items-center">
 
         <li class="nav-item"><a class="nav-link" href="dashboard-teacher.html">Dashboard</a></li>
         <li class="nav-item"><a class="nav-link" href="create-course.html">Add Course</a></li>
         <li class="nav-item"><a class="nav-link" href="teacher_courses.html">My Courses</a></li>
         <li class="nav-item"><a class="nav-link" href="teacher_students.html">Students</a></li>
-        
         <li class="nav-item"><a class="nav-link" href="teacher-profile.html">Profile</a></li>
 
-        <!-- 🔔 Notifications -->
+        <!-- Notifications -->
         <li class="nav-item dropdown">
           <a class="nav-link position-relative" href="#" id="teacherNotifDropdown" data-bs-toggle="dropdown">
               <i class="bi bi-bell fs-4"></i>
-
               <span id="teacherNotifCount"
                     class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger d-none">
               </span>
@@ -41,8 +43,86 @@
         </li>
 
       </ul>
+
+      <!-- 🔍 Live Search -->
+      <form class="d-flex position-relative" id="live-search-form" autocomplete="off">
+        <input class="form-control" id="live-search-input" type="search"
+               placeholder="ابحث عن كورس، شركة، مدرس..." style="width: 260px;">
+        <div id="live-search-results" class="search-dropdown"></div>
+      </form>
+
     </div>
 
   </div>
 </nav>
+<script>
+const input = document.getElementById("live-search-input");
+const box = document.getElementById("live-search-results");
 
+let timer = null;
+
+input.addEventListener("input", function () {
+    const q = this.value.trim();
+
+    clearTimeout(timer);
+
+    if (q.length < 2) {
+        box.style.display = "none";
+        return;
+    }
+
+    timer = setTimeout(async () => {
+        const res = await fetch(`http://127.0.0.1:8000/api/search/live/?q=${encodeURIComponent(q)}`, {
+            headers: {
+                "Authorization": "Token " + localStorage.getItem("token")
+            }
+        });
+
+        const data = await res.json();
+        renderResults(data);
+    }, 250);
+});
+
+
+function renderResults(data) {
+    let html = "";
+
+    if (data.courses?.length) {
+        html += `<div class="px-2 py-1 text-primary fw-bold">📘 كورسات</div>`;
+        data.courses.forEach(c => {
+            html += `<div class="search-item" onclick="location.href='/course/${c.id}/'">${c.title}</div>`;
+        });
+    }
+
+    if (data.teachers?.length) {
+        html += `<div class="px-2 py-1 text-primary fw-bold">👨‍🏫 مدرسين</div>`;
+        data.teachers.forEach(t => {
+            html += `<div class="search-item" onclick="location.href='/teacher/${t.id}/'">${t.full_name}</div>`;
+        });
+    }
+
+    if (data.companies?.length) {
+        html += `<div class="px-2 py-1 text-primary fw-bold">🏢 شركات</div>`;
+        data.companies.forEach(c => {
+            html += `<div class="search-item" onclick="location.href='/company/${c.id}/'">${c.company_name}</div>`;
+        });
+    }
+
+    if (data.jobs?.length) {
+        html += `<div class="px-2 py-1 text-primary fw-bold">💼 وظائف</div>`;
+        data.jobs.forEach(j => {
+            html += `<div class="search-item" onclick="location.href='/job/${j.id}/'">${j.title}</div>`;
+        });
+    }
+
+    box.innerHTML = html;
+    box.style.display = "block";
+}
+
+
+document.addEventListener("click", function (e) {
+    if (!input.contains(e.target) && !box.contains(e.target)) {
+        box.style.display = "none";
+    }
+});
+</script>

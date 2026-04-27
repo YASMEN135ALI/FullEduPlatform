@@ -1,7 +1,10 @@
 from django.urls import path
+from .views import live_search
+
 from .views import (
     # AUTH & ADMIN
     RegisterView, ApproveUserView, LoginView,
+
 
     # STUDENT
     StudentRegisterView, StudentProfileView, UpdateStudentProfile,
@@ -146,6 +149,9 @@ path("notifications/student/settings/", StudentNotificationSettingsView.as_view(
     path('course/<int:course_id>/lessons/', CourseLessonsView.as_view(), name='course-lessons'),
     path('lesson/<int:lesson_id>/complete/', CompleteLessonView.as_view(), name='lesson-complete'),
      path("ai/lesson/", ai_lesson_assistant),
+    path('search/live/', live_search, name='live-search'),
+
+
     # -----------------------------------------------------
     # CERTIFICATES
     # -----------------------------------------------------

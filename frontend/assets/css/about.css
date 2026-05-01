@@ -148,7 +148,7 @@ section h5 {
 }
 /* Hero Section with Background Image */
 #about-hero {
-  background-image: url('../images/hero.jpg') ; /* ← ضعي اسم الصورة هنا */
+  background-image: url('../images/hero.jpg') ; 
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

@@ -11,7 +11,7 @@ from .views import (
     MyCoursesView, StudentCoursesView, EnrollCourseView,
     AddCourseReviewView, AddSkillView, AddExperienceView,
     AddProjectView, AddLanguageView, UpdateObjectiveView,
-    ProfileDataView, JobMatchView,
+    ProfileDataView, JobMatchView,CheckAppliedView,
 
     # STUDENT NOTIFICATIONS
     StudentNotificationsView, StudentMarkAllReadView,
@@ -61,7 +61,7 @@ from .views import (
     JobDetailUpdateView, JobDeleteView, JobApplicantsListView,
     JobApplicationStatusUpdateView, CompanyJobsListView,
     CompanyChangePasswordView, CompanyNotificationsView,
-    CompanyNotificationSettingsView
+    CompanyNotificationSettingsView,JobApplicationDetailView
 )
 
 
@@ -96,6 +96,7 @@ urlpatterns = [
     
     path("student/profile-data/", ProfileDataView.as_view(), name="profile-data"),
     path("student/job-matching/", JobMatchView.as_view(), name="job-matching"),
+    path("jobs/<int:job_id>/is_applied/", CheckAppliedView.as_view()),
 
 
 # ---------------- Student Notifications ----------------
@@ -209,7 +210,8 @@ path("company/jobs/", CompanyJobsListView.as_view(), name="company-jobs"),
     path('company/job/<int:id>/delete/', JobDeleteView.as_view(), name='company-job-delete'),
     path('company/job/<int:job_id>/applicants/', JobApplicantsListView.as_view(), name='job-applicants'),
     path('company/applicant/<int:id>/status/', JobApplicationStatusUpdateView.as_view(), name='applicant-status'),
-   
+   path("student/application/<int:pk>/", JobApplicationDetailView.as_view()),
+
     path('company/change-password/', CompanyChangePasswordView.as_view(), name='company-change-password'),
     path('company/notification-settings/', CompanyNotificationSettingsView.as_view(), name='company-notification-settings'),
     path('company/notifications/', CompanyNotificationsView.as_view(), name='company-notifications'),

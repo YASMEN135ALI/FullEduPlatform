@@ -1,184 +1,143 @@
+// ===============================
+//  تحميل الطلبات عند فتح الصفحة
+// ===============================
 document.addEventListener("DOMContentLoaded", function () {
-    loadNavbarAndFooter(); // إذا عندك هذا في main.js
     loadApplications();
 });
 
-async function loadApplications() {
+// ===============================
+//  جلب الطلبات من الـ API
+// ===============================
+let allApplications = []; // نخزن كل الطلبات هنا
+
+function loadApplications() {
     const token = localStorage.getItem("token");
-    const container = document.getElementById("applicationsContainer");
-    const loadingState = document.getElementById("loadingState");
 
     if (!token) {
-        container.innerHTML = `<p class="text-muted">الرجاء تسجيل الدخول لعرض طلباتك.</p>`;
+        document.getElementById("applicationsContainer").innerHTML =
+            `<div class="text-center py-5 text-danger">يجب تسجيل الدخول أولاً.</div>`;
         return;
     }
 
-    try {
-        const res = await fetch(
-            "http://127.0.0.1:8000/api/accounts/student/my-applications/",
-
-            { headers: { "Authorization": "Token " + token } }
-        );
-
-        const data = await res.json();
-        loadingState?.remove();
-
-        const applications = data || [];
-
-        updateSummary(applications);
-        renderApplications(applications);
-        setupFilters(applications);
-
-    } catch (err) {
-        console.error("Applications Error:", err);
-        container.innerHTML = `<p class="text-danger">حدث خطأ أثناء تحميل الطلبات.</p>`;
-    }
+    fetch("http://127.0.0.1:8000/api/accounts/student/my-applications/", {
+        method: "GET",
+        headers: {
+            "Authorization": "Token " + token
+        }
+    })
+    .then(response => {
+        if (response.status === 401) {
+            document.getElementById("applicationsContainer").innerHTML =
+                `<div class="text-center py-5 text-danger">غير مصرح. سجّلي دخول من جديد.</div>`;
+            return [];
+        }
+        return response.json();
+    })
+    .then(data => {
+        allApplications = data; // نخزن الطلبات الأصلية
+        renderApplications(data); // نعرض الطلبات
+    })
+    .catch(error => {
+        document.getElementById("applicationsContainer").innerHTML =
+            `<div class="text-center py-5 text-danger">حدث خطأ أثناء تحميل الطلبات.</div>`;
+    });
 }
 
-function updateSummary(apps) {
-    const total = apps.length;
-    const pending = apps.filter(a => a.status === "pending").length;
-    const accepted = apps.filter(a => a.status === "accepted").length;
-    const rejected = apps.filter(a => a.status === "rejected").length;
-
-    document.getElementById("totalApplications").textContent = total;
-    document.getElementById("pendingApplications").textContent = pending;
-    document.getElementById("acceptedApplications").textContent = accepted;
-    document.getElementById("rejectedApplications").textContent = rejected;
-}
-
-function renderApplications(apps, filterStatus = "all") {
+// ===============================
+//  عرض الطلبات في الصفحة
+// ===============================
+function renderApplications(applications) {
     const container = document.getElementById("applicationsContainer");
     container.innerHTML = "";
 
-    const filtered = filterStatus === "all"
-        ? apps
-        : apps.filter(a => a.status === filterStatus);
-
-    if (filtered.length === 0) {
-        container.innerHTML = `<p class="text-muted mt-3">لا توجد طلبات مطابقة لهذا الفلتر.</p>`;
+    if (!applications || applications.length === 0) {
+        container.innerHTML =
+            `<div class="text-center py-5 text-muted">لا يوجد أي طلبات.</div>`;
+        updateSummary(0, 0, 0, 0);
         return;
     }
 
-    filtered.forEach(app => {
+    // عدّاد الحالات
+    let total = applications.length;
+    let pending = applications.filter(a => a.status === "pending").length;
+    let accepted = applications.filter(a => a.status === "accepted").length;
+    let rejected = applications.filter(a => a.status === "rejected").length;
+
+    updateSummary(total, pending, accepted, rejected);
+
+    // إنشاء البطاقات
+    applications.forEach(app => {
         const card = document.createElement("div");
         card.className = "app-card";
 
-        const statusBadge = getStatusBadge(app.status);
-        const matchScore = app.match_score || 0;
-        const missingSkills = app.missing_skills || [];
-        const appliedAt = app.applied_at || "";
-        const jobUrl = `job-details.html?id=${app.job_id}`;
-
-        const insightText = generateInsight(app);
-
         card.innerHTML = `
-            <div class="d-flex justify-content-between align-items-start mb-2">
+            <div class="d-flex justify-content-between align-items-center mb-2">
                 <div>
                     <div class="app-title">${app.job_title}</div>
                     <div class="app-company">${app.company_name}</div>
                 </div>
-                <div>${statusBadge}</div>
+                <span class="badge-status badge-${app.status}">
+                    ${translateStatus(app.status)}
+                </span>
             </div>
 
-            <div class="d-flex justify-content-between align-items-center mb-2">
-                <div>
-                    <div class="match-score">نسبة التطابق: ${matchScore}%</div>
-                    <div class="match-bar mt-1">
-                        <div class="match-bar-inner" style="width:${matchScore}%;"></div>
-                    </div>
-                </div>
-                <div class="text-end meta-text">
-                    <div>تاريخ التقديم: ${formatDate(appliedAt)}</div>
-                </div>
-            </div>
-
-            <div class="mb-2">
-                <span class="meta-text">المهارات الناقصة:</span>
-                ${
-                    missingSkills.length === 0
-                        ? `<span class="skills-badge">لا توجد مهارات ناقصة 🎉</span>`
-                        : missingSkills.map(s => `<span class="skills-badge">${s}</span>`).join("")
-                }
-            </div>
-
-            <div class="insight-box">
-                <div class="insight-title">💡 ملاحظة ذكية</div>
-                <p class="insight-text">${insightText}</p>
-            </div>
-
-            <div class="mt-3 d-flex justify-content-between align-items-center">
-                <button class="btn btn-outline-primary btn-view" onclick="goToJob('${jobUrl}')">
-                    عرض تفاصيل الوظيفة
-                </button>
-            </div>
+            <button class="btn btn-primary btn-view" onclick="viewApplication(${app.id})">
+                عرض التفاصيل
+            </button>
         `;
 
         container.appendChild(card);
     });
 }
 
-function setupFilters(apps) {
-    const pills = document.querySelectorAll(".filter-pill");
-    pills.forEach(pill => {
-        pill.addEventListener("click", () => {
-            pills.forEach(p => p.classList.remove("active"));
-            pill.classList.add("active");
+// ===============================
+//  تحديث العدادات
+// ===============================
+function updateSummary(total, pending, accepted, rejected) {
+    document.getElementById("totalApplications").innerText = total;
+    document.getElementById("pendingApplications").innerText = pending;
+    document.getElementById("acceptedApplications").innerText = accepted;
+    document.getElementById("rejectedApplications").innerText = rejected;
+}
 
-            const status = pill.getAttribute("data-status");
-            renderApplications(apps, status);
-        });
+// ===============================
+//  ترجمة الحالات للعربي
+// ===============================
+function translateStatus(status) {
+    switch (status) {
+        case "pending": return "قيد المراجعة";
+        case "accepted": return "مقبولة";
+        case "rejected": return "مرفوضة";
+        default: return status;
+    }
+}
+
+// ===============================
+//  الفلترة حسب الحالة
+// ===============================
+document.querySelectorAll(".filter-pill").forEach(btn => {
+    btn.addEventListener("click", function () {
+
+        // إزالة active من الكل
+        document.querySelectorAll(".filter-pill").forEach(b => b.classList.remove("active"));
+
+        // إضافة active للزر الحالي
+        this.classList.add("active");
+
+        const status = this.getAttribute("data-status");
+
+        if (status === "all") {
+            renderApplications(allApplications);
+        } else {
+            const filtered = allApplications.filter(app => app.status === status);
+            renderApplications(filtered);
+        }
     });
-}
+});
 
-function getStatusBadge(status) {
-    if (status === "pending") {
-        return `<span class="badge-status badge-pending">قيد المراجعة</span>`;
-    }
-    if (status === "accepted") {
-        return `<span class="badge-status badge-accepted">مقبولة</span>`;
-    }
-    if (status === "rejected") {
-        return `<span class="badge-status badge-rejected">مرفوضة</span>`;
-    }
-    return `<span class="badge-status badge-pending">غير محدد</span>`;
-}
-
-function generateInsight(app) {
-    const status = app.status;
-    const match = app.match_score || 0;
-    const missing = app.missing_skills || [];
-
-    if (status === "pending") {
-        if (match >= 70) {
-            return "طلبك قوي ونسبة التطابق عالية. تابع بريدك الإلكتروني بانتظام لأي رد من الشركة.";
-        } else {
-            return "طلبك قيد المراجعة، لكن نسبة التطابق متوسطة. حاول تحسين مهاراتك في المهارات الناقصة لفرص أفضل لاحقًا.";
-        }
-    }
-
-    if (status === "accepted") {
-        return "ممتاز! تم قبول طلبك. تأكد من تجهيز سيرتك الذاتية ومعلوماتك جيدًا لأي مقابلة قادمة.";
-    }
-
-    if (status === "rejected") {
-        if (match < 50) {
-            return "نسبة التطابق كانت منخفضة. حاول التقديم على وظائف أقرب لمهاراتك الحالية، وطور مهاراتك الناقصة.";
-        } else {
-            return "رغم أن نسبة التطابق جيدة، تم رفض الطلب. قد يكون السبب المنافسة العالية. لا تتوقف عن التقديم.";
-        }
-    }
-
-    return "هذا الطلب لا يحتوي على حالة واضحة بعد. تابع لاحقًا لمزيد من التحديثات.";
-}
-
-function formatDate(dateStr) {
-    if (!dateStr) return "غير متوفر";
-    const d = new Date(dateStr);
-    if (isNaN(d)) return dateStr;
-    return d.toLocaleDateString("ar-EG");
-}
-
-function goToJob(url) {
-    window.location.href = url;
+// ===============================
+//  زر عرض التفاصيل
+// ===============================
+function viewApplication(id) {
+    window.location.href = `application-details.html?app_id=${id}`;
 }

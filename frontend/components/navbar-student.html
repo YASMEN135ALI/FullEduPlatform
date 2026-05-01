@@ -8,7 +8,7 @@
     </a>
 
     <!-- Mobile Toggle -->
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#studentNavbar">
+    <button class="navbar-toggler text-white" type="button" data-bs-toggle="collapse" data-bs-target="#studentNavbar">
       <span class="navbar-toggler-icon"></span>
     </button>
 
@@ -30,28 +30,12 @@
           <button class="logout-btn ms-3" onclick="logout()">Logout</button>
         </li>
 
-        <!-- Notifications Dropdown -->
-        <li class="nav-item dropdown">
-          <a class="nav-link position-relative" href="#" id="notifDropdown" data-bs-toggle="dropdown">
-            <i class="bi bi-bell fs-4"></i>
 
-            <span id="notif-count"
-                  class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                  style="font-size: 10px; display:none;">
-            </span>
-          </a>
-
-          <ul class="dropdown-menu dropdown-menu-end p-2 shadow"
-              style="width: 350px; max-height: 400px; overflow-y: auto;"
-              id="notif-list">
-            <li class="text-center text-muted py-2">Loading...</li>
-          </ul>
-        </li>
 
         <!-- Full Notifications Page -->
         <li class="nav-item ms-2">
-          <a href="student-notifications.html" class="btn btn-outline-primary btn-sm">
-            كل الإشعارات
+          <a href="student-notifications.html" class=" nav-link btn btn-dark btn-sm">
+          notfication 
           </a>
         </li>
 
@@ -68,6 +52,7 @@
 
   </div>
 </nav>
+
 <script>
 const input = document.getElementById("live-search-input");
 const box = document.getElementById("live-search-results");

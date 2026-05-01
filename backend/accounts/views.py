@@ -420,17 +420,22 @@ class JobDetailView(generics.RetrieveAPIView):
     lookup_field = 'id'
 
 class ApplyJobView(APIView):
-    permission_classes = [IsAuthenticated, IsStudent]
+    permission_classes = [IsAuthenticated]
 
     def post(self, request, job_id):
-        job = get_object_or_404(JobPost, id=job_id)
         student = request.user
+        job = get_object_or_404(JobPost, id=job_id)
 
+        # 🔥 1) Check if already applied
+        if JobApplication.objects.filter(job=job, student=student).exists():
+            return Response(
+                {"error": "لقد قمت بالتقديم على هذه الوظيفة مسبقًا."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # 🔥 2) Create application
         cv = request.FILES.get("cv")
-        cover_letter = request.data.get("cover_letter")
-
-        if not cv:
-            return Response({"error": "CV is required"}, status=400)
+        cover_letter = request.data.get("cover_letter", "")
 
         JobApplication.objects.create(
             job=job,
@@ -439,7 +444,28 @@ class ApplyJobView(APIView):
             cover_letter=cover_letter
         )
 
-        return Response({"message": "Application submitted successfully"})
+        return Response(
+            {"message": "تم التقديم على الوظيفة بنجاح."},
+            status=status.HTTP_201_CREATED
+        )
+
+class CheckAppliedView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, job_id):
+        student = request.user
+        app = JobApplication.objects.filter(job_id=job_id, student=student).first()
+
+        if app:
+            return Response({
+                "applied": True,
+                "application_id": app.id
+            })
+
+        return Response({
+            "applied": False,
+            "application_id": None
+        })
 
 
 class MyJobApplicationsView(generics.ListAPIView):
@@ -1929,3 +1955,16 @@ def live_search(request):
         "companies": CompanyProfileSerializer(search_companies(q)[:5], many=True).data,
         "jobs": JobPostSerializer(search_jobs(q)[:5], many=True).data,
     })
+
+
+from rest_framework.generics import RetrieveAPIView
+
+from .serializers import JobApplicationDetailSerializer
+
+
+class JobApplicationDetailView(RetrieveAPIView):
+    serializer_class = JobApplicationDetailSerializer
+    permission_classes = [IsAuthenticated, IsStudent]
+
+    def get_queryset(self):
+        return JobApplication.objects.filter(student=self.request.user)

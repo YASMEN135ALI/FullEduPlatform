@@ -67,7 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
             <div class="col-md-4 mb-4">
                 <div class="card h-100 shadow-sm">
 
-                    <img src="${c.image || 'assets/img/course-placeholder.jpg'}" 
+                    <img src="${c.image || 'assets/images/default-course.jpg'}" 
                          class="card-img-top" alt="Course Image">
 
                     <div class="card-body">

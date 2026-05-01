@@ -356,12 +356,33 @@ class JobPostSerializer(serializers.ModelSerializer):
         return obj.requirements or ""
 
 class JobApplicationSerializer(serializers.ModelSerializer):
-    job_id = serializers.IntegerField(source="job.id", read_only=True)
     job_title = serializers.CharField(source="job.title", read_only=True)
-    company_name = serializers.CharField(
-        source="job.company.company_profile.company_name",
-        read_only=True
-    )
+    company_name = serializers.CharField(source="job.company.company_profile.company_name", read_only=True)
+    job_id = serializers.IntegerField(source="job.id", read_only=True)
+
+    # إذا ما عندك match_score و missing_skills بالـ model، رجّعي قيم افتراضية
+    match_score = serializers.SerializerMethodField()
+    missing_skills = serializers.SerializerMethodField()
+
+    class Meta:
+        model = JobApplication
+        fields = [
+            "id",
+            "job_id",
+            "job_title",
+            "company_name",
+            "status",
+            "applied_at",
+            "match_score",
+            "missing_skills",
+        ]
+
+    def get_match_score(self, obj):
+        return 0  # أو احسبيها إذا عندك logic
+
+    def get_missing_skills(self, obj):
+        return []  # أو احسبيها إذا عندك logic
+
 
     match_score = serializers.IntegerField(read_only=True)
     missing_skills = serializers.ListField(child=serializers.CharField(), read_only=True)
@@ -538,3 +559,31 @@ class CompanyNotificationSettingsSerializer(serializers.ModelSerializer):
         model = CompanyNotificationSettings
         fields = "__all__"
         read_only_fields = ["company"]
+
+
+class JobApplicationDetailSerializer(serializers.ModelSerializer):
+    job_title = serializers.CharField(source="job.title", read_only=True)
+    company_name = serializers.CharField(
+        source="job.company.company_profile.company_name",
+        read_only=True
+    )
+    job_category = serializers.CharField(
+        source="job.category.name",
+        read_only=True
+    )
+
+    class Meta:
+        model = JobApplication
+        fields = [
+            "id",
+            "job_title",
+            "company_name",
+            "job_category",
+            "status",
+            "applied_at",
+            "match_score",
+            "missing_skills",
+            "skills_snapshot",
+            "cv",
+            "cover_letter",
+        ]

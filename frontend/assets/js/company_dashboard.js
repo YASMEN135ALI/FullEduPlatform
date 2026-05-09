@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         return;
     }
 
-    // 2) عناصر الصفحة
+    // عناصر الصفحة
     const companyNameEl = document.getElementById("companyName");
     const companyIndustryEl = document.getElementById("companyIndustry");
 
@@ -19,47 +19,18 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     const jobsListEl = document.getElementById("jobsList");
 
-    try {
-        // 3) جلب بيانات الشركة + الوظائف من API
-        const response = await fetch("http://127.0.0.1:8000/api/accounts/company/dashboard/", {
-            method: "GET",
-            headers: {
-                "Authorization": "Token " + token
-            }
-        });
-
-        const data = await response.json();
-        console.log("Dashboard Data:", data);
-
-        // 4) عرض بيانات الشركة
-        const company = data.company;
-
-        companyNameEl.textContent = company.company_name;
-        companyIndustryEl.textContent = company.industry || "غير محدد";
-
-        // 5) عرض الوظائف
-        const jobs = data.jobs;
-
-        jobsCountEl.textContent = jobs.length;
-
-        let totalApplicants = 0;
-        let totalAccepted = 0;
-
+    // ⭐ دالة عرض الوظائف
+    function renderJobs(jobs) {
         jobsListEl.innerHTML = "";
 
         if (jobs.length === 0) {
             jobsListEl.innerHTML = `
-                <p class="text-muted text-center">لا توجد وظائف منشورة حتى الآن.</p>
+                <p class="text-muted text-center">لا توجد وظائف.</p>
             `;
+            return;
         }
 
         jobs.forEach(job => {
-
-            // حساب المتقدمين والمقبولين (إذا أضفتهم لاحقًا في الـ API)
-            totalApplicants += job.applicants_count || 0;
-            totalAccepted += job.accepted_count || 0;
-
-            // عرض الوظيفة
             jobsListEl.innerHTML += `
                 <div class="job-card">
                     <h5>${job.title}</h5>
@@ -73,9 +44,70 @@ document.addEventListener("DOMContentLoaded", async function () {
                 </div>
             `;
         });
+    }
+
+    // ⭐ دالة جلب الوظائف حسب الحالة
+    async function loadJobs(status = "all") {
+        let url = "http://127.0.0.1:8000/api/accounts/company/jobs/";
+
+        if (status !== "all") {
+            url += `?status=${status}`;
+        }
+
+        const response = await fetch(url, {
+            headers: {
+                "Authorization": "Token " + token
+            }
+        });
+
+        const jobs = await response.json();
+        renderJobs(jobs);
+    }
+
+    // ⭐ تشغيل الفلترة عند الضغط على الأزرار
+    document.querySelectorAll(".filter-buttons button").forEach(btn => {
+        btn.addEventListener("click", function () {
+            const status = this.getAttribute("data-status");
+            loadJobs(status);
+        });
+    });
+
+    try {
+        // ⭐ جلب بيانات الشركة + الإحصائيات
+        const response = await fetch("http://127.0.0.1:8000/api/accounts/company/dashboard/", {
+            method: "GET",
+            headers: {
+                "Authorization": "Token " + token
+            }
+        });
+
+        const data = await response.json();
+        console.log("Dashboard Data:", data);
+
+        // عرض بيانات الشركة
+        const company = data.company;
+
+        companyNameEl.textContent = company.company_name;
+        companyIndustryEl.textContent = company.industry || "غير محدد";
+
+        // عرض الإحصائيات
+        const jobs = data.jobs;
+
+        jobsCountEl.textContent = jobs.length;
+
+        let totalApplicants = 0;
+        let totalAccepted = 0;
+
+        jobs.forEach(job => {
+            totalApplicants += job.applicants_count || 0;
+            totalAccepted += job.accepted_count || 0;
+        });
 
         applicantsCountEl.textContent = totalApplicants;
         acceptedCountEl.textContent = totalAccepted;
+
+        // ⭐ تحميل كل الوظائف عند فتح الصفحة
+        loadJobs("all");
 
     } catch (error) {
         console.error("Error loading dashboard:", error);

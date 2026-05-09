@@ -1,71 +1,102 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>إعدادات الحساب - EduPlatform</title>
+
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/css/theme.css">
+
+    <style>
+        body {
+            background: #F1F5F9;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .settings-container {
+            max-width: 650px;
+            margin: auto;
+        }
+
+        .settings-card {
+            background: #fff;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            margin-bottom: 25px;
+        }
+
+        .settings-card h5 {
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .settings-card button {
+            margin-top: 10px;
+        }
+    </style>
 </head>
+
 <body>
-    <div class="container py-5">
 
-    <h2 class="fw-bold mb-4 text-center">إعدادات الحساب</h2>
+    <div id="navbar"></div>
 
-    <!-- تغيير كلمة المرور -->
-    <div class="card p-4 shadow-sm mb-4">
-        <h5 class="mb-3">تغيير كلمة المرور</h5>
+    <div class="container py-5 settings-container">
 
-        <form id="passwordForm">
+        <h2 class="fw-bold mb-4 text-center">إعدادات الحساب</h2>
 
-            <div class="mb-3">
-                <label class="form-label">كلمة المرور الحالية</label>
-                <input type="password" id="oldPassword" class="form-control">
-            </div>
+        <!-- تغيير كلمة المرور -->
+        <div class="settings-card">
+            <h5>تغيير كلمة المرور</h5>
 
-            <div class="mb-3">
-                <label class="form-label">كلمة المرور الجديدة</label>
-                <input type="password" id="newPassword" class="form-control">
-            </div>
+            <form id="passwordForm">
 
-            <div class="mb-3">
-                <label class="form-label">تأكيد كلمة المرور</label>
-                <input type="password" id="confirmPassword" class="form-control">
-            </div>
+                <div class="mb-3">
+                    <label class="form-label">كلمة المرور الحالية</label>
+                    <input type="password" id="oldPassword" class="form-control" required>
+                </div>
 
-            <button class="btn btn-primary w-100">تحديث كلمة المرور</button>
+                <div class="mb-3">
+                    <label class="form-label">كلمة المرور الجديدة</label>
+                    <input type="password" id="newPassword" class="form-control" required>
+                </div>
 
-        </form>
+                <div class="mb-3">
+                    <label class="form-label">تأكيد كلمة المرور</label>
+                    <input type="password" id="confirmPassword" class="form-control" required>
+                </div>
+
+                <button class="btn btn-primary w-100">تحديث كلمة المرور</button>
+
+            </form>
+        </div>
+
+        <!-- إعدادات الإشعارات -->
+        <div class="settings-card">
+            <h5>إعدادات الإشعارات</h5>
+
+            <form id="notificationsForm">
+
+                <div class="form-check form-switch mb-3">
+                    <input class="form-check-input" type="checkbox" id="notifyApplicants">
+                    <label class="form-check-label">إشعار عند تقديم طالب جديد</label>
+                </div>
+
+                <div class="form-check form-switch mb-3">
+                    <input class="form-check-input" type="checkbox" id="notifyStatus">
+                    <label class="form-check-label">إشعار عند تغيير حالة متقدم</label>
+                </div>
+
+                <button class="btn btn-success w-100">حفظ الإعدادات</button>
+
+            </form>
+        </div>
+
     </div>
 
-    <!-- إعدادات الإشعارات -->
-    <div class="card p-4 shadow-sm">
-        <h5 class="mb-3">إعدادات الإشعارات</h5>
-
-        <form id="notificationsForm">
-
-            <div class="form-check form-switch mb-3">
-                <input class="form-check-input" type="checkbox" id="notifyApplicants">
-                <label class="form-check-label">إشعار عند تقديم طالب جديد</label>
-            </div>
-
-            <div class="form-check form-switch mb-3">
-                <input class="form-check-input" type="checkbox" id="notifyStatus">
-                <label class="form-check-label">إشعار عند تغيير حالة متقدم</label>
-            </div>
-
-            <button class="btn btn-success w-100">حفظ الإعدادات</button>
-
-        </form>
-    </div>
-
-</div>
-
-<script src="assets/js/company-settings.js"></script>
+    <script src="assets/js/company-settings.js"></script>
+    <script src="assets/js/main.js"></script>
 
 </body>
 </html>
-
-
-
-

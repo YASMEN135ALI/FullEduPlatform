@@ -2,6 +2,8 @@
 const urlParams = new URLSearchParams(window.location.search);
 const jobId = urlParams.get("id");
 
+// نفترض أن عندك API يعيد تفاصيل وظيفة واحدة من JobPost
+// مثلاً: /api/accounts/jobs/<id>/
 const JOB_API = `http://127.0.0.1:8000/api/accounts/jobs/${jobId}/`;
 const CHECK_APPLY_API = `http://127.0.0.1:8000/api/accounts/jobs/${jobId}/is_applied/`;
 
@@ -9,7 +11,9 @@ document.addEventListener("DOMContentLoaded", () => {
     loadJobDetails();
 });
 
-// جلب تفاصيل الوظيفة
+// ===============================
+// جلب تفاصيل الوظيفة من JobPost فقط
+// ===============================
 async function loadJobDetails() {
     try {
         const token = localStorage.getItem("token");
@@ -23,47 +27,35 @@ async function loadJobDetails() {
 
         if (!response.ok) {
             document.querySelector(".container").innerHTML =
-                `<p class="text-danger text-center">حدث خطأ أثناء تحميل الوظيفة</p>`;
+                `<p class="text-danger text-center">حدث خطأ أثناء تحميل تفاصيل الوظيفة</p>`;
             return;
         }
 
         const job = await response.json();
 
-        // تعبئة البيانات في الصفحة
+        // تعبئة البيانات الأساسية من JobPost
         document.getElementById("jobTitle").textContent = job.title;
-        document.getElementById("jobCompany").textContent = job.company_name;
-        document.getElementById("jobType").textContent = job.job_type;
+        document.getElementById("jobCompany").textContent = job.company_name || job.company || "";
+        document.getElementById("jobType").textContent = job.job_type_display || job.job_type || "";
         document.getElementById("jobDescription").textContent = job.description;
 
-        // المتطلبات (نفصلها حسب السطر)
+        // المتطلبات (من حقل requirements في JobPost)
         const reqList = document.getElementById("jobRequirements");
-reqList.innerHTML = "";
+        reqList.innerHTML = "";
 
-// 1) إذا الـ API يرجّع requirements كسطر نصي
-if (typeof job.requirements === "string") {
-    job.requirements.split("\n").forEach(req => {
-        reqList.innerHTML += `<li class="list-group-item">${req.trim()}</li>`;
-    });
-}
+        if (job.requirements) {
+            // نفصلها حسب السطر
+            job.requirements.split("\n").forEach(req => {
+                if (req.trim() !== "") {
+                    reqList.innerHTML += `<li class="list-group-item">${req.trim()}</li>`;
+                }
+            });
+        } else {
+            reqList.innerHTML = `<li class="list-group-item text-muted">لا توجد متطلبات محددة</li>`;
+        }
 
-// 2) إذا الـ API يرجّع requirements كـ Array
-else if (Array.isArray(job.requirements)) {
-    job.requirements.forEach(req => {
-        reqList.innerHTML += `<li class="list-group-item">${req}</li>`;
-    });
-}
-
-// 3) إذا اسم الحقل مختلف (مثلاً required_skills)
-else if (typeof job.required_skills === "string") {
-    job.required_skills.split("\n").forEach(req => {
-        reqList.innerHTML += `<li class="list-group-item">${req.trim()}</li>`;
-    });
-}
-
-// 4) إذا ما في متطلبات نهائيًا
-else {
-    reqList.innerHTML = `<li class="list-group-item text-muted">لا توجد متطلبات محددة</li>`;
-}
+        // عرض تفاصيل إضافية من JobPost (الموقع، الراتب، المهارات)
+        renderExtraDetailsFromJobPost(job);
 
         // فحص إذا الطالب قدّم مسبقًا
         checkIfApplied();
@@ -73,9 +65,38 @@ else {
     }
 }
 
+// ===============================
+// عرض تفاصيل إضافية من JobPost فقط
+// ===============================
+function renderExtraDetailsFromJobPost(job) {
+    const box = document.getElementById("extraDetails");
+
+    // skills من JobPost (نص مفصول بفواصل)
+    let skillsText = "غير محدد";
+    if (job.skills) {
+        skillsText = job.skills;
+    }
+
+    box.innerHTML = `
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+
+                <h4 class="fw-bold mb-3">تفاصيل الوظيفة</h4>
+
+                <p><strong>📍 الموقع:</strong> ${job.location || "غير محدد"}</p>
+
+                <p><strong>💰 الراتب:</strong> ${job.salary || "غير محدد"}</p>
+
+                <p><strong>🔧 المهارات المطلوبة:</strong> ${skillsText}</p>
+
+            </div>
+        </div>
+    `;
+}
 
 // ===============================
 // فحص إذا الطالب قدّم على الوظيفة
+// (هذا الجزء خاص بالطالب لكن لا يغيّر تفاصيل الوظيفة)
 // ===============================
 async function checkIfApplied() {
     const token = localStorage.getItem("token");
@@ -89,26 +110,17 @@ async function checkIfApplied() {
     const data = await res.json();
 
     const applyBtn = document.getElementById("applyBtn");
+    const viewBtn = document.getElementById("viewApplicationBtn");
 
     if (data.applied === true) {
-        // إخفاء زر التقديم
         applyBtn.style.display = "none";
+        viewBtn.style.display = "block";
 
-        // إنشاء زر عرض الطلب
-        const viewBtn = document.createElement("button");
-        viewBtn.className = "btn btn-primary w-100 mt-3";
-        viewBtn.textContent = "عرض الطلب";
-
-        // عند الضغط → نذهب لصفحة الطلبات
         viewBtn.onclick = () => {
             window.location.href = `applications.html?app_id=${data.application_id}`;
         };
 
-        // إضافته مكان زر التقديم
-        applyBtn.parentNode.appendChild(viewBtn);
-
     } else {
-        // إذا لم يقدّم → زر التقديم يعمل طبيعي
         applyBtn.onclick = () => {
             window.location.href = `job-apply.html?id=${jobId}`;
         };

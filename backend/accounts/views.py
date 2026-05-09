@@ -84,7 +84,7 @@ from .serializers import (
     StudentNotificationSettingsSerializer,
     TeacherNotificationSettingsSerializer,
     CompanyNotificationSettingsSerializer,
-
+     CompanyApplicantSerializer,
     QuizCreateSerializer,
     QuestionStudentSerializer,
     LessonUpdateSerializer,
@@ -378,6 +378,9 @@ class GenerateCertificateView(APIView):
 # ---------------------------------------------------------
 # 5) COMPANY & JOBS
 # ---------------------------------------------------------
+from django.db.models import Count, Q
+
+from django.db.models import Count, Q
 
 class CompanyDashboardView(APIView):
     permission_classes = [IsAuthenticated, IsCompany]
@@ -385,11 +388,27 @@ class CompanyDashboardView(APIView):
     def get(self, request):
         user = request.user
         profile = user.company_profile
-        jobs = JobPost.objects.filter(company=user)
+
+        jobs = JobPost.objects.filter(company=user).annotate(
+            count_applicants=Count("applications"),
+            count_accepted=Count("applications", filter=Q(applications__status="accepted"))
+        )
+
+        jobs_data = []
+        for job in jobs:
+            jobs_data.append({
+                "id": job.id,
+                "title": job.title,
+                "job_type": job.job_type,
+                "salary": job.salary,
+                "created_at": job.created_at,
+                "applicants_count": job.count_applicants,   # ← لاحظي الاسم الجديد
+                "accepted_count": job.count_accepted,       # ← لاحظي الاسم الجديد
+            })
 
         return Response({
-            'company': CompanyProfileSerializer(profile, context={'request': request}).data,
-            'jobs': JobPostSerializer(jobs, many=True, context={'request': request}).data
+            "company": CompanyProfileSerializer(profile, context={'request': request}).data,
+            "jobs": jobs_data
         })
 
 
@@ -496,7 +515,7 @@ class JobDeleteView(generics.DestroyAPIView):
         return JobPost.objects.filter(company=self.request.user)
 
 class JobApplicantsListView(generics.ListAPIView):
-    serializer_class = JobApplicationSerializer
+    serializer_class = CompanyApplicantSerializer
     permission_classes = [IsAuthenticated, IsCompany]
 
     def get_queryset(self):
@@ -517,7 +536,22 @@ class CompanyJobsListView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return JobPost.objects.filter(company=self.request.user)
+        user = self.request.user
+        status_filter = self.request.GET.get("status")  # active / closed / archived
+
+        queryset = JobPost.objects.filter(company=user)
+
+        # فلترة حسب الحالة
+        if status_filter == "active":
+            queryset = queryset.filter(is_active=True, is_archived=False)
+
+        elif status_filter == "closed":
+            queryset = queryset.filter(is_active=False, is_archived=False)
+
+        elif status_filter == "archived":
+            queryset = queryset.filter(is_archived=True)
+
+        return queryset
 
 class CompanyChangePasswordView(generics.UpdateAPIView):
     permission_classes = [IsAuthenticated, IsCompany]
@@ -1610,16 +1644,238 @@ class ProfileDataView(APIView):
     # -----------------------------------------
     # 7) COURSE RECOMMENDATIONS
     # -----------------------------------------
+class ProfileDataView(APIView):
+    permission_classes = [IsAuthenticated, IsStudent]
+
+    # -----------------------------------------
+    # 1) Career Skills Map
+    # -----------------------------------------
+    CAREER_SKILLS = {
+        "backend developer": [
+            "python", "django", "rest api", "sql", "git", "docker"
+        ],
+        "frontend developer": [
+            "html", "css", "javascript", "react", "git"
+        ],
+        "fullstack developer": [
+            "html", "css", "javascript", "react", "python", "django", "git"
+        ],
+        "data analyst": [
+            "python", "pandas", "numpy", "sql", "excel", "power bi"
+        ],
+        "ui ux designer": [
+            "figma", "wireframing", "prototyping", "user research"
+        ]
+    }
+
+    # -----------------------------------------
+    # 2) Career Path Details
+    # -----------------------------------------
+    CAREER_PATHS = {
+        "backend developer": {
+            "description": "مسؤول عن بناء السيرفر، قواعد البيانات، والـ APIs.",
+            "recommended_projects": [
+                "REST API project",
+                "Django CRUD system",
+                "Authentication system"
+            ],
+            "recommended_courses": [
+                "Python",
+                "Django",
+                "REST Framework",
+                "SQL Databases"
+            ]
+        },
+        "frontend developer": {
+            "description": "مسؤول عن بناء واجهات المستخدم وتجربة الاستخدام.",
+            "recommended_projects": [
+                "Landing page",
+                "React dashboard",
+                "Portfolio website"
+            ],
+            "recommended_courses": [
+                "HTML & CSS",
+                "JavaScript",
+                "React"
+            ]
+        },
+        "fullstack developer": {
+            "description": "يجمع بين تطوير الواجهة الأمامية والخلفية.",
+            "recommended_projects": [
+                "Fullstack e-commerce",
+                "Fullstack blog",
+                "Authentication system"
+            ],
+            "recommended_courses": [
+                "HTML/CSS",
+                "JavaScript",
+                "React",
+                "Python",
+                "Django"
+            ]
+        },
+        "data analyst": {
+            "description": "تحليل البيانات واستخراج insights.",
+            "recommended_projects": [
+                "Data cleaning project",
+                "Power BI dashboard",
+                "Pandas analysis project"
+            ],
+            "recommended_courses": [
+                "Python",
+                "Pandas",
+                "SQL",
+                "Power BI"
+            ]
+        }
+    }
+
+    # -----------------------------------------
+    # 3) Course Recommendation Map
+    # -----------------------------------------
+    COURSE_MAP = {
+        "python": "Python for Beginners",
+        "django": "Django Web Development",
+        "rest api": "REST API with Django",
+        "sql": "SQL for Data Management",
+        "git": "Git & GitHub Mastery",
+        "docker": "Docker Essentials",
+
+        "html": "HTML Fundamentals",
+        "css": "CSS Mastery",
+        "javascript": "JavaScript Basics",
+        "react": "React for Beginners",
+
+        "pandas": "Data Analysis with Pandas",
+        "numpy": "NumPy Essentials",
+        "excel": "Excel for Data Analysis",
+        "power bi": "Power BI Dashboarding",
+
+        "figma": "Figma UI/UX Design",
+        "wireframing": "Wireframing Basics",
+        "prototyping": "Prototyping for UX",
+        "user research": "User Research Fundamentals"
+    }
+
+    # -----------------------------------------
+    # 4) CV SCORE CALCULATOR
+    # -----------------------------------------
+    def calculate_cv_score(self, profile, completed_courses, certificates):
+        score = 0
+
+        score += len(profile.skills) * 5
+        score += len(profile.experience) * 10
+        score += len(profile.projects) * 7
+        score += len(profile.languages) * 4
+        score += len(completed_courses) * 3
+        score += len(certificates) * 5
+
+        if profile.objective:
+            score += 5
+
+        if profile.photo:
+            score += 3
+
+        if profile.objective:
+            for exp in profile.experience:
+                if profile.objective.lower() in str(exp).lower():
+                    score += 5
+                    break
+
+        if profile.objective:
+            for proj in profile.projects:
+                if profile.objective.lower() in str(proj).lower():
+                    score += 5
+                    break
+
+        return min(score, 100)
+
+    # -----------------------------------------
+    # 5) SKILLS GAP ANALYSIS
+    # -----------------------------------------
+    def get_skills_gap(self, student_skills, objective):
+        if not objective:
+            return {
+                "career_path": None,
+                "required_skills": [],
+                "student_skills": student_skills,
+                "missing_skills": []
+            }
+
+        obj = objective.lower()
+
+        matched_role = None
+        for role in self.CAREER_SKILLS:
+            if role in obj:
+                matched_role = role
+                break
+
+        if not matched_role:
+            return {
+                "career_path": None,
+                "required_skills": [],
+                "student_skills": student_skills,
+                "missing_skills": []
+            }
+
+        required = self.CAREER_SKILLS[matched_role]
+        student_lower = [s.lower() for s in student_skills]
+        missing = [skill for skill in required if skill not in student_lower]
+
+        return {
+            "career_path": matched_role,
+            "required_skills": required,
+            "student_skills": student_skills,
+            "missing_skills": missing
+        }
+
+    # -----------------------------------------
+    # 6) CAREER PATH RECOMMENDATION
+    # -----------------------------------------
+    def get_career_path_recommendation(self, objective, skills_gap):
+        if not objective:
+            return None
+
+        obj = objective.lower()
+
+        matched_role = None
+        for role in self.CAREER_PATHS:
+            if role in obj:
+                matched_role = role
+                break
+
+        if not matched_role:
+            return None
+
+        path_info = self.CAREER_PATHS[matched_role]
+
+        return {
+            "career_path": matched_role,
+            "description": path_info["description"],
+            "recommended_projects": path_info["recommended_projects"],
+            "recommended_courses": path_info["recommended_courses"],
+            "missing_skills": skills_gap["missing_skills"]
+        }
+
+    # -----------------------------------------
+    # 7) COURSE RECOMMENDATIONS (نسخة صحيحة)
+    # -----------------------------------------
     def get_course_recommendations(self, skills_gap, completed_courses):
         missing = skills_gap["missing_skills"]
         recommendations = []
 
         for skill in missing:
             if skill in self.COURSE_MAP:
-                recommendations.append(self.COURSE_MAP[skill])
+                course_title = self.COURSE_MAP[skill]
 
-        # إزالة الكورسات اللي الطالب أخذها
-        recommendations = [c for c in recommendations if c not in completed_courses]
+                course_obj = Course.objects.filter(title__icontains=course_title).first()
+
+                if course_obj and course_obj.title not in completed_courses:
+                    recommendations.append({
+                        "id": course_obj.id,
+                        "title": course_obj.title,
+                        "image": course_obj.image.url if course_obj.image else None
+                    })
 
         return recommendations
 

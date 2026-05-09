@@ -47,8 +47,15 @@ function renderRecommendedCourses(courses) {
         return;
     }
 
-    box.innerHTML = courses.map(c => `<li>${c}</li>`).join("");
+    box.innerHTML = courses.map(c => `
+        <li>
+            <a href="student-course-detail.html?id=${c.id}" class="text-primary fw-bold">
+                ${c.title}
+            </a>
+        </li>
+    `).join("");
 }
+
 
 //
 // ===============================
@@ -105,19 +112,32 @@ function renderJobMatching(jobs) {
 
     box.innerHTML = jobs.map(job => `
         <div class="job-box">
-            <h5>${job.title}</h5>
-            <p class="text-muted small">${job.company}</p>
 
-            <p>نسبة التطابق: <strong>${job.match_score}%</strong></p>
+            <h4 class="fw-bold">${job.title}</h4>
+            <p class="text-muted">${job.company}</p>
 
-            <p class="small text-muted">
-                المهارات الناقصة:
+            <p><strong>📍 الموقع:</strong> ${job.location}</p>
+            <p><strong>💼 نوع الدوام:</strong> ${job.job_type}</p>
+            <p><strong>💰 الراتب:</strong> ${job.salary || "غير محدد"}</p>
+
+            <p><strong>📝 الوصف:</strong><br>${job.description}</p>
+
+            ${job.requirements ? `
+                <p><strong>📌 المتطلبات:</strong><br>${job.requirements}</p>
+            ` : ""}
+
+            <p><strong>🔧 المهارات المطلوبة:</strong> ${job.required_skills.join("، ")}</p>
+
+            <p><strong>❗ المهارات الناقصة لديك:</strong> 
                 ${job.missing_skills.length === 0 ? "لا يوجد" : job.missing_skills.join("، ")}
             </p>
 
-            <button class="btn btn-primary btn-sm mt-2" onclick="goToApply(${job.id})">
+            <p><strong>🔥 نسبة التطابق:</strong> ${job.match_score}%</p>
+
+            <button class="btn btn-primary btn-sm mt-2" onclick="goToApply(${job.job_id})">
                 قدّم الآن
             </button>
+
         </div>
     `).join("");
 }

@@ -400,7 +400,39 @@ class JobApplicationSerializer(serializers.ModelSerializer):
             "missing_skills",
         ]
 
+class CompanyApplicantSerializer(serializers.ModelSerializer):
+    student_name = serializers.SerializerMethodField()
+    student_email = serializers.EmailField(source="student.email", read_only=True)
+    cv_url = serializers.SerializerMethodField()
 
+    class Meta:
+        model = JobApplication
+        fields = [
+            "id",
+            "student_name",
+            "student_email",
+            "cv_url",
+            "status",
+            "applied_at",
+        ]
+
+    def get_student_name(self, obj):
+        # لو الطالب ما عنده first_name أو last_name
+        first = obj.student.first_name or ""
+        last = obj.student.last_name or ""
+
+        # لو الاثنين فاضيين → رجّع الإيميل بدل الاسم
+        if not first and not last:
+            return obj.student.email.split("@")[0]  # اسم مستعار من الإيميل
+
+        full = f"{first} {last}".strip()
+        return full
+
+    def get_cv_url(self, obj):
+        request = self.context.get("request")
+        if hasattr(obj, "cv") and obj.cv:
+            return request.build_absolute_uri(obj.cv.url)
+        return None
 
 class ChoiceSerializer(serializers.ModelSerializer):
     class Meta:

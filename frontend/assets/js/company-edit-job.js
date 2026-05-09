@@ -19,6 +19,8 @@ document.addEventListener("DOMContentLoaded", async function () {
     const salaryEl = document.getElementById("jobSalary");
     const skillsEl = document.getElementById("jobSkills");
     const locationEl = document.getElementById("jobLocation");
+    const requirementsEl = document.getElementById("jobRequirements");
+    const statusEl = document.getElementById("jobStatus");
 
     // 1) جلب بيانات الوظيفة
     try {
@@ -38,6 +40,16 @@ document.addEventListener("DOMContentLoaded", async function () {
         salaryEl.value = job.salary || "";
         skillsEl.value = job.skills || "";
         locationEl.value = job.location || "";
+        requirementsEl.value = job.requirements || "";
+
+        // ⭐ تحديد حالة الوظيفة
+        if (job.is_archived) {
+            statusEl.value = "archived";
+        } else if (!job.is_active) {
+            statusEl.value = "closed";
+        } else {
+            statusEl.value = "active";
+        }
 
     } catch (error) {
         console.error(error);
@@ -48,6 +60,17 @@ document.addEventListener("DOMContentLoaded", async function () {
     document.getElementById("editJobForm").addEventListener("submit", async function (e) {
         e.preventDefault();
 
+        // ⭐ تحويل الحالة إلى is_active + is_archived
+        let is_active = true;
+        let is_archived = false;
+
+        if (statusEl.value === "closed") {
+            is_active = false;
+        } else if (statusEl.value === "archived") {
+            is_active = false;
+            is_archived = true;
+        }
+
         const updatedData = {
             title: titleEl.value,
             description: descEl.value,
@@ -55,6 +78,11 @@ document.addEventListener("DOMContentLoaded", async function () {
             salary: salaryEl.value,
             skills: skillsEl.value,
             location: locationEl.value,
+            requirements: requirementsEl.value,
+
+            // ⭐ تحديث الحالة
+            is_active: is_active,
+            is_archived: is_archived
         };
 
         try {

@@ -5,28 +5,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>الوظائف المنشورة</title>
 
+    <!-- Bootstrap -->
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/theme.css">
 </head>
 
 <body>
-<!-- 🔵 النافبار -->
-<div id="navbar"></div>
-<div class="container py-5">
 
-    <h2 class="fw-bold mb-4 text-center">الوظائف المنشورة</h2>
+    <!-- 🔵 النافبار -->
+    <div id="navbar"></div>
 
-    <div id="jobsList" class="row g-4">
-        <!-- يتم تعبئتها من الجافاسكربت -->
+    <!-- 🔵 المحتوى الرئيسي -->
+    <div class="container py-5">
+
+        <!-- العنوان -->
+        <h2 class="fw-bold mb-4 text-center">الوظائف المنشورة</h2>
+
+        <!-- قائمة الوظائف -->
+        <div id="jobsList" class="row g-4">
+            <!-- يتم تعبئتها من الجافاسكربت -->
+        </div>
+
+        <!-- رسالة في حال عدم وجود وظائف -->
+        <p id="noJobsMsg" class="text-center text-muted d-none">
+            لا توجد وظائف منشورة حتى الآن.
+        </p>
+
     </div>
 
-    <p id="noJobsMsg" class="text-center text-muted d-none">
-        لا توجد وظائف منشورة حتى الآن.
-    </p>
-
-</div>
-
-<script src="assets/js/company-jobs.js"></script>
-<script src="assets/js/main.js"></script>
+    <!-- 🔵 سكربتات -->
+    <script src="assets/js/company-jobs.js"></script>
+    <script src="assets/js/main.js"></script>
 
 </body>
 </html>

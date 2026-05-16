@@ -78,10 +78,15 @@ class CompanyProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='company_profile')
 
     company_name = models.CharField(max_length=200)
+    tagline = models.CharField(max_length=255, null=True, blank=True)
+    bio = models.TextField(null=True, blank=True)
+
     industry = models.CharField(max_length=100, null=True, blank=True)
     size = models.CharField(max_length=50, null=True, blank=True)
     phone = models.CharField(max_length=20, null=True, blank=True)
+    email = models.EmailField(null=True, blank=True)
     location = models.CharField(max_length=200, null=True, blank=True)
+    address = models.CharField(max_length=255, null=True, blank=True)
     website = models.URLField(blank=True, null=True)
 
     license = models.FileField(upload_to='companies/license/', null=True, blank=True)

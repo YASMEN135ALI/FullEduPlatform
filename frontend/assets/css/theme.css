@@ -241,6 +241,11 @@ body {
   border-radius: 20px;
   transition: 1s ease all;
 }
+.btn-secondary:hover {
+  background-color: green;
+  border-radius: 20px;
+  transition: 1s ease all;
+}
 /*about*/
 .about-section {
   background: linear-gradient(to right, #e3f2fd, #ffffff);

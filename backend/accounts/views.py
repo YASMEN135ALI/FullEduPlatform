@@ -694,9 +694,9 @@ class CompanyProfileView(APIView):
 
     def get(self, request):
         profile = request.user.company_profile
-        return Response({
-            "profile": CompanyProfileSerializer(profile, context={'request': request}).data
-        })
+        serializer = CompanyProfileSerializer(profile, context={'request': request})
+        return Response({"profile": serializer.data})
+
 class UpdateCompanyProfileView(APIView):
     permission_classes = [IsAuthenticated, IsCompany]
 
@@ -704,10 +704,15 @@ class UpdateCompanyProfileView(APIView):
         profile = request.user.company_profile
 
         profile.company_name = request.data.get("company_name", profile.company_name)
+        profile.tagline = request.data.get("tagline", profile.tagline)
+        profile.bio = request.data.get("bio", profile.bio)
+
         profile.industry = request.data.get("industry", profile.industry)
         profile.size = request.data.get("size", profile.size)
         profile.phone = request.data.get("phone", profile.phone)
+        profile.email = request.data.get("email", profile.email)
         profile.location = request.data.get("location", profile.location)
+        profile.address = request.data.get("address", profile.address)
         profile.website = request.data.get("website", profile.website)
 
         if "logo" in request.FILES:
@@ -721,9 +726,10 @@ class UpdateCompanyProfileView(APIView):
 
         profile.save()
 
+        serializer = CompanyProfileSerializer(profile, context={'request': request})
         return Response({
             "message": "Company profile updated successfully",
-            "profile": CompanyProfileSerializer(profile, context={'request': request}).data
+            "profile": serializer.data
         })
 
 class LoginView(APIView):

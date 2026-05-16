@@ -5,71 +5,149 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ملف الشركة - EduPlatform</title>
 
-    
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
-        <link rel="stylesheet" href="assets/css/profile.css">
-        <link rel="stylesheet" href="assets/css/theme.css">
+    <link rel="stylesheet" href="assets/css/theme.css">
+    <link rel="stylesheet" href="assets/css/comp-profile.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 
 <body>
 
-<div class="container py-5">
+<div id="navbar"></div>
 
-    <div class="card shadow-sm mb-4">
-        <div class="card-body text-center">
-            <img id="companyLogo" class="profile-img mb-3" src="assets/img/company.png" alt="Company Logo">
+<div class="company-profile">
 
-            <h3 id="companyName" class="fw-bold"></h3>
-            <p id="companyIndustry" class="text-muted"></p>
-            <p id="companyLocation"></p>
+    <!-- ============ HERO / HEADER ============ -->
+    <section class="hero-header">
+        <div class="hero-bg"></div>
+        <div class="hero-content">
+            <div class="hero-main">
+                <img id="companyLogo" class="company-logo" src="" alt="Logo">
+
+                <div>
+                    <h1 id="companyName" class="company-title">
+                        اسم الشركة
+                        <span class="badge verified-badge"><i class="fa-solid fa-check"></i> موثّقة</span>
+                    </h1>
+
+                    <p id="companyTagline" class="tagline">سطر تعريفي قصير عن الشركة</p>
+
+                    <div class="meta">
+                        <span><i class="fa-solid fa-briefcase"></i> <span id="companyIndustry">مجال العمل</span></span>
+                        <span>•</span>
+                        <span><i class="fa-solid fa-location-dot"></i> <span id="companyLocation">الموقع</span></span>
+                        <span>•</span>
+                        <span><i class="fa-solid fa-users"></i> <span id="companySize">حجم الشركة</span></span>
+                    </div>
+                </div>
+            </div>
+
+            <button class="edit-btn" id="editProfileBtn">
+                <i class="fa-solid fa-pen"></i> تعديل الملف
+            </button>
         </div>
-    </div>
+    </section>
 
-    <!-- Edit Company Profile -->
-    <div class="card shadow-sm">
-        <div class="card-body">
-            <h4 class="fw-bold mb-3">تعديل بيانات الشركة</h4>
-
-            <form id="editCompanyForm">
-
-                <div class="mb-3">
-                    <label class="form-label">اسم الشركة</label>
-                    <input type="text" id="companyNameInput" class="form-control">
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">مجال العمل</label>
-                    <input type="text" id="industryInput" class="form-control">
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">الموقع</label>
-                    <input type="text" id="locationInput" class="form-control">
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">رقم الهاتف</label>
-                    <input type="text" id="phoneInput" class="form-control">
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">الموقع الإلكتروني</label>
-                    <input type="text" id="websiteInput" class="form-control">
-                </div>
-
-                <button type="submit" class="btn btn-primary w-100">حفظ التعديلات</button>
-            </form>
+    <!-- ============ ABOUT ============ -->
+    <section class="section about">
+        <div class="section-header">
+            <h2><i class="fa-solid fa-circle-info"></i> نبذة عن الشركة</h2>
         </div>
-    </div>
+        <p id="companyBio" class="about-text">
+            لا توجد نبذة متاحة حالياً.
+        </p>
+    </section>
+
+    <!-- ============ CONTACT + CERTS ============ -->
+    <section class="section contact-grid">
+        <div class="contact">
+            <div class="section-header">
+                <h2><i class="fa-solid fa-phone"></i> معلومات التواصل</h2>
+            </div>
+
+            <ul class="contact-list">
+                <li>
+                    <i class="fa-solid fa-envelope"></i>
+                    <strong>البريد الإلكتروني:</strong>
+                    <span id="companyEmail">—</span>
+                </li>
+                <li>
+                    <i class="fa-solid fa-mobile-screen"></i>
+                    <strong>رقم الهاتف:</strong>
+                    <span id="companyPhone">—</span>
+                </li>
+                <li>
+                    <i class="fa-solid fa-globe"></i>
+                    <strong>الموقع الإلكتروني:</strong>
+                    <a href="#" id="companyWebsite" target="_blank">—</a>
+                </li>
+                <li>
+                    <i class="fa-solid fa-location-dot"></i>
+                    <strong>العنوان:</strong>
+                    <span id="companyAddress">—</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="docs">
+            <div class="section-header">
+                <h2><i class="fa-solid fa-file-shield"></i> مستندات الشركة</h2>
+            </div>
+
+            <div class="docs-grid">
+                <button id="viewCertificateBtn" class="doc-card" disabled>
+                    <i class="fa-solid fa-file-pdf"></i>
+                    <span>شهادة الشركة</span>
+                </button>
+
+                <button id="viewLicenseBtn" class="doc-card" disabled>
+                    <i class="fa-solid fa-id-card"></i>
+                    <span>رخصة الشركة</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ STATS ============ -->
+    <section class="section stats">
+        <div class="section-header">
+            <h2><i class="fa-solid fa-chart-line"></i> إحصائيات الشركة</h2>
+        </div>
+
+        <div class="grid">
+            <div class="stat-card">
+                <h3 id="jobsCount">0</h3>
+                <p>عدد الوظائف</p>
+            </div>
+
+            <div class="stat-card">
+                <h3 id="applicantsCount">0</h3>
+                <p>إجمالي المتقدمين</p>
+            </div>
+
+            <div class="stat-card">
+                <h3 id="activeJobsCount">0</h3>
+                <p>وظائف نشطة</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ JOBS ============ -->
+    <section class="section jobs">
+        <div class="section-header">
+            <h2><i class="fa-solid fa-briefcase"></i> أحدث الوظائف</h2>
+        </div>
+
+        <div id="companyJobs" class="jobs-grid">
+            <!-- تعبئة من JS -->
+        </div>
+    </section>
 
 </div>
 
-
-  
-     <script src="assets/js/bootstrap.bundle.min.js"></script>
-     <script src="assets/js/bootstrap.min.js"></script>  
-      
-    <script src="assets/js/company-profile.js"></script>
+<script src="assets/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/main.js"></script>
+<script src="assets/js/company-profile.js"></script>
 
 </body>
 </html>

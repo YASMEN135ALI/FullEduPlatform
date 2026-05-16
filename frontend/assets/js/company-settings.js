@@ -2,7 +2,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const token = localStorage.getItem("token");
 
+    // ============================
     // تغيير كلمة المرور
+    // ============================
     document.getElementById("passwordForm").addEventListener("submit", async function (e) {
         e.preventDefault();
 
@@ -27,14 +29,18 @@ document.addEventListener("DOMContentLoaded", function () {
             })
         });
 
+        const data = await response.json();
+
         if (response.ok) {
             alert("تم تغيير كلمة المرور بنجاح");
         } else {
-            alert("حدث خطأ أثناء تغيير كلمة المرور");
+            alert(data.error || "حدث خطأ أثناء تغيير كلمة المرور");
         }
     });
 
-    // إعدادات الإشعارات
+    // ============================
+    // حفظ إعدادات الإشعارات
+    // ============================
     document.getElementById("notificationsForm").addEventListener("submit", async function (e) {
         e.preventDefault();
 
@@ -53,10 +59,12 @@ document.addEventListener("DOMContentLoaded", function () {
             })
         });
 
+        const data = await response.json();
+
         if (response.ok) {
             alert("تم حفظ إعدادات الإشعارات");
         } else {
-            alert("حدث خطأ أثناء حفظ الإعدادات");
+            alert(data.error || "حدث خطأ أثناء حفظ الإعدادات");
         }
     });
 

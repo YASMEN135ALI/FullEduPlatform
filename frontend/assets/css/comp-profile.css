@@ -1,0 +1,167 @@
+/* =========================================================
+   GLOBAL STYLE
+========================================================= */
+.company-profile {
+    font-family: 'Cairo', sans-serif;
+    color: #1e293b;
+    line-height: 1.8;
+}
+
+/* =========================================================
+   HEADER (بدون الخلفية الزرقاء)
+========================================================= */
+.hero-header {
+    background: none !important; /* إزالة الأزرق بالكامل */
+    padding: 80px 20px;
+    text-align: center;
+    color: #0f172a;
+}
+
+.company-logo {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    margin-bottom: 20px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+#companyName {
+    font-size: 42px;
+    font-weight: 900;
+    margin-bottom: 8px;
+}
+
+.tagline {
+    font-size: 20px;
+    opacity: 0.85;
+    margin-bottom: 8px;
+}
+
+.meta {
+    font-size: 18px;
+    opacity: 0.7;
+}
+
+.edit-btn {
+    margin-top: 20px;
+    padding: 12px 28px;
+    background: #1e3a8a;
+    color: #fff;
+    border-radius: 10px;
+    border: none;
+    font-weight: bold;
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+.edit-btn:hover {
+    background: #3b82f6;
+}
+
+/* =========================================================
+   SECTIONS
+========================================================= */
+.section {
+    padding: 70px 20px;
+    max-width: 1100px;
+    margin: auto;
+}
+
+.section h2 {
+    font-size: 30px;
+    font-weight: 900;
+    margin-bottom: 25px;
+    color: #0f172a;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* دعم الأيقونات داخل العناوين */
+.section h2 i {
+    font-size: 28px;
+    color: #1e3a8a;
+}
+
+/* =========================================================
+   GRID
+========================================================= */
+.grid {
+    display: grid;
+    gap: 18px;
+}
+
+.services .grid,
+.why-us .grid,
+.values .grid,
+.stats .grid {
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+}
+
+/* =========================================================
+   CARDS
+========================================================= */
+.service-card,
+.why-card,
+.value-card,
+.stat-card,
+.job-card {
+    background: #fff;
+    padding: 22px;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    transition: 0.3s;
+    border: 1px solid #f1f5f9;
+}
+
+.service-card:hover,
+.why-card:hover,
+.value-card:hover,
+.stat-card:hover,
+.job-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+/* =========================================================
+   STAT CARDS
+========================================================= */
+.stat-card h3 {
+    font-size: 32px;
+    margin: 0;
+    color: #1d4ed8;
+    font-weight: 900;
+}
+
+/* =========================================================
+   JOBS
+========================================================= */
+.jobs-grid {
+    display: grid;
+    gap: 18px;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+}
+
+.job-card h3 {
+    font-size: 20px;
+    font-weight: 800;
+    margin-bottom: 10px;
+}
+
+.job-status {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.job-status.active {
+    background: #22c55e;
+    color: #fff;
+}
+
+.job-status.closed {
+    background: #ef4444;
+    color: #fff;
+}

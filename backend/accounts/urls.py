@@ -196,8 +196,9 @@ path("notifications/student/settings/", StudentNotificationSettingsView.as_view(
     # -----------------------------------------------------
     path('register/company/', CompanyRegisterView.as_view(), name='register-company'),
     path('company/dashboard/', CompanyDashboardView.as_view(), name='company-dashboard'),
-    path('company/profile/', CompanyProfileView.as_view(), name='company-profile'),
-    path('company/profile/update/', UpdateCompanyProfileView.as_view(), name='company-profile-update'),
+   path("company/profile/", CompanyProfileView.as_view(), name="company-profile"),
+path("company/profile/update/", UpdateCompanyProfileView.as_view(), name="company-profile-update"),
+
     path('company/create-job/', CreateJobPostView.as_view(), name='create-job'),
     path('jobs/', JobListView.as_view(), name='job-list'),
     path('jobs/<int:id>/', JobDetailView.as_view(), name='job-detail'),

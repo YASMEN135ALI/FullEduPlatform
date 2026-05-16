@@ -138,10 +138,14 @@ class CompanyProfileSerializer(serializers.ModelSerializer):
         model = CompanyProfile
         fields = [
             'company_name',
+            'tagline',
+            'bio',
             'industry',
             'size',
             'phone',
+            'email',
             'location',
+            'address',
             'website',
             'logo',
             'certificate',
